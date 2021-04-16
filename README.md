@@ -1,2 +1,2 @@
 # whoami
-Basic app with websockets
+Basic app with websockets in nodejs and react
