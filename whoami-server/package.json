@@ -6,7 +6,7 @@
   "scripts": {
     "prepublish": "npm run build",
     "flow": "flow",
-    "start": "npm run flow && npm run build && nodemon lib/index.js",
+    "start": "npm run flow && npm run build && node lib/app.js",
     "build": "babel src/ -d lib/"
   },
   "keywords": [],
