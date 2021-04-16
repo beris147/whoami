@@ -4,41 +4,17 @@ const http = require('http');
 const socketIO = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
 
+import type { RoomT } from './types/roomType';
+import type { UserT } from './types/userType';
+import type { CallBackT } from './types/callBackType';
+import type { JoinRoomT } from './types/joinRoomType';
+import type { JoinRequestT } from './types/joinRequestType';
+import type { ErrorT } from './types/errorType.js';
+
 const port = process.env.PORT || 9000;
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
-
-type RoomT = {|
-  id: string,
-  users: Array<string>,
-  owner: string,
-  round: number,
-  time: number,
-|};
-
-
-type UserT = {|
-  id: string,
-  username: string,
-  roomId: string,
-|};
-
-type ErrorT = {|
-  error: string,
-|};
-
-type CallBackT = (error: ErrorT) => void; 
-
-type JoinRoomT = {|
-  username: string,
-  room: RoomT,
-|};
-
-type JoinRequestT = {|
-  room: RoomT, 
-  error: ?ErrorT,
-|};
 
 const rooms: { [string]: RoomT } = {};
 const users: { [string]: UserT } = {};
