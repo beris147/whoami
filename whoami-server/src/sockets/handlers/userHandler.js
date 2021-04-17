@@ -9,19 +9,20 @@ const { removeRoom, emitRoomUpdate } = roomUtils;
 const { removeUserFromRoom, removeUser } = userUtils;
 
 module.exports = (
-    io: Object, 
+    io: Object,
     socket: Object,
     rooms: RoomSetT,
     users: UserSetT,
 ) => {
     const disconnect = (): void => {
       console.log(`Client ${socket.id} disconnected`);
+      if(!users[socket.id]) return;
       try {
         const user = users[socket.id];
-        removeUserFromRoom(user, rooms);
         removeUser(user, users);
+        removeUserFromRoom(user, rooms);
         if (!rooms[user.roomId].users.length) {
-          console.log(`removing room ${user.roomId}`);
+          console.log(`removing empty room ${user.roomId}`);
           removeRoom(rooms[user.roomId], rooms);
         }
         else emitRoomUpdate(rooms[user.roomId], io);
