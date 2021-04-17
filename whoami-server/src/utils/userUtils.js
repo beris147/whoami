@@ -1,29 +1,28 @@
 // @flow
-const { rooms } = require('./roomUtils')
-
 import type { RoomT } from '../types/roomType';
+import type { RoomSetT } from '../types/roomSetType';
 import type { UserT } from '../types/userType';
-
-const users: { [string]: UserT } = {};
+import type { UserSetT } from '../types/userSetType';
 
 const createUser = (
     id: string, 
     username: string, 
-    roomId: string, 
+    roomId: string,
+    users: UserSetT,
 ): UserT => {
-    return users[id] = { id, username, roomId };
+  return users[id] = { id, username, roomId };
 }
 
-const removeUserFromRoom = (user: UserT): void => {
-  const room = userRoom(user);
+const removeUserFromRoom = (user: UserT, rooms: RoomSetT): void => {
+  const room = userRoom(user, rooms);
   rooms[room.id].users = room.users.filter(name => name != user.username);
 }
 
-const userRoom = (user: UserT): RoomT => {
+const userRoom = (user: UserT, rooms: RoomSetT): RoomT => {
   return rooms[user.roomId];
 }
 
-const removeUser = (user: UserT): void => {
+const removeUser = (user: UserT, users: UserSetT): void => {
   delete users[user.id];
 }
 
@@ -33,5 +32,4 @@ module.exports = {
     removeUser,
     removeUserFromRoom,
     userRoom,
-    users,
 };

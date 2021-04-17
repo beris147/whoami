@@ -4,11 +4,11 @@ const { v4: uuidv4 } = require('uuid');
 import type { ErrorT } from '../types/errorType';
 import type { JoinRequestT } from '../types/joinRequestType';
 import type { RoomT } from '../types/roomType';
+import type { RoomSetT } from '../types/roomSetType';
 import type { UserT } from '../types/userType';
+import type { UserSetT } from '../types/userSetType';
 
-const rooms: { [string]: RoomT } = {};
-
-const canJoinRoom = (room: RoomT, user: UserT): ?ErrorT => {
+const canJoinRoom = (room: RoomT, user: UserT, rooms: RoomSetT): ?ErrorT => {
   if(!rooms[room.id]) { 
     return { error: `no room with id ${room.id}` };
   }
@@ -22,8 +22,9 @@ const joinRoom = (
     room: RoomT,
     user: UserT,
     io: any,
-  ): JoinRequestT => {
-  const error = canJoinRoom(room, user);
+    rooms: RoomSetT,
+): JoinRequestT => {
+  const error = canJoinRoom(room, user, rooms);
   if(error) return { room, error };
   rooms[room.id].users.push(user.username);
   io.in(room.id).emit('room-update', rooms[room.id]);
@@ -33,7 +34,7 @@ const joinRoom = (
 }
 
 
-const createRoom = (owner: string): RoomT => {
+const createRoom = (owner: string, rooms: RoomSetT): RoomT => {
   const id = uuidv4();
   return rooms[id] = {
     id,
@@ -44,7 +45,7 @@ const createRoom = (owner: string): RoomT => {
   };
 }
 
-const removeRoom = (room: RoomT): void => {
+const removeRoom = (room: RoomT, rooms: RoomSetT): void => {
   delete rooms[room.id];
 }
 
@@ -58,5 +59,4 @@ module.exports = {
     emitRoomUpdate,
     joinRoom,
     removeRoom,
-    rooms,
 };
