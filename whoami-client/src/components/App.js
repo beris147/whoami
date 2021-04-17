@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import socketIOClient from 'socket.io-client';
-import logo from './logo.svg';
+
 import './App.css';
 
 const ENDPOINT = 'http://localhost:9000';
@@ -35,8 +35,7 @@ function App() {
   return (
     <div className='App'>
       <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>{JSON.stringify(response)}</p>
+        <h1>hey</h1>
       </header>
     </div>
   );
