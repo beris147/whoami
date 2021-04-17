@@ -1,6 +1,7 @@
 import React from 'react';
 import routes from './utils/routes';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import SocketProvider from './providers/SocketProvider';
 
 function TemporalLinkLi() {
   return (
@@ -29,10 +30,12 @@ function MySwitch() {
 
 function App() {
   return (
-    <Router>
-      <TemporalLinkLi />
-      <MySwitch />
-    </Router>
+    <SocketProvider>
+      <Router>
+        <TemporalLinkLi />
+        <MySwitch />
+      </Router>
+    </SocketProvider>
   );
 }
 
