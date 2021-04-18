@@ -1,6 +1,6 @@
 // @flow
-const roomUtils = require('../../utils/roomUtils');
-const userUtils = require('../../utils/userUtils');
+const roomUtils = require('utils/roomUtils');
+const userUtils = require('utils/userUtils');
 
 import type { RoomSetT } from 'types/roomSetType';
 import type { UserSetT } from 'types/userSetType';

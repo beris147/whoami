@@ -1,6 +1,6 @@
 // @flow
-const roomUtils = require('../../utils/roomUtils');
-const userUtils = require('../../utils/userUtils');
+const roomUtils = require('utils/roomUtils');
+const userUtils = require('utils/userUtils');
 
 import type { CallBackT } from 'types/callBackType';
 import type { JoinRoomT } from 'types/joinRoomType';
