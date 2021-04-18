@@ -1,5 +1,6 @@
+// @flow
 import React from 'react';
 
-const SocketContext = React.createContext()
+const SocketContext: React$Context<any> = React.createContext();
 
 export default SocketContext;

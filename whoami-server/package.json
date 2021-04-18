@@ -6,6 +6,8 @@
   "scripts": {
     "prepublish": "npm run build",
     "flow": "flow",
+    "importTypes": "node lib/app.js",
+    "dev": "npm run flow && npm run build && node lib/app.js",
     "start": "npm run flow && npm run build && node lib/app.js",
     "build": "babel src/ -d lib/"
   },

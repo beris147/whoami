@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import routes from './utils/routes';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
@@ -28,7 +29,7 @@ function MySwitch() {
   );
 }
 
-function App() {
+function App(): React$Element<any> {
   return (
     <SocketProvider>
       <Router>

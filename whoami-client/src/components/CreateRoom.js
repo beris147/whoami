@@ -1,14 +1,15 @@
+// @flow
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import SocketContext from '../contexts/SocketContext';
 
 
-function CreateRoom() {
+function CreateRoom(): React$Element<any> {
   const history = useHistory();
   const socket = useContext(SocketContext);
   const [username, setUsername] = useState('');
 
-  const handleCreateRoom = () => {
+  const handleCreateRoom = (): void => {
     socket.emit('create-room', {username}, error => {
       if(error) {
         console.log(error);
@@ -16,7 +17,7 @@ function CreateRoom() {
     });
   }
 
-  useEffect(() => {
+  useEffect((): void => {
     socket.on('joined-room', data => {
       history.push(`/room/${data.id}`);
     });

@@ -1,3 +1,4 @@
+// @flow
 import CreateRoom from '../components/CreateRoom';
 import Home from '../components/Home';
 import JoinRoom from '../components/JoinRoom';
