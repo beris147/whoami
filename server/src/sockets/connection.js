@@ -1,6 +1,6 @@
 // @flow
-const roomHandler = require('./handlers/roomHandler');
-const userHandler = require('./handlers/userHandler');
+const roomHandler = require('sockets/handlers/roomHandler');
+const userHandler = require('sockets/handlers/userHandler');
 
 import type { RoomSetT } from 'types/roomSetType';
 import type { UserSetT } from 'types/userSetType';
