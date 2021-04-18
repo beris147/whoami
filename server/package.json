@@ -15,8 +15,9 @@
   "dependencies": {
     "express": "^4.17.1",
     "socket.io": "^4.0.1",
-    "sockets": "file:./src/sockets",
-    "utils": "file:./src/utils",
+    "sockets": "file:./lib/sockets",
+    "types": "file:../common/types",
+    "utils": "file:./lib/utils",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -24,6 +25,8 @@
     "@babel/core": "^7.13.15",
     "@babel/preset-flow": "^7.13.13",
     "flow-bin": "^0.148.0",
-    "types": "file:../common/types"
+    "sockets": "file:./src/sockets",
+    "types": "file:../common/types",
+    "utils": "file:./src/utils"
   }
 }
