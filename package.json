@@ -1,0 +1,26 @@
+{
+  "name": "whoami",
+  "version": "1.0.0",
+  "description": "Basic app with websockets in nodejs and react # backend inside server dir run `npm start` # front end inside client dir run `npm start`",
+  "scripts": {
+    "server": "npm start --prefix ./server",
+    "client": "npm start --prefix ./client",
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+    "flow": "flow"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beris147/whoami.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beris147/whoami/issues"
+  },
+  "homepage": "https://github.com/beris147/whoami#readme",
+  "devDependencies": {
+    "concurrently": "^6.0.2",
+    "flow-bin": "^0.149.0"
+  }
+}

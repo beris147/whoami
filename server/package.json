@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepublish": "npm run build",
-    "flow": "flow",
-    "start": "npm run flow && npm run build && node lib/app.js",
+    "start": "npm run build && node lib/app.js",
     "build": "babel src/ -d lib/"
   },
   "keywords": [],
@@ -24,7 +23,6 @@
     "@babel/core": "^7.13.15",
     "@babel/preset-flow": "^7.13.13",
     "common": "file:../common",
-    "flow-bin": "^0.148.0",
     "sockets": "file:./src/sockets",
     "utils": "file:./src/utils"
   }
