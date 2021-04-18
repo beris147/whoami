@@ -5,10 +5,10 @@ import type { UserT } from 'types/userType';
 import type { UserSetT } from 'types/userSetType';
 
 const createUser = (
-    id: string, 
-    username: string, 
-    roomId: string,
-    users: UserSetT,
+  id: string, 
+  username: string, 
+  roomId: string,
+  users: UserSetT,
 ): UserT => {
   return users[id] = { id, username, roomId };
 }
@@ -28,8 +28,8 @@ const removeUser = (user: UserT, users: UserSetT): void => {
 
 
 module.exports = {
-    createUser,
-    removeUser,
-    removeUserFromRoom,
-    userRoom,
+  createUser,
+  removeUser,
+  removeUserFromRoom,
+  userRoom,
 };

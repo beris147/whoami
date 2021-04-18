@@ -18,11 +18,11 @@ const canJoinRoom = (room: RoomT, user: UserT, rooms: RoomSetT): ?ErrorT => {
 }
 
 const joinRoom = (
-    socket: any,
-    room: RoomT,
-    user: UserT,
-    io: any,
-    rooms: RoomSetT,
+  socket: any,
+  room: RoomT,
+  user: UserT,
+  io: any,
+  rooms: RoomSetT,
 ): JoinRequestT => {
   const error = canJoinRoom(room, user, rooms);
   if(error) return { room, error };
@@ -54,9 +54,9 @@ const emitRoomUpdate = (room: RoomT, io: any) => {
 }
 
  module.exports = {
-    canJoinRoom,
-    createRoom,
-    emitRoomUpdate,
-    joinRoom,
-    removeRoom,
+  canJoinRoom,
+  createRoom,
+  emitRoomUpdate,
+  joinRoom,
+  removeRoom,
 };

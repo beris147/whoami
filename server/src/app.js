@@ -18,7 +18,7 @@ const rooms: RoomSetT = {};
 connection.connect(io, rooms, users);
 
 app.get('/', (req, res): void => {
-    res.send({ response: 'I am alive' }).status(200);
+  res.send({ response: 'I am alive' }).status(200);
 });
 
 process.on('uncaughtException', (err, origin) => {
