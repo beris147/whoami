@@ -2,8 +2,8 @@
 const roomUtils = require('../../utils/roomUtils');
 const userUtils = require('../../utils/userUtils');
 
-import type { RoomSetT } from '../../types/roomSetType';
-import type { UserSetT } from '../../types/userSetType';
+import type { RoomSetT } from 'types/roomSetType';
+import type { UserSetT } from 'types/userSetType';
 
 const { removeRoom, emitRoomUpdate } = roomUtils;
 const { removeUserFromRoom, removeUser } = userUtils;

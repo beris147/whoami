@@ -1,12 +1,12 @@
 // @flow
 const { v4: uuidv4 } = require('uuid');
 
-import type { ErrorT } from '../types/errorType';
-import type { JoinRequestT } from '../types/joinRequestType';
-import type { RoomT } from '../types/roomType';
-import type { RoomSetT } from '../types/roomSetType';
-import type { UserT } from '../types/userType';
-import type { UserSetT } from '../types/userSetType';
+import type { ErrorT } from 'types/errorType';
+import type { JoinRequestT } from 'types/joinRequestType';
+import type { RoomT } from 'types/roomType';
+import type { RoomSetT } from 'types/roomSetType';
+import type { UserT } from 'types/userType';
+import type { UserSetT } from 'types/userSetType';
 
 const canJoinRoom = (room: RoomT, user: UserT, rooms: RoomSetT): ?ErrorT => {
   if(!rooms[room.id]) { 
@@ -53,7 +53,7 @@ const emitRoomUpdate = (room: RoomT, io: any) => {
   io.in(room.id).emit('room-update', room);
 }
 
-module.exports = {
+ module.exports = {
     canJoinRoom,
     createRoom,
     emitRoomUpdate,

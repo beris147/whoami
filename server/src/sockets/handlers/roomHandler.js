@@ -2,11 +2,11 @@
 const roomUtils = require('../../utils/roomUtils');
 const userUtils = require('../../utils/userUtils');
 
-import type { CallBackT } from '../../types/callBackType';
-import type { JoinRoomT } from '../../types/joinRoomType';
-import type { RoomT } from '../../types/roomType';
-import type { RoomSetT } from '../../types/roomSetType';
-import type { UserSetT } from '../../types/userSetType';
+import type { CallBackT } from 'types/callBackType';
+import type { JoinRoomT } from 'types/joinRoomType';
+import type { RoomT } from 'types/roomType';
+import type { RoomSetT } from 'types/roomSetType';
+import type { UserSetT } from 'types/userSetType';
 
 const { createRoom, removeRoom, emitRoomUpdate, joinRoom } = roomUtils;
 const { createUser, removeUserFromRoom, removeUser } = userUtils;
