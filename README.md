@@ -1,6 +1,7 @@
 # whoami
 Basic app with websockets in nodejs and react
-# backend
-inside server dir run `npm start`
-# front end
-inside client dir run `npm start`
+# Running in local
+After installing all the dependencies with `npm i`, run `npm run dev` 
+# Run apart
+run `npm start` inside client and inside server in different consoles, this way
+when working on the backend is no needed to compile the front end everytime
