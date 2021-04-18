@@ -16,7 +16,6 @@
     "express": "^4.17.1",
     "socket.io": "^4.0.1",
     "sockets": "file:./lib/sockets",
-    "types": "file:../common/types",
     "utils": "file:./lib/utils",
     "uuid": "^8.3.2"
   },
@@ -24,9 +23,9 @@
     "@babel/cli": "^7.13.14",
     "@babel/core": "^7.13.15",
     "@babel/preset-flow": "^7.13.13",
+    "common": "file:../common",
     "flow-bin": "^0.148.0",
     "sockets": "file:./src/sockets",
-    "types": "file:../common/types",
     "utils": "file:./src/utils"
   }
 }

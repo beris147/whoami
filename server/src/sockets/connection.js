@@ -2,8 +2,7 @@
 const roomHandler = require('sockets/handlers/roomHandler');
 const userHandler = require('sockets/handlers/userHandler');
 
-import type { RoomSetT } from 'types/roomSetType';
-import type { UserSetT } from 'types/userSetType';
+import type { RoomSetT, UserSetT } from 'common/types';
 
 module.exports.connect = (io: any, rooms: RoomSetT, users: UserSetT) => {
   io.on('connection', (socket: any): void => {

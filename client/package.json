@@ -15,6 +15,9 @@
     "socket.io-client": "^4.0.1",
     "web-vitals": "^1.1.1"
   },
+  "devDependencies": {
+    "common": "file:../common"
+  },
   "scripts": {
     "flow": "flow",
     "start": "react-scripts start",

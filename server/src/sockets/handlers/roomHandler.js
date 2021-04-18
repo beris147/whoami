@@ -12,11 +12,13 @@ const {
   removeUser,
 } = require('utils/userUtils');
 
-import type { CallBackT } from 'types/callBackType';
-import type { JoinRoomT } from 'types/joinRoomType';
-import type { RoomT } from 'types/roomType';
-import type { RoomSetT } from 'types/roomSetType';
-import type { UserSetT } from 'types/userSetType';
+import type {
+  CallBackT,
+  JoinRoomT,
+  RoomT,
+  RoomSetT,
+  UserSetT,
+} from 'common/types';
 
 module.exports = (
   io: Object, 

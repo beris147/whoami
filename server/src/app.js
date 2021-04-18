@@ -4,8 +4,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const connection = require('sockets/connection');
 
-import type { UserSetT } from 'types/userSetType';
-import type { RoomSetT } from 'types/roomSetType';
+import type { UserSetT, RoomSetT } from 'common/types';
 
 const app = express();
 const port = process.env.PORT || 9000;

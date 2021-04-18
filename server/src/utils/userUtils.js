@@ -1,8 +1,5 @@
 // @flow
-import type { RoomT } from 'types/roomType';
-import type { RoomSetT } from 'types/roomSetType';
-import type { UserT } from 'types/userType';
-import type { UserSetT } from 'types/userSetType';
+import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
 
 const createUser = (
   id: string, 
