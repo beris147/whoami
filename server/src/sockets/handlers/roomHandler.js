@@ -13,11 +13,12 @@ const {
 } = require('utils/userUtils');
 
 import type {
-  CallBackT,
+  ErrorCallBackT,
   JoinRoomT,
   RoomT,
   RoomSetT,
   UserSetT,
+  CreateRoomT,
 } from 'common/types';
 
 module.exports = (
@@ -26,7 +27,10 @@ module.exports = (
   rooms: RoomSetT,
   users: UserSetT,
 ) => {
-  const createRoomHandler = (data: any, callback: CallBackT): void => {
+  const createRoomHandler = (
+    data: CreateRoomT, 
+    callback: ErrorCallBackT,
+  ): void => {
     const newRoom = createRoom(data.username, rooms);
     const user = createUser(socket.id, data.username, newRoom.id, users);
     const { room, error } = joinRoom(socket, newRoom, user, io, rooms);
@@ -34,7 +38,10 @@ module.exports = (
     socket.emit('joined-room', rooms[room.id]);
   }
 
-  const joinRoomHandler =  (data: JoinRoomT, callback: CallBackT): void => {
+  const joinRoomHandler = (
+    data: JoinRoomT, 
+    callback: ErrorCallBackT,
+  ): void => {
     const user = createUser(socket.id, data.username, data.room.id, users);
     const { room, error } = joinRoom(socket, data.room, user, io, rooms);
     if (error) return callback(error);

@@ -3,27 +3,35 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import SocketContext from '../contexts/SocketContext';
 
+import type { 
+  CreateRoomT, 
+  ErrorCallBackT, 
+  ErrorT,
+  RoomT,
+} from 'common/types';
 
 function CreateRoom(): React$Element<any> {
-  const history = useHistory();
-  const socket = useContext(SocketContext);
-  const [username, setUsername] = useState('');
+  const history: any = useHistory();
+  const socket: any = useContext(SocketContext);
+  const [username: string, setUsername: mixed] = useState('');
 
-  const handleCreateRoom = (): void => {
-    socket.emit('create-room', {username}, error => {
-      if(error) {
-        console.log(error);
-      } 
-    });
+  const errorCallBack: ErrorCallBackT = (error: ?ErrorT): void => {
+    if(error) {
+      console.log(error);
+    }
+  }
+
+  const handleCreateRoom: mixed = (): void => {
+    const data: CreateRoomT = { username };
+    socket.emit('create-room', data, errorCallBack);
   }
 
   useEffect((): void => {
-    socket.on('joined-room', data => {
+    socket.on('joined-room', (data: RoomT): void => {
       history.push(`/room/${data.id}`);
     });
-
-    socket.on('error', data => {
-      console.log(data);
+    socket.on('error', (error: ErrorT) => {
+      console.log(error);
     });
   }, [socket, history]);
 
