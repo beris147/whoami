@@ -3,7 +3,7 @@ const {
   createRoom,
   removeRoom,
   emitRoomUpdate,
-  joinRoom,
+  joinUserToRoomById,
 } = require('utils/roomUtils');
 
 const {
@@ -14,7 +14,7 @@ const {
 
 import type {
   ErrorCallBackT,
-  JoinRoomT,
+  JoinRoomRequestT,
   RoomT,
   RoomSetT,
   UserSetT,
@@ -33,17 +33,29 @@ module.exports = (
   ): void => {
     const newRoom = createRoom(data.username, rooms);
     const user = createUser(socket.id, data.username, newRoom.id, users);
-    const { room, error } = joinRoom(socket, newRoom, user, io, rooms);
+    const { room, error } = joinUserToRoomById(
+      socket,
+      newRoom.id,
+      user,
+      io,
+      rooms,
+    );
     if (error) return callback(error);
-    socket.emit('joined-room', rooms[room.id]);
+    socket.emit('joined-room', room);
   }
 
   const joinRoomHandler = (
-    data: JoinRoomT, 
+    data: JoinRoomRequestT, 
     callback: ErrorCallBackT,
   ): void => {
-    const user = createUser(socket.id, data.username, data.room.id, users);
-    const { room, error } = joinRoom(socket, data.room, user, io, rooms);
+    const user = createUser(socket.id, data.username, data.roomId, users);
+    const { room, error } = joinUserToRoomById(
+      socket,
+      data.roomId,
+      user,
+      io,
+      rooms
+    );
     if (error) return callback(error);
     socket.emit('joined-room', room);
   }

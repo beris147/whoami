@@ -11,11 +11,11 @@ const createUser = (
 }
 
 const removeUserFromRoom = (user: UserT, rooms: RoomSetT): void => {
-  const room = userRoom(user, rooms);
+  const room = getUserRoom(user, rooms);
   rooms[room.id].users = room.users.filter(name => name != user.username);
 }
 
-const userRoom = (user: UserT, rooms: RoomSetT): RoomT => {
+const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {
   return rooms[user.roomId];
 }
 
@@ -28,5 +28,5 @@ module.exports = {
   createUser,
   removeUser,
   removeUserFromRoom,
-  userRoom,
+  getUserRoom,
 };
