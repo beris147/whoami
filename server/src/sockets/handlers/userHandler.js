@@ -16,6 +16,7 @@ module.exports = (
     try {
       const user = users[socket.id];
       removeUser(user, users);
+      if(!rooms[user.roomId]) return;
       removeUserFromRoom(user, rooms);
       if (!rooms[user.roomId].users.length) {
         console.log(`removing empty room ${user.roomId}`);
