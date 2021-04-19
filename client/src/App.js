@@ -10,7 +10,6 @@ function TemporalLinkLi() {
       <li><Link to="/">Home</Link></li>
       <li><Link to="/create">Create new room</Link></li>
       <li><Link to="/join">Join room</Link></li>
-      <li><Link to="/join/1234">Join room 1234</Link></li>
     </ul>
   );
 }
