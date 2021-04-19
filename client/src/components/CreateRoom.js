@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import SocketContext from '../contexts/SocketContext';
 import errorCallBack from '../utils/errorCallBack'
 
-import type { CreateRoomT, RoomT } from 'common/types';
+import type { CreateRoomRequestT, RoomT } from 'common/types';
 
 function CreateRoom(): React$Element<any> {
   const history: any = useHistory();
@@ -12,7 +12,7 @@ function CreateRoom(): React$Element<any> {
   const [username: string, setUsername: mixed] = useState('');
 
   const handleCreateRoom: mixed = (): void => {
-    const data: CreateRoomT = { username };
+    const data: CreateRoomRequestT = { username };
     socket.emit('create-room', data, errorCallBack);
   }
 

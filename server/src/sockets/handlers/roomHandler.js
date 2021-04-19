@@ -18,7 +18,7 @@ import type {
   RoomT,
   RoomSetT,
   UserSetT,
-  CreateRoomT,
+  CreateRoomRequestT,
 } from 'common/types';
 
 module.exports = (
@@ -28,7 +28,7 @@ module.exports = (
   users: UserSetT,
 ) => {
   const createRoomHandler = (
-    data: CreateRoomT, 
+    data: CreateRoomRequestT, 
     callback: ErrorCallBackT,
   ): void => {
     const newRoom = createRoom(data.username, rooms);
