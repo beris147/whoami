@@ -1,13 +1,14 @@
 // @flow
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { useHistory, useParams } from 'react-router-dom';
+import UserContext from '../contexts/UserContext';
+
 
 function Room(): React$Element<any> {
-    // confirm if room exists, if not show error
-    // if room exists join the game
-    // if we have an username in the props, join
-    // else go to /join/:id to log in 
+    const { user } = useContext(UserContext);
     const { id } = useParams();
+    const history = useHistory();
+    if(!user) history.push(`/join/${id}`);
     return <h1>Room {id}</h1>;
 }
 

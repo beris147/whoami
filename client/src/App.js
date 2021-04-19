@@ -3,6 +3,8 @@ import React from 'react';
 import routes from './utils/routes';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import SocketProvider from './providers/SocketProvider';
+import UserProvider from './providers/UserProvider';
+
 
 function TemporalLinkLi() {
   return (
@@ -30,12 +32,14 @@ function MySwitch() {
 
 function App(): React$Element<any> {
   return (
-    <SocketProvider>
-      <Router>
-        <TemporalLinkLi />
-        <MySwitch />
-      </Router>
-    </SocketProvider>
+    <UserProvider>
+      <SocketProvider>
+        <Router>
+          <TemporalLinkLi />
+          <MySwitch />
+        </Router>
+      </SocketProvider>
+    </UserProvider>
   );
 }
 

@@ -2,14 +2,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import SocketContext from '../contexts/SocketContext';
+import UserContext from '../contexts/UserContext';
 import errorCallBack from '../utils/errorCallBack';
 
 import type { JoinRoomRequestT, RoomT } from 'common/types';
 
 function JoinRoom(): React$Element<any> {
-  const socket = useContext(SocketContext);
-  const history = useHistory();
   const { id } = useParams();
+  const history = useHistory();
+  const socket = useContext(SocketContext);
+  const { user, setUser } = useContext(UserContext);
   const [username: string, setUsername: mixed] = useState('');
   const [roomId: string, setRoomId: mixed] = useState('');
 
@@ -23,8 +25,9 @@ function JoinRoom(): React$Element<any> {
   }, [id]);
 
   useEffect((): void => {
-    socket.on('joined-room', (data: RoomT): void => {
-      history.push(`/room/${data.id}`);
+    socket.on('joined-room', (room: RoomT): void => {
+      setUser({ username, roomId: room });
+      history.push(`/room/${room.id}`);
     });
   }, [socket, history]);
 
