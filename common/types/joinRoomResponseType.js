@@ -2,7 +2,7 @@
 import type { RoomT } from './roomType';
 import type { ErrorT } from './errorType';
 
-export type JoinRequestT = {|
-  room: RoomT, 
+export type JoinRoomResponseT = {|
+  room: ?RoomT, 
   error: ?ErrorT,
 |};

@@ -3,36 +3,40 @@ const { v4: uuidv4 } = require('uuid');
 
 import type { 
   ErrorT,
-  JoinRequestT,
+  JoinRoomResponseT,
   RoomT,
   RoomSetT,
   UserT,
   UserSetT 
 } from 'common/types';
 
-const canJoinRoom = (room: RoomT, user: UserT, rooms: RoomSetT): ?ErrorT => {
-  if(!rooms[room.id]) { 
-    return { error: `no room with id ${room.id}` };
+const canUserJoinRoom = (
+  roomId: string, 
+  user: UserT, 
+  rooms: RoomSetT
+): ?ErrorT => {
+  if(!rooms[roomId]) { 
+    return { error: `no room with id ${roomId}` };
   }
-  if(rooms[room.id].users.includes(user.username)) {
+  if(rooms[roomId].users.includes(user.username)) {
     return { error: `username ${user.username} already in use` };
   }
 }
 
-const joinRoom = (
+const joinUserToRoomById = (
   socket: any,
-  room: RoomT,
+  roomId: string,
   user: UserT,
   io: any,
   rooms: RoomSetT,
-): JoinRequestT => {
-  const error = canJoinRoom(room, user, rooms);
-  if(error) return { room, error };
-  rooms[room.id].users.push(user.username);
-  io.in(room.id).emit('room-update', rooms[room.id]);
-  socket.join(room.id);
-  console.log(`User ${socket.id} joined room ${room.id}`);
-  return { room: rooms[room.id], error: undefined };
+): JoinRoomResponseT => {
+  const error = canUserJoinRoom(roomId, user, rooms);
+  if(error) return { room: undefined, error };
+  rooms[roomId].users.push(user.username);
+  io.in(roomId).emit('room-update', rooms[roomId]);
+  socket.join(roomId);
+  console.log(`User ${socket.id} joined room ${roomId}`);
+  return { room: rooms[roomId], error: undefined };
 }
 
 
@@ -55,10 +59,9 @@ const emitRoomUpdate = (room: RoomT, io: any) => {
   io.in(room.id).emit('room-update', room);
 }
 
- module.exports = {
-  canJoinRoom,
+module.exports = {
   createRoom,
   emitRoomUpdate,
-  joinRoom,
+  joinUserToRoomById,
   removeRoom,
 };
