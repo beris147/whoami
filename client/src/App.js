@@ -34,10 +34,8 @@ function App(): React$Element<any> {
   return (
     <UserProvider>
       <SocketProvider>
-        <Router>
-          <TemporalLinkLi />
-          <MySwitch />
-        </Router>
+        <TemporalLinkLi />
+        <MySwitch />
       </SocketProvider>
     </UserProvider>
   );
