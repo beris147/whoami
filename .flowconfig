@@ -1,5 +1,5 @@
 [ignore]
-
+.*/lib/*.
 [include]
 
 [libs]
@@ -7,5 +7,6 @@
 [lints]
 
 [options]
-
+module.name_mapper='^utils\(.*\)$' -> '<PROJECT_ROOT>/server/src/utils/\1'
+module.name_mapper='^sockets\(.*\)$' -> '<PROJECT_ROOT>/server/src/sockets/\1'
 [strict]
