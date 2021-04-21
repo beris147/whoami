@@ -1,32 +1,59 @@
 // @flow
-import React, { useContext } from 'react';
+import React from 'react';
 import { render, screen, cleanup } from '@testing-library/react';
-import { test, expect, describe, afterEach } from '@jest/globals';
-import { BrowserRouter, Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
-import '@testing-library/jest-dom';
-
+import {
+  test,
+  expect,
+  describe,
+  afterEach,
+  beforeEach,
+  jest,
+} from '@jest/globals';
+import { MemoryRouter } from 'react-router-dom';
+import io from 'socket.io-client';
+import MockedSocket from 'socket.io-mock';
+import MockedProvider from 'providers/__tests__/MockedProvider.test';
+import SocketContext from 'contexts/SocketContext';
+import UserContext from 'contexts/UserContext';
 import App from '../App';
 
-describe('App component', () => {
-  afterEach(cleanup);
+import '@testing-library/jest-dom';
 
-  test('App renders wihtout crashing test', () => {
+jest.mock('socket.io-client');
+
+describe('App component', () => {
+
+  let socket: Object;
+
+  beforeEach(() => {
+    socket = new MockedSocket();
+    io.mockReturnValue(socket);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    cleanup();
+  });
+
+  test('App renders wihtout crashing', () => {
     render(
-      <BrowserRouter>
+      <MemoryRouter>
         <App />
-      </BrowserRouter>
+      </MemoryRouter>
     );
     expect(screen.getByText(/Create new room/i)).toBeInTheDocument();
   });
 
   test('App routing test', () => {
-    const history = createMemoryHistory();
-    history.push('/create');
+    const mockUserState = {user: undefined, setUser: () => {}};
     render(
-      <Router history={history}>
-        <App />
-      </Router>
+      <MockedProvider value={mockUserState} context={UserContext}>
+        <MockedProvider value={socket} context={SocketContext}>
+          <MemoryRouter initialEntries={['/create']}>
+            <App />
+          </MemoryRouter>
+        </MockedProvider>
+      </MockedProvider>
     );
     expect(
       screen.getByRole(
