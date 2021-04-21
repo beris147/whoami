@@ -19,6 +19,7 @@ import type {
   RoomSetT,
   UserSetT,
   CreateRoomRequestT,
+  LeaveRoomRequestT,
 } from 'common/types';
 
 module.exports = (
@@ -60,6 +61,15 @@ module.exports = (
     socket.emit('joined-room', room);
   }
 
+  const leaveRoomHandler = (
+    data: LeaveRoomRequestT,
+    callback: ErrorCallBackT,
+  ): void => {
+    removeUserFromRoom(data.user, rooms);
+    socket.emit('left-room');
+  }
+
   socket.on('create-room', createRoomHandler);
   socket.on('join-room', joinRoomHandler);
+  socket.on('leave-room', leaveRoomHandler);
 }
