@@ -20,7 +20,7 @@ import '@testing-library/jest-dom';
 
 describe('App component', () => {
 
-  const socket = io;
+  const socket = io.connect();
 
   afterEach(cleanup);
 
