@@ -12,7 +12,7 @@ import {
 import { MemoryRouter } from 'react-router-dom';
 import io from 'socket.io-client';
 import MockedSocket from 'socket.io-mock';
-import MockedProvider from 'providers/__tests__/MockedProvider.test';
+import MockedProvider from 'providers/__mocks__/MockedProvider';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import App from '../App';
