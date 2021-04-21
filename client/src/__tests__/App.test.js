@@ -10,30 +10,19 @@ import {
   jest,
 } from '@jest/globals';
 import { MemoryRouter } from 'react-router-dom';
-import io from 'socket.io-client';
-import MockedSocket from 'socket.io-mock';
 import MockedProvider from 'providers/__mocks__/MockedProvider';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
+import io from 'utils/__mocks__/MockedSocketIO';
 import App from '../App';
 
 import '@testing-library/jest-dom';
 
-jest.mock('socket.io-client');
-
 describe('App component', () => {
 
-  let socket: Object;
+  const socket = io;
 
-  beforeEach(() => {
-    socket = new MockedSocket();
-    io.mockReturnValue(socket);
-  });
-
-  afterEach(() => {
-    jest.restoreAllMocks();
-    cleanup();
-  });
+  afterEach(cleanup);
 
   test('App renders wihtout crashing', () => {
     render(
