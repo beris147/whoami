@@ -15,7 +15,11 @@
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
-    "common": "file:../common"
+    "common": "file:../common",
+    "components": "file:./src/components",
+    "contexts": "file:./src/contexts",
+    "providers": "file:./src/providers",
+    "utils": "file:./src/utils"
   },
   "scripts": {
     "start": "react-scripts start",

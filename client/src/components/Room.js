@@ -1,7 +1,7 @@
 // @flow
 import React, { useContext } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import UserContext from '../contexts/UserContext';
+import UserContext from 'contexts/UserContext';
 
 
 function Room(): React$Element<any> {

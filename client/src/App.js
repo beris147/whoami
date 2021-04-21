@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import routes from './utils/routes';
+import routes from 'utils/routes';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import SocketProvider from './providers/SocketProvider';
-import UserProvider from './providers/UserProvider';
+import SocketProvider from 'providers/SocketProvider';
+import UserProvider from 'providers/UserProvider';
 
 
 function TemporalLinkLi() {
