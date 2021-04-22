@@ -117,6 +117,7 @@ describe('CreateRoom component', (): void => {
     fireEvent.change(userNameInput, { target: { value: username } });
     expect(button).toBeEnabled();
     fireEvent.click(button);
+    expect(socket.has('joined-room')).toBe(true);
   });
 
 });

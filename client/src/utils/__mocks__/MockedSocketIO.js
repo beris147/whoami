@@ -12,7 +12,10 @@ const socket = {
     }
     EVENTS[event] = [func];
   },
-  emit
+  emit,
+  has(event) {
+    return (EVENTS[event]) ? true : false;
+  },
 };
 
 export const io = {
