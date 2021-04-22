@@ -12,7 +12,7 @@ import {
 import JoinRoom from '../JoinRoom';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
-import CustomMemoryRouter from 'components/__mocks__/CustomMemoryRouter';
+import MockRouter from 'components/__mocks__/MockRouter';
 
 import type { UserT, RoomT, JoinRoomRequestT } from 'common/types';
 
@@ -26,7 +26,7 @@ describe('JoinRoom component', (): void => {
   const setUser: mixed = (user: UserT): void => { user = user; };
 
   const ui = (
-    <CustomMemoryRouter 
+    <MockRouter 
       ui={<JoinRoom/>}
       initialEntries={['join']}
       path={'join'}

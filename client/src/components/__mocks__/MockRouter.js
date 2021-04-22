@@ -2,13 +2,13 @@
 import React from 'react';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-type CustomMemoryRouterT = {
+type MockRouterT = {
   ui: React$Element<any>,
   initialEntries: [string],
   path: string,
 };
 
-function CustomMemoryRouter(props: CustomMemoryRouterT): React$Element<any>{
+function MockRouter(props: MockRouterT): React$Element<any>{
   return (
     <MemoryRouter initialEntries={props.initialEntries}>
       <Route path={props.path}>
@@ -18,4 +18,4 @@ function CustomMemoryRouter(props: CustomMemoryRouterT): React$Element<any>{
   );
 }
 
-export default CustomMemoryRouter;
+export default MockRouter;
