@@ -37,6 +37,28 @@ describe("removeUserFromRoom", () => {
     });
     // TODO: it removes the user from the user set
   });
+  describe("given a user whose room exists and their username is the only one in the room's list", () => {
+    it("keeps the room", () => {
+      // TODO: removing the only user left in the room should delete the room
+      const user: UserT = {
+        id: "user-id",
+        username: "user-username",
+        roomId: "room-id",
+      };
+      const room: RoomT = {
+        id: user.roomId,
+        owner: "owner-id",
+        round: 1,
+        time: 1,
+        users: [user.username],
+      };
+      const rooms: RoomSetT = {
+        [room.id]: room,
+      };
+      removeUserFromRoom(user, rooms);
+      expect(rooms[room.id]).toBeDefined();
+    });
+  });
   describe("given a user whose room exists and owns it", () => {
     it("does nothing", () => {
       // TODO: removing the owner should change ownership
