@@ -4,14 +4,13 @@ const { removeUserFromRoom } = require("utils/userUtils");
 
 import type { RoomT, RoomSetT, UserT, UserSetT, ErrorT } from "common/types";
 
-describe("removeUserFromRoom", () => {
-  describe("given a user whose room exists and their username appears in the room's list", () => {
-    it("removes the username from the room user list", () => {
-      const roomId: string = "room-id";
+describe("When removing a user from a room", () => {
+  describe("Given a user whose room exists and their username appears in the room's list", () => {
+    it("Removes the username from the room user list", () => {
       const user: UserT = {
         id: "user-id",
         username: "user-username",
-        roomId: roomId,
+        roomId: "room-id",
       };
       const userList: Array<string> = [
         "username-1",
@@ -19,7 +18,7 @@ describe("removeUserFromRoom", () => {
         "username-3",
       ];
       const room: RoomT = {
-        id: roomId,
+        id: user.roomId,
         owner: "owner-id",
         round: 1,
         time: 1,
@@ -29,16 +28,16 @@ describe("removeUserFromRoom", () => {
         ...room,
         users: userList,
       };
-      let rooms: RoomSetT = {};
-      rooms[roomId] = room;
+      const rooms: RoomSetT = {
+        [room.id]: room
+      };
 
       removeUserFromRoom(user, rooms);
-      expect(rooms[roomId]).toStrictEqual(expectedRoom);
+      expect(rooms[user.roomId]).toStrictEqual(expectedRoom);
     });
-    // TODO: it removes the user from the user set
   });
-  describe("given a user whose room exists and their username is the only one in the room's list", () => {
-    it("keeps the room", () => {
+  describe("Given a user whose room exists and their username is the only one in the room's list", () => {
+    it("Keeps the room", () => {
       // TODO: removing the only user left in the room should delete the room
       const user: UserT = {
         id: "user-id",
@@ -59,8 +58,8 @@ describe("removeUserFromRoom", () => {
       expect(rooms[room.id]).toBeDefined();
     });
   });
-  describe("given a user whose room exists and owns it", () => {
-    it("does nothing", () => {
+  describe("Given a user whose room exists and owns it", () => {
+    it("Does nothing", () => {
       // TODO: removing the owner should change ownership
       const user: UserT = {
         id: "user-id",
@@ -81,13 +80,12 @@ describe("removeUserFromRoom", () => {
       expect(rooms[room.id]).toStrictEqual(room);
     });
   });
-  describe("given a user whose room exists and their username doesn't appear in the room's list", () => {
-    it("does nothing", () => {
-      const roomId: string = "room-id";
+  describe("Given a user whose room exists and their username doesn't appear in the room's list", () => {
+    it("Does nothing", () => {
       const user: UserT = {
         id: "user-id",
         username: "user-username",
-        roomId: roomId,
+        roomId: "room-id",
       };
       const userList: Array<string> = [
         "username-1",
@@ -95,32 +93,31 @@ describe("removeUserFromRoom", () => {
         "username-3",
       ];
       const room: RoomT = {
-        id: roomId,
+        id: user.roomId,
         owner: "owner-id",
         round: 1,
         time: 1,
         users: userList,
       };
-      let rooms: RoomSetT = {};
-      rooms[roomId] = room;
+      const rooms: RoomSetT = {
+        [room.id]: room,
+      };
 
       removeUserFromRoom(user, rooms);
-      expect(rooms[roomId]).toStrictEqual(room);
+      expect(rooms[user.roomId]).toStrictEqual(room);
     });
   });
-  describe("given a user whose room doesn't exists", () => {
-    it("throws an error", () => {
-      const roomId: string = "room-id";
+  describe("Given a user whose room doesn't exists", () => {
+    it("Throws an error", () => {
       const user: UserT = {
         id: "user-id",
         username: "user-username",
-        roomId: roomId,
+        roomId: "room-id",
       };
-      let rooms: RoomSetT = {};
+      const rooms: RoomSetT = {};
       expect(() => {
         removeUserFromRoom(user, rooms);
       }).toThrow();
     });
   });
-  describe("given an owner", () => {});
 });
