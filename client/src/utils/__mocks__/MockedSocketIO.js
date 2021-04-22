@@ -25,7 +25,7 @@ export const io = {
 export const serverSocket = { emit };
  
 // cleanup helper
-export function cleanup() {
+export function cleanSocket() {
   EVENTS = {};
 }
 
