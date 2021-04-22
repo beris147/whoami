@@ -36,6 +36,28 @@ describe("removeUserFromRoom", () => {
       expect(rooms[roomId]).toStrictEqual(expectedRoom);
     });
   });
+  describe("given a user whose room exists and owns it", () => {
+    it("does nothing", () => {
+      // TODO: removing the owner should change ownership
+      const user: UserT = {
+        id: "user-id",
+        username: "user-username",
+        roomId: "room-id",
+      };
+      const room: RoomT = {
+        id: user.roomId,
+        owner: user.username,
+        round: 1,
+        time: 1,
+        users: ["username-1", "username-2", "username-3"],
+      };
+      const rooms: RoomSetT = {
+        [room.id]: room,
+      };
+      removeUserFromRoom(user, rooms);
+      expect(rooms[room.id]).toStrictEqual(room);
+    });
+  });
   describe("given a user whose room exists and their username doesn't appear in the room's list", () => {
     it("does nothing", () => {
       const roomId: string = "room-id";
