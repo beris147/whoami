@@ -118,6 +118,7 @@ describe('CreateRoom component', (): void => {
           <CreateRoom />
         </Router>
       );
+      
       render(
         <ElementWithProviders 
           ui={ui}
