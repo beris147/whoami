@@ -62,7 +62,7 @@ describe('Room component', (): void => {
     expect(search).toBeInTheDocument();
   });
   
-  test('Do not load room view if the user is undefined', (): void => {
+  test('If user is undefined, redirect to join to ask for it', (): void => {
     const history = createMemoryHistory();
     history.push(`/room/${roomId}`);
     const ui = (
