@@ -2,7 +2,7 @@
 const EVENTS: {[string]: any} = {};
 
 function emit(event: string, ...args: any) {
-  EVENTS[event].foreach(func => func(...args));
+  EVENTS[event].map(func => func(...args));
 }
 
 const socket = {
@@ -25,7 +25,7 @@ export const io = {
 export const serverSocket = { emit };
  
 // cleanup helper
-export function cleanup() {
+export function cleanSocket() {
   for (let event in EVENTS) {
     if (EVENTS.hasOwnProperty(event)) {
       delete EVENTS[event];
