@@ -2,7 +2,7 @@
 let EVENTS: {[string]: any} = {};
 
 function emit(event: string, ...args: any) {
-  EVENTS[event].foreach(func => func(...args));
+  EVENTS[event].map(func => func(...args));
 }
 
 const socket = {
