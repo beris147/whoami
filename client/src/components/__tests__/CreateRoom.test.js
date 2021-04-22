@@ -133,5 +133,4 @@ describe('CreateRoom component', (): void => {
       expect(socket.has('joined-room')).toBe(true);
     }
   );
-
 });
