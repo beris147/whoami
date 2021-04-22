@@ -37,12 +37,14 @@ function JoinRoom(): React$Element<any> {
       <div>
         <input 
           type='text' 
+          data-testid="username"
           placeholder='User Name'
           value={username}
           onChange={e => setUsername(e.target.value)}
         /><br/>
         <input 
           type='text'
+          data-testid="roomid"
           placeholder='Room id'
           value={roomId}
           onChange={e => setRoomId(e.target.value)}
