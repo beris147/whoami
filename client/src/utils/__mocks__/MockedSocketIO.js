@@ -1,5 +1,5 @@
 // @flow
-const EVENTS: {[string]: any} = {};
+let EVENTS: {[string]: any} = {};
 
 function emit(event: string, ...args: any) {
   EVENTS[event].foreach(func => func(...args));
@@ -26,11 +26,7 @@ export const serverSocket = { emit };
  
 // cleanup helper
 export function cleanup() {
-  for (let event in EVENTS) {
-    if (EVENTS.hasOwnProperty(event)) {
-      delete EVENTS[event];
-    }
-  }
+  EVENTS = {};
 }
 
 export default io;
