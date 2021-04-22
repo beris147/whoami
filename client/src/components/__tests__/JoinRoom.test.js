@@ -9,32 +9,14 @@ import {
   beforeEach,
   jest,
 } from '@jest/globals';
-import { MemoryRouter, Route } from 'react-router-dom';
 import JoinRoom from '../JoinRoom';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
+import CustomMemoryRouter from 'components/__mocks__/CustomMemoryRouter';
+
 import type { UserT, RoomT, JoinRoomRequestT } from 'common/types';
 
 import '@testing-library/jest-dom';
-
-// Join room needs useParams hook, with this personalized router we can have
-// it in test enviroment
-
-type CustomMemoryRouterT = {
-  ui: React$Element<any>,
-  initialEntries: [string],
-  path: string,
-};
-
-function CustomMemoryRouter(props: CustomMemoryRouterT): React$Element<any>{
-  return (
-    <MemoryRouter initialEntries={props.initialEntries}>
-      <Route path={props.path}>
-        {props.ui}
-      </Route>
-    </MemoryRouter>
-  );
-}
 
 describe('JoinRoom component', (): void => {
 
@@ -51,9 +33,13 @@ describe('JoinRoom component', (): void => {
     />
   );
 
-  const mockedUserState = () => {
-    return { user, setUser }; 
-  };
+  const renderElement = (
+    <ElementWithProviders 
+      ui={ui}
+      mockUserState={{ user, setUser }}
+      socket={socket}
+    />
+  );
 
   beforeEach((): void => {
     user = undefined;
@@ -65,29 +51,13 @@ describe('JoinRoom component', (): void => {
   });
 
   test('JoinRoom renders wihtout crashing', (): void => {
-    render(
-      <ElementWithProviders 
-        ui={ui}
-        mockUserState={mockedUserState()}
-        socket={socket}
-      />
-    );
-    expect(
-      screen.getByRole(
-        'button', 
-        { name: /Join Room/i }
-      )
-    ).toBeInTheDocument();
+    render(renderElement);
+    const joinButton = screen.getByRole('button', { name: /Join Room/i });
+    expect(joinButton).toBeInTheDocument();
   });
   
   test('join room button disabled if not username or not roomid', (): void => {
-    render(
-      <ElementWithProviders 
-        ui={ui}
-        mockUserState={mockedUserState()}
-        socket={socket}
-      />
-    );
+    render(renderElement);
     const joinButton = screen.getByRole('button', { name: /Join Room/i });
     const userNameInput = screen.getByTestId('username');
     const roomIdInput = screen.getByTestId('roomid');
@@ -119,13 +89,7 @@ describe('JoinRoom component', (): void => {
         expect(room).toBe(fakeRoom);
         expect(room.users).toContain(username);
       });
-      render(
-        <ElementWithProviders 
-          ui={ui}
-          mockUserState={mockedUserState()}
-          socket={socket}
-        />
-      );
+      render(renderElement);
       const joinButton = screen.getByRole('button', { name: /Join Room/i });
       const userNameInput = screen.getByTestId('username');
       const roomIdInput = screen.getByTestId('roomid');
