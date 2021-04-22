@@ -98,38 +98,42 @@ describe('JoinRoom component', (): void => {
     expect(joinButton).toBeEnabled();
   });
   
-  test('join room sockets test', (): void => {
-    const username = 'owner';
-    const roomid = 'my-id';
-    let fakeRoom: RoomT = {
-      id: roomid,
-      users: [ ],
-      owner: '',
-      round: 1,
-      time: 30,
-    };
-    socket.on('join-room', (data: JoinRoomRequestT) => {
-      fakeRoom.users.push(data.username);
-      serverSocket.emit('joined-room', fakeRoom);
-    });
-    socket.on('joined-room', (room: RoomT) => {
-      expect(room).toBe(fakeRoom);
-      expect(room.users).toContain(username);
-    });
-    render(
-      <ElementWithProviders 
-        ui={ui}
-        mockUserState={mockedUserState()}
-        socket={socket}
-      />
-    );
-    const joinButton = screen.getByRole('button', { name: /Join Room/i });
-    const userNameInput = screen.getByTestId('username');
-    const roomIdInput = screen.getByTestId('roomid');
-    fireEvent.change(userNameInput, { target: { value: username } });
-    fireEvent.change(roomIdInput, { target: { value: roomid } });
-    expect(joinButton).toBeEnabled();
-    fireEvent.click(joinButton);
-  });
-
+  test(
+    'when the client clicks on join room, if the button is enabled, the join ' +
+    'room request should be sent with a joined room response', 
+    (): void => {
+      const username = 'owner';
+      const roomid = 'my-id';
+      let fakeRoom: RoomT = {
+        id: roomid,
+        users: [ ],
+        owner: '',
+        round: 1,
+        time: 30,
+      };
+      socket.on('join-room', (data: JoinRoomRequestT) => {
+        fakeRoom.users.push(data.username);
+        serverSocket.emit('joined-room', fakeRoom);
+      });
+      socket.on('joined-room', (room: RoomT) => {
+        expect(room).toBe(fakeRoom);
+        expect(room.users).toContain(username);
+      });
+      render(
+        <ElementWithProviders 
+          ui={ui}
+          mockUserState={mockedUserState()}
+          socket={socket}
+        />
+      );
+      const joinButton = screen.getByRole('button', { name: /Join Room/i });
+      const userNameInput = screen.getByTestId('username');
+      const roomIdInput = screen.getByTestId('roomid');
+      fireEvent.change(userNameInput, { target: { value: username } });
+      fireEvent.change(roomIdInput, { target: { value: roomid } });
+      expect(joinButton).toBeEnabled();
+      fireEvent.click(joinButton);
+      expect(socket.has('joined-room')).toBe(true);
+    }
+  );
 });
