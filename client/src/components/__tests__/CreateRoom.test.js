@@ -87,37 +87,43 @@ describe('CreateRoom component', (): void => {
     ).toBeEnabled();
   });
 
-  test('create and join room sockets test', (): void => {
-    const username = 'owner';
-    let fakeRoom: RoomT = {
-      id: 'my-id',
-      users: [ ],
-      owner: '',
-      round: 1,
-      time: 30,
-    };
-    socket.on('create-room', (data: CreateRoomRequestT) => {
-      fakeRoom.users = [data.username];
-      fakeRoom.owner = data.username;
-      serverSocket.emit('joined-room', fakeRoom);
-    });
-    socket.on('joined-room', (room: RoomT) => {
-      expect(room).toBe(fakeRoom);
-      expect(room.owner).toBe(username);
-    });
-    const history = createMemoryHistory();
-    const ui = (
-      <Router history={history}>
-        <CreateRoom />
-      </Router>
-    );
-    customRender(ui, mockedUserState(), socket);
-    const userNameInput = screen.getByRole('textbox', {type: 'text'});
-    const button = screen.getByRole('button', { name: /Create Room/i });
-    fireEvent.change(userNameInput, { target: { value: username } });
-    expect(button).toBeEnabled();
-    fireEvent.click(button);
-    expect(socket.has('joined-room')).toBe(true);
-  });
+  test(
+    'when we click on create room button, we expect to received the joined ' +
+    'room response, everything should be alright.', 
+    (): void => {
+      const username = 'owner';
+      let fakeRoom: RoomT = {
+        id: 'my-id',
+        users: [ ],
+        owner: '',
+        round: 1,
+        time: 30,
+      };
+      // mock of what the server should do. 
+      socket.on('create-room', (data: CreateRoomRequestT) => {
+        fakeRoom.users = [data.username];
+        fakeRoom.owner = data.username;
+        serverSocket.emit('joined-room', fakeRoom);
+      });
+      // still check if the username that created the room is the same
+      socket.on('joined-room', (room: RoomT) => {
+        expect(room).toBe(fakeRoom);
+        expect(room.owner).toBe(username);
+      });
+      const history = createMemoryHistory();
+      const ui = (
+        <Router history={history}>
+          <CreateRoom />
+        </Router>
+      );
+      customRender(ui, mockedUserState(), socket);
+      const userNameInput = screen.getByRole('textbox', {type: 'text'});
+      const button = screen.getByRole('button', { name: /Create Room/i });
+      fireEvent.change(userNameInput, { target: { value: username } });
+      expect(button).toBeEnabled();
+      fireEvent.click(button);
+      expect(socket.has('joined-room')).toBe(true);
+    }
+  );
 
 });
