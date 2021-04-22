@@ -35,6 +35,7 @@ describe("removeUserFromRoom", () => {
       removeUserFromRoom(user, rooms);
       expect(rooms[roomId]).toStrictEqual(expectedRoom);
     });
+    // TODO: it removes the user from the user set
   });
   describe("given a user whose room exists and owns it", () => {
     it("does nothing", () => {
