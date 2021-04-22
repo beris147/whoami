@@ -118,7 +118,10 @@ describe('CreateRoom component', (): void => {
           <CreateRoom />
         </Router>
       );
+<<<<<<< HEAD
       
+=======
+>>>>>>> 0af83c266eaa83ccbd497de9a9adeb6c3f359fbd
       render(
         <ElementWithProviders 
           ui={ui}
