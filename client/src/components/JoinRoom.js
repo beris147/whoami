@@ -24,11 +24,15 @@ function JoinRoom(): React$Element<any> {
     if(id) setRoomId(id);
   }, [id]);
 
-  useEffect((): void => {
+  useEffect((): any => {
     socket.on('joined-room', (room: RoomT): void => {
       setUser({ username, roomId: room });
       history.push(`/room/${room.id}`);
     });
+
+    return function cleanup() {
+      socket.off('joined-room');
+    };
   }, [socket, history]);
 
   return (
