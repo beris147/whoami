@@ -11,7 +11,7 @@ import {
 } from '@jest/globals';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
-import CreateRoom from '../CreateRoom';
+import CreateRoom from 'components/CreateRoom';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';

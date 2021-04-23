@@ -9,11 +9,11 @@ import {
   beforeEach,
   jest,
 } from '@jest/globals';
-import Room from '../Room';
+import Room from 'components/Room';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import MockRouter from 'components/__mocks__/MockRouter';
-import { createMemoryHistory } from "history";
+import { createMemoryHistory } from 'history';
 import type { UserT, RoomT } from 'common/types';
 import '@testing-library/jest-dom';
 

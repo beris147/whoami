@@ -9,7 +9,7 @@ import {
   beforeEach,
   jest,
 } from '@jest/globals';
-import JoinRoom from '../JoinRoom';
+import JoinRoom from 'components/JoinRoom';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import MockRouter from 'components/__mocks__/MockRouter';
