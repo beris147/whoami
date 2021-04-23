@@ -11,28 +11,12 @@ import {
 } from '@jest/globals';
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
-import MockedProvider from 'providers/__mocks__/MockedProvider';
-import SocketContext from 'contexts/SocketContext';
-import UserContext from 'contexts/UserContext';
 import CreateRoom from '../CreateRoom';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
+import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';
 
 import '@testing-library/jest-dom';
-
-const customRender = (
-  ui: React$Element<any>,
-  mockUserState: { user: ?UserT, setUser: mixed },
-  socket: Object,
-): React$Element<any> => {
-  return render(
-    <MockedProvider value={mockUserState} context={UserContext}>
-      <MockedProvider value={socket} context={SocketContext}>
-        {ui}
-      </MockedProvider>
-    </MockedProvider>
-  );
-}
 
 describe('CreateRoom component', (): void => {
 
@@ -55,7 +39,13 @@ describe('CreateRoom component', (): void => {
   });
 
   test('CreateRoom renders wihtout crashing', (): void => {
-    customRender(<CreateRoom />, mockedUserState(), socket);
+    render(
+      <ElementWithProviders 
+        ui={<CreateRoom />}
+        mockUserState={mockedUserState()}
+        socket={socket}
+      />
+    );
     expect(
       screen.getByRole(
         'button', 
@@ -65,7 +55,13 @@ describe('CreateRoom component', (): void => {
   });
 
   test('create room button disabled if not username', (): void => {
-    customRender(<CreateRoom />, mockedUserState(), socket);
+    render(
+      <ElementWithProviders 
+        ui={<CreateRoom />}
+        mockUserState={mockedUserState()}
+        socket={socket}
+      />
+    );
     expect(
       screen.getByRole(
         'button', 
@@ -76,7 +72,13 @@ describe('CreateRoom component', (): void => {
 
 
   test('create room button enabled if username', (): void => {
-    customRender(<CreateRoom />, mockedUserState(), socket);
+    render(
+      <ElementWithProviders 
+        ui={<CreateRoom />}
+        mockUserState={mockedUserState()}
+        socket={socket}
+      />
+    );
     const userNameInput = screen.getByRole('textbox', {type: 'text'});
     fireEvent.change(userNameInput, { target: { value: 'a' } });
     expect(
@@ -116,7 +118,13 @@ describe('CreateRoom component', (): void => {
           <CreateRoom />
         </Router>
       );
-      customRender(ui, mockedUserState(), socket);
+      render(
+        <ElementWithProviders 
+          ui={ui}
+          mockUserState={mockedUserState()}
+          socket={socket}
+        />
+      );
       const userNameInput = screen.getByRole('textbox', {type: 'text'});
       const button = screen.getByRole('button', { name: /Create Room/i });
       fireEvent.change(userNameInput, { target: { value: username } });
@@ -125,5 +133,4 @@ describe('CreateRoom component', (): void => {
       expect(socket.has('joined-room')).toBe(true);
     }
   );
-
 });
