@@ -12,6 +12,7 @@ import {
 import { Router } from 'react-router-dom';
 import { createMemoryHistory } from 'history'
 import CreateRoom from 'components/CreateRoom';
+import MockRouter from 'components/__mocks__/MockRouter';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';
@@ -22,15 +23,30 @@ describe('CreateRoom component', (): void => {
 
   const socket = io.connect();
   let user: ?UserT;
+  let history: any;
+  let ui: React$Element<any>;
+  let elementToRender: React$Element<any>;
 
-  const setUser: mixed = (user: UserT): void => { user = user; };
-
-  const mockedUserState = () => {
-    return { user, setUser }; 
-  };
+  const setUser = (newUser: ?UserT): void => { user = newUser; };
 
   beforeEach((): void => {
     user = undefined;
+    history = createMemoryHistory();
+    history.push('/create');
+    ui = (
+      <MockRouter 
+        ui={<CreateRoom/>}
+        history={history}
+        path={'/create'}
+      />
+    );
+    elementToRender = (
+      <ElementWithProviders 
+        ui={ui}
+        mockUserState={{ user, setUser }}
+        socket={socket}
+      />
+    );
   });
 
   afterEach(() => {
@@ -39,54 +55,24 @@ describe('CreateRoom component', (): void => {
   });
 
   test('CreateRoom renders wihtout crashing', (): void => {
-    render(
-      <ElementWithProviders 
-        ui={<CreateRoom />}
-        mockUserState={mockedUserState()}
-        socket={socket}
-      />
-    );
-    expect(
-      screen.getByRole(
-        'button', 
-        { name: /Create Room/i }
-      )
-    ).toBeInTheDocument();
+    render(elementToRender);
+    const button = screen.getByRole('button', { name: /Create Room/i });
+    expect(button).toBeInTheDocument();
   });
 
   test('create room button disabled if not username', (): void => {
-    render(
-      <ElementWithProviders 
-        ui={<CreateRoom />}
-        mockUserState={mockedUserState()}
-        socket={socket}
-      />
-    );
-    expect(
-      screen.getByRole(
-        'button', 
-        { name: /Create Room/i, disabled: true }
-      )
-    ).toBeDisabled();
+    render(elementToRender);
+    const button = screen.getByRole('button', { name: /Create Room/i });
+    expect(button).toBeDisabled();
   });
 
 
   test('create room button enabled if username', (): void => {
-    render(
-      <ElementWithProviders 
-        ui={<CreateRoom />}
-        mockUserState={mockedUserState()}
-        socket={socket}
-      />
-    );
+    render(elementToRender);
     const userNameInput = screen.getByRole('textbox', {type: 'text'});
+    const button = screen.getByRole('button', { name: /Create Room/i });
     fireEvent.change(userNameInput, { target: { value: 'a' } });
-    expect(
-      screen.getByRole(
-        'button', 
-        { name: /Create Room/i, disabled: false }
-      )
-    ).toBeEnabled();
+    expect(button).toBeEnabled();
   });
 
   test(
@@ -112,25 +98,14 @@ describe('CreateRoom component', (): void => {
         expect(room).toBe(fakeRoom);
         expect(room.owner).toBe(username);
       });
-      const history = createMemoryHistory();
-      const ui = (
-        <Router history={history}>
-          <CreateRoom />
-        </Router>
-      );
-      render(
-        <ElementWithProviders 
-          ui={ui}
-          mockUserState={mockedUserState()}
-          socket={socket}
-        />
-      );
+      render(elementToRender);
       const userNameInput = screen.getByRole('textbox', {type: 'text'});
       const button = screen.getByRole('button', { name: /Create Room/i });
       fireEvent.change(userNameInput, { target: { value: username } });
       expect(button).toBeEnabled();
       fireEvent.click(button);
       expect(socket.has('joined-room')).toBe(true);
+      expect(history.location.pathname).toBe(`/room/${fakeRoom.id}`);
     }
   );
 });
