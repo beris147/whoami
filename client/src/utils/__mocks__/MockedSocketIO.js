@@ -2,7 +2,7 @@
 let EVENTS: {[string]: any} = {};
 
 function emit(event: string, ...args: any) {
-  EVENTS[event].foreach(func => func(...args));
+  EVENTS[event].map(func => func(...args));
 }
 
 const socket = {
@@ -12,7 +12,10 @@ const socket = {
     }
     EVENTS[event] = [func];
   },
-  emit
+  emit,
+  has(event) {
+    return (EVENTS[event]) ? true : false;
+  },
 };
 
 export const io = {
@@ -25,7 +28,7 @@ export const io = {
 export const serverSocket = { emit };
  
 // cleanup helper
-export function cleanup() {
+export function cleanSocket() {
   EVENTS = {};
 }
 
