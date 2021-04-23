@@ -9,8 +9,7 @@ import {
   beforeEach,
   jest,
 } from '@jest/globals';
-import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory } from 'history';
 import CreateRoom from 'components/CreateRoom';
 import MockRouter from 'components/__mocks__/MockRouter';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
