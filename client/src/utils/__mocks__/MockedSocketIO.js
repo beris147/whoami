@@ -6,16 +6,21 @@ function emit(event: string, ...args: any) {
 }
 
 const socket = {
-  on(event, func) {
+  on(event: string, func) {
     if (EVENTS[event]) {
       return EVENTS[event].push(func);
     }
     EVENTS[event] = [func];
   },
   emit,
-  has(event) {
+  has(event: string) {
     return (EVENTS[event]) ? true : false;
   },
+  off(event: string) {
+    // with tests we need to check if the event was called, so we do not 
+    // remove the event with this mock of socketio
+    return;
+  } 
 };
 
 export const io = {

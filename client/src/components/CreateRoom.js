@@ -18,11 +18,15 @@ function CreateRoom(): React$Element<any> {
     socket.emit('create-room', data, errorCallBack);
   }
 
-  useEffect((): void => {
+  useEffect((): any => {
     socket.on('joined-room', (room: RoomT): void => {
       setUser({ username, roomId: room.id});
       history.push(`/room/${room.id}`);
     });
+
+    return function cleanup() {
+      socket.off('joined-room');
+    };
   }, [socket, history]);
 
   return (
