@@ -1,9 +1,9 @@
 // @flow
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import SocketContext from '../contexts/SocketContext';
-import UserContext from '../contexts/UserContext';
-import errorCallBack from '../utils/errorCallBack';
+import SocketContext from 'contexts/SocketContext';
+import UserContext from 'contexts/UserContext';
+import errorCallBack from 'utils/errorCallBack';
 
 import type { JoinRoomRequestT, RoomT } from 'common/types';
 
@@ -37,12 +37,14 @@ function JoinRoom(): React$Element<any> {
       <div>
         <input 
           type='text' 
+          data-testid="username"
           placeholder='User Name'
           value={username}
           onChange={e => setUsername(e.target.value)}
         /><br/>
         <input 
           type='text'
+          data-testid="roomid"
           placeholder='Room id'
           value={roomId}
           onChange={e => setRoomId(e.target.value)}

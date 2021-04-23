@@ -1,9 +1,7 @@
 // @flow
 import React from 'react';
-import routes from './utils/routes';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import SocketProvider from './providers/SocketProvider';
-import UserProvider from './providers/UserProvider';
+import routes from 'utils/routes';
+import { Switch, Route, Link } from 'react-router-dom';
 
 
 function TemporalLinkLi() {
@@ -32,14 +30,10 @@ function MySwitch() {
 
 function App(): React$Element<any> {
   return (
-    <UserProvider>
-      <SocketProvider>
-        <Router>
-          <TemporalLinkLi />
-          <MySwitch />
-        </Router>
-      </SocketProvider>
-    </UserProvider>
+    <>
+      <TemporalLinkLi />
+      <MySwitch />
+    </>
   );
 }
 

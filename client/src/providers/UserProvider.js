@@ -1,6 +1,6 @@
 // @flow
 import React, { useState } from 'react';
-import UserContext from '../contexts/UserContext';
+import UserContext from 'contexts/UserContext';
 
 import type { UserT } from 'common/types';
 
