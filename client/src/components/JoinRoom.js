@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
+import { toast } from 'react-toastify';
 
 import type { JoinRoomRequestT, RoomT } from 'common/types';
 
@@ -26,6 +27,7 @@ function JoinRoom(): React$Element<any> {
 
   useEffect((): any => {
     socket.on('joined-room', (room: RoomT): void => {
+      toast.success('Hey you joined!');
       setUser({ username, roomId: room });
       history.push(`/room/${room.id}`);
     });

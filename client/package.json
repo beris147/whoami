@@ -10,7 +10,6 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
-    "react-toast-notifications": "^2.4.3",
     "socket.io-client": "^4.0.1",
     "web-vitals": "^1.1.1"
   },
@@ -19,6 +18,7 @@
     "components": "file:./src/components",
     "contexts": "file:./src/contexts",
     "providers": "file:./src/providers",
+    "react-toastify": "^7.0.4",
     "utils": "file:./src/utils"
   },
   "scripts": {

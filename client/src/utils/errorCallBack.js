@@ -1,9 +1,10 @@
 // @flow
 import type { ErrorCallBackT, ErrorT } from 'common/types';
+import { toast } from 'react-toastify';
 
 const errorCallBack: ErrorCallBackT = (error: ?ErrorT): void => {
   if(error) {
-    console.log(error);
+    toast.error(error.error);
   }
 }
 
