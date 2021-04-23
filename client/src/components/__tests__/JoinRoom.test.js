@@ -13,6 +13,7 @@ import JoinRoom from 'components/JoinRoom';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import MockRouter from 'components/__mocks__/MockRouter';
+import { createMemoryHistory } from 'history';
 
 import type { UserT, RoomT, JoinRoomRequestT } from 'common/types';
 
@@ -22,27 +23,30 @@ describe('JoinRoom component', (): void => {
 
   const socket = io.connect();
   let user: ?UserT;
+  let history: any;
+  let ui: React$Element<any>;
+  let elementToRender: React$Element<any>;
 
   const setUser: mixed = (user: UserT): void => { user = user; };
 
-  const ui = (
-    <MockRouter 
-      ui={<JoinRoom/>}
-      initialEntries={['join']}
-      path={'join'}
-    />
-  );
-
-  const renderElement = (
-    <ElementWithProviders 
-      ui={ui}
-      mockUserState={{ user, setUser }}
-      socket={socket}
-    />
-  );
-
   beforeEach((): void => {
     user = undefined;
+    history = createMemoryHistory();
+    history.push('/join');
+    ui = (
+      <MockRouter 
+        ui={<JoinRoom/>}
+        history={history}
+        path={'/join'}
+      />
+    );
+    elementToRender = (
+      <ElementWithProviders 
+        ui={ui}
+        mockUserState={{ user, setUser }}
+        socket={socket}
+      />
+    );
   });
 
   afterEach(() => {
@@ -51,13 +55,13 @@ describe('JoinRoom component', (): void => {
   });
 
   test('JoinRoom renders wihtout crashing', (): void => {
-    render(renderElement);
+    render(elementToRender);
     const joinButton = screen.getByRole('button', { name: /Join Room/i });
     expect(joinButton).toBeInTheDocument();
   });
   
   test('join room button disabled if not username or not roomid', (): void => {
-    render(renderElement);
+    render(elementToRender);
     const joinButton = screen.getByRole('button', { name: /Join Room/i });
     const userNameInput = screen.getByTestId('username');
     const roomIdInput = screen.getByTestId('roomid');
@@ -70,7 +74,8 @@ describe('JoinRoom component', (): void => {
   
   test(
     'when the client clicks on join room, if the button is enabled, the join ' +
-    'room request should be sent with a joined room response', 
+    'room request should be sent with a joined room response, and redirects ' +
+    'user to /room/:roomid (the room route)', 
     (): void => {
       const username = 'owner';
       const roomid = 'my-id';
@@ -89,7 +94,7 @@ describe('JoinRoom component', (): void => {
         expect(room).toBe(fakeRoom);
         expect(room.users).toContain(username);
       });
-      render(renderElement);
+      render(elementToRender);
       const joinButton = screen.getByRole('button', { name: /Join Room/i });
       const userNameInput = screen.getByTestId('username');
       const roomIdInput = screen.getByTestId('roomid');
@@ -98,6 +103,7 @@ describe('JoinRoom component', (): void => {
       expect(joinButton).toBeEnabled();
       fireEvent.click(joinButton);
       expect(socket.has('joined-room')).toBe(true);
+      expect(history.location.pathname).toBe(`/room/${roomid}`);
     }
   );
 });
