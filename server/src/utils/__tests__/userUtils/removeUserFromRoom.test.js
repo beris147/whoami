@@ -48,8 +48,7 @@ describe("When removing a user from a room", () => {
     });
   });
   describe("Given a user whose room exists and owns it", () => {
-    it("Does nothing", () => {
-      // TODO: removing the owner should change ownership
+    it("Transfer ownership to first user", () => {
       const room: RoomT = {
         ...roomTemplate,
         owner: user.username,
@@ -58,7 +57,7 @@ describe("When removing a user from a room", () => {
         [room.id]: room,
       };
       removeUserFromRoom(user, rooms);
-      expect(rooms[room.id]).toStrictEqual(room);
+      expect(rooms[room.id].owner).toStrictEqual("username-1");
     });
   });
   describe("Given a user whose room exists and their username doesn't appear in the room's list", () => {
