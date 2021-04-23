@@ -22,6 +22,8 @@
     "utils": "file:./src/utils"
   },
   "scripts": {
+    "prestart": "npm test -- --watchAll=false",
+    "prebuild": "npm test -- --watchAll=false",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
