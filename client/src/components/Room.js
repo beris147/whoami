@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import UserContext from 'contexts/UserContext';
 import { toast } from 'react-toastify';
 import Chat from 'components/Chat/Chat';
+import Lobby from 'components/lobby/Lobby';
 
 function Room(): React$Element<any> {
 	const { user } = useContext(UserContext);
@@ -18,6 +19,7 @@ function Room(): React$Element<any> {
 	return (
 		<div>
 			<h1>Room {id}</h1> 
+			<Lobby />
 			<Chat />
 		</div>
 	);
