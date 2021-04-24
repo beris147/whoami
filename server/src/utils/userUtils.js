@@ -1,5 +1,6 @@
 // @flow
 import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
+const { transferOwnership } = require("utils/roomUtils");
 
 const createUser = (
   id: string, 
@@ -12,7 +13,15 @@ const createUser = (
 
 const removeUserFromRoom = (user: UserT, rooms: RoomSetT): void => {
   const room = getUserRoom(user, rooms);
-  rooms[room.id].users = room.users.filter(name => name != user.username);
+  const roomv2: RoomT = 
+    room.owner == user.username
+    ? transferOwnership(room, room.users[0])
+    : room;
+  const roomv3: RoomT = {
+    ...roomv2,
+    users: roomv2.users.filter(name => name != user.username),
+  }
+  rooms[room.id] = roomv3; 
 }
 
 const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {

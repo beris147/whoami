@@ -48,17 +48,23 @@ describe("When removing a user from a room", () => {
     });
   });
   describe("Given a user whose room exists and owns it", () => {
-    it("Does nothing", () => {
-      // TODO: removing the owner should change ownership
-      const room: RoomT = {
-        ...roomTemplate,
-        owner: user.username,
-      };
-      const rooms: RoomSetT = {
-        [room.id]: room,
-      };
+    const room: RoomT = {
+      ...roomTemplate,
+      owner: user.username,
+    };
+    const rooms: RoomSetT = {
+      [room.id]: room,
+    };
+    beforeEach(() => {
+      rooms[room.id] = room;
+    });
+    it("Transfers ownership to first user", () => {
       removeUserFromRoom(user, rooms);
-      expect(rooms[room.id]).toStrictEqual(room);
+      expect(rooms[room.id].owner).toStrictEqual("username-1");
+    });
+    it("Removes the new owner from the list", () => {
+      removeUserFromRoom(user, rooms);
+      expect(rooms[room.id].users).toStrictEqual(["username-2", "username-3"]);
     });
   });
   describe("Given a user whose room exists and their username doesn't appear in the room's list", () => {
