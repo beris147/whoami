@@ -26,7 +26,7 @@ function JoinRoom(): React$Element<any> {
 
     socket.on('joined-room', (room: RoomT): void => {
       toast.success('Hey you joined!');
-      setUser({ username, roomId: room });
+      setUser({ username, roomId: room.id, id: socket.id });
       history.push(`/room/${room.id}`);
     });
 
