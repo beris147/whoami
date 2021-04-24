@@ -60,8 +60,8 @@ const emitRoomUpdate = (room: RoomT, io: any) => {
   io.in(room.id).emit('room-update', room);
 }
 
-const emitRoomMessage = (room: RoomT, message: MessageT, io: any) => {
-  io.in(room.id).emit('new-message', message);
+const emitRoomMessage = (room: RoomT, message: MessageT, socket: any) => {
+  socket.to(room.id).emit('new-message', message);
 }
 
 module.exports = {

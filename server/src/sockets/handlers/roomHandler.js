@@ -80,7 +80,7 @@ module.exports = (
     const user = users[socket.id];
     const room = getUserRoom(user, rooms);
     if(!room) return callback({error: 'disconnection error'});
-    emitRoomMessage(room, data, io);
+    emitRoomMessage(room, data, socket);
   }
 
   socket.on('create-room', createRoomHandler);
