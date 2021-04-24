@@ -12,7 +12,7 @@ function Room(): React$Element<any> {
     useEffect(()=> {
       if(!user) history.push(`/join/${id}`);
       else toast.info('Share the link with your friends!', {autoClose: 5000, delay: 2500});
-    });
+    }, [history, id, user]);
     
     return <h1>Room {id}</h1>;
 }

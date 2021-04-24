@@ -12,20 +12,18 @@ function JoinRoom(): React$Element<any> {
   const { id } = useParams();
   const history = useHistory();
   const socket = useContext(SocketContext);
-  const { user, setUser } = useContext(UserContext);
-  const [username: string, setUsername: mixed] = useState('');
-  const [roomId: string, setRoomId: mixed] = useState('');
+  const { setUser } = useContext(UserContext);
+  const [username: string, setUsername ] = useState('');
+  const [roomId: string, setRoomId ] = useState('');
 
-  const handleJoinRoom: mixed = (): void => {
+  const handleJoinRoom = (): void => {
     const data: JoinRoomRequestT = { username, roomId };
     socket.emit('join-room', data, errorCallBack);
   }
 
-  useEffect((): void => {
-    if(id) setRoomId(id);
-  }, [id]);
-
   useEffect((): any => {
+    if(id) setRoomId(id);
+
     socket.on('joined-room', (room: RoomT): void => {
       toast.success('Hey you joined!');
       setUser({ username, roomId: room });
@@ -35,7 +33,7 @@ function JoinRoom(): React$Element<any> {
     return function cleanup() {
       socket.off('joined-room');
     };
-  }, [socket, history]);
+  }, [history, id, setUser, socket, username]);
 
   return (
     <div>
