@@ -59,13 +59,9 @@ const transferOwnership = (
   room: RoomT,
   newOwnerUsername: string,
 ): RoomT => {
-  const remainingUsers = room.users.filter(
-    (username) => username != newOwnerUsername
-  );
   return {
     ...room,
     owner: newOwnerUsername,
-    users: [...remainingUsers, room.owner],
   };
 };
 
