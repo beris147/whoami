@@ -2,7 +2,6 @@
 const {
   createRoom,
   removeRoom,
-  emitRoomUpdate,
   joinUserToRoomById,
 } = require('utils/roomUtils');
 

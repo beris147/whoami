@@ -3,7 +3,7 @@ import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
 const { 
   transferOwnership, 
   removeRoom, 
-  emitRoomUpdate,
+  emitToRoom,
 } = require("utils/roomUtils");
 
 const createUser = (
@@ -15,7 +15,7 @@ const createUser = (
   return users[id] = { id, username, roomId };
 }
 
-const removeUserFromRoom = (user: UserT, rooms: RoomSetT): void => {
+const removeUserFromRoom = (user: UserT, rooms: RoomSetT, io: any): void => {
   const room = getUserRoom(user, rooms);
   room.users = room.users.filter(name => name != user.username);
   if(!room.users.length) {
@@ -26,6 +26,7 @@ const removeUserFromRoom = (user: UserT, rooms: RoomSetT): void => {
     room.owner == user.username
     ? transferOwnership(room, room.users[0])
     : room;
+  if(io) emitToRoom(room.id, 'room-update', rooms[room.id], io);
 }
 
 const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {
@@ -40,12 +41,13 @@ const removeUserById = (
   userId: string,
   users: UserSetT,
   rooms: RoomSetT,
+  io: any,
 ): void => {
   if(!users[userId]) return;
   const user = users[userId];
   removeUser(user, users);
   if(!rooms[user.roomId]) return;
-  removeUserFromRoom(user, rooms); // handles transfer owner
+  removeUserFromRoom(user, rooms, io); // handles transfer owner
 }
 
 module.exports = {
