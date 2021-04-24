@@ -76,9 +76,8 @@ module.exports = (
     data: MessageT,
     callback: ErrorCallBackT,
   ): void => {
-    if(!users[socket.id]) return callback({error: 'disconnection error'});
-    const user = users[socket.id];
-    const room = getUserRoom(user, rooms);
+    if(!users[data.sender.id]) return callback({error: 'disconnection error'});
+    const room = getUserRoom(data.sender, rooms);
     if(!room) return callback({error: 'disconnection error'});
     emitRoomMessage(room, data, socket);
   }
