@@ -2,6 +2,7 @@
 const {
   createRoom,
   removeRoom,
+  emitRoomMessage,
   emitRoomUpdate,
   joinUserToRoomById,
 } = require('utils/roomUtils');
@@ -10,6 +11,7 @@ const {
   createUser,
   removeUserFromRoom,
   removeUser,
+  getUserRoom,
 } = require('utils/userUtils');
 
 import type {
@@ -20,6 +22,7 @@ import type {
   UserSetT,
   CreateRoomRequestT,
   LeaveRoomRequestT,
+  MessageT, 
 } from 'common/types';
 
 module.exports = (
@@ -69,7 +72,19 @@ module.exports = (
     socket.emit('left-room');
   }
 
+  const sendMessageHandler = (
+    data: MessageT,
+    callback: ErrorCallBackT,
+  ): void => {
+    if(!users[socket.id]) return callback({error: 'disconnection error'});
+    const user = users[socket.id];
+    const room = getUserRoom(user, rooms);
+    if(!room) return callback({error: 'disconnection error'});
+    emitRoomMessage(room, data);
+  }
+
   socket.on('create-room', createRoomHandler);
   socket.on('join-room', joinRoomHandler);
   socket.on('leave-room', leaveRoomHandler);
+  socket.on('send-message', sendMessageHandler);
 }
