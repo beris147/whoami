@@ -1,6 +1,10 @@
 // @flow
 import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
-const { transferOwnership } = require("utils/roomUtils");
+const { 
+  transferOwnership, 
+  removeRoom, 
+  emitToRoom,
+} = require("utils/roomUtils");
 
 const createUser = (
   id: string, 
@@ -11,17 +15,18 @@ const createUser = (
   return users[id] = { id, username, roomId };
 }
 
-const removeUserFromRoom = (user: UserT, rooms: RoomSetT): void => {
+const removeUserFromRoom = (user: UserT, rooms: RoomSetT, io: any): void => {
   const room = getUserRoom(user, rooms);
-  const roomv2: RoomT = 
+  room.users = room.users.filter(name => name != user.username);
+  if(!room.users.length) {
+    removeRoom(room, rooms);
+    return;
+  }
+  rooms[room.id] = 
     room.owner == user.username
     ? transferOwnership(room, room.users[0])
     : room;
-  const roomv3: RoomT = {
-    ...roomv2,
-    users: roomv2.users.filter(name => name != user.username),
-  }
-  rooms[room.id] = roomv3; 
+  if(io) emitToRoom(room.id, 'room-update', rooms[room.id], io);
 }
 
 const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {
@@ -32,10 +37,23 @@ const removeUser = (user: UserT, users: UserSetT): void => {
   delete users[user.id];
 }
 
+const removeUserById = (
+  userId: string,
+  users: UserSetT,
+  rooms: RoomSetT,
+  io: any,
+): void => {
+  if(!users[userId]) return;
+  const user = users[userId];
+  removeUser(user, users);
+  if(!rooms[user.roomId]) return;
+  removeUserFromRoom(user, rooms, io); // handles transfer owner
+}
 
 module.exports = {
   createUser,
   removeUser,
+  removeUserById,
   removeUserFromRoom,
   getUserRoom,
 };

@@ -59,23 +59,19 @@ const transferOwnership = (
   room: RoomT,
   newOwnerUsername: string,
 ): RoomT => {
-  const remainingUsers = room.users.filter(
-    (username) => username != newOwnerUsername
-  );
   return {
     ...room,
     owner: newOwnerUsername,
-    users: [...remainingUsers, room.owner],
   };
 };
 
-const emitRoomUpdate = (room: RoomT, io: any) => {
-  io.in(room.id).emit('room-update', room);
+const emitToRoom = (roomId: string, petition: string, data: any, io: any) => {
+  io.in(roomId).emit(petition, data);
 }
 
 module.exports = {
   createRoom,
-  emitRoomUpdate,
+  emitToRoom,
   joinUserToRoomById,
   removeRoom,
   transferOwnership,
