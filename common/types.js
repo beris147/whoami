@@ -9,3 +9,4 @@ export type { UserSetT } from 'types/userSetType';
 export type { UserT } from 'types/userType';
 export type { CreateRoomRequestT } from 'types/createRoomRequestType';
 export type { LeaveRoomRequestT } from 'types/leaveRoomRequestType';
+export type { MessageT } from 'types/messageType';
