@@ -56,8 +56,18 @@ const removeRoom = (room: RoomT, rooms: RoomSetT): void => {
   delete rooms[room.id];
 }
 
-const emitRoomUpdate = (room: RoomT, io: any) => {
-  io.in(room.id).emit('room-update', room);
+const transferOwnership = (
+  room: RoomT,
+  newOwnerUsername: string,
+): RoomT => {
+  return {
+    ...room,
+    owner: newOwnerUsername,
+  };
+};
+
+const emitToRoom = (roomId: string, petition: string, data: any, io: any) => {
+  io.in(roomId).emit(petition, data);
 }
 
 const emitRoomMessage = (room: RoomT, message: MessageT, socket: any) => {
@@ -67,7 +77,8 @@ const emitRoomMessage = (room: RoomT, message: MessageT, socket: any) => {
 module.exports = {
   createRoom,
   emitRoomMessage,
-  emitRoomUpdate,
+  emitToRoom,
   joinUserToRoomById,
   removeRoom,
+  transferOwnership,
 };

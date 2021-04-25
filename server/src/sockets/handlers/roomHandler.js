@@ -3,7 +3,6 @@ const {
   createRoom,
   removeRoom,
   emitRoomMessage,
-  emitRoomUpdate,
   joinUserToRoomById,
 } = require('utils/roomUtils');
 
