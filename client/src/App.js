@@ -2,7 +2,8 @@
 import React from 'react';
 import routes from 'utils/routes';
 import { Switch, Route, Link } from 'react-router-dom';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function TemporalLinkLi() {
   return (
@@ -33,6 +34,17 @@ function App(): React$Element<any> {
     <>
       <TemporalLinkLi />
       <MySwitch />
+      <ToastContainer 
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }
