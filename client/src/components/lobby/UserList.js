@@ -13,7 +13,7 @@ const UserList = (props: UserListPropsT): React$Element<any> => {
   return (
     <ul>
       {props.users.map((user) => (
-        <User user={user} />
+        <li key={user.username}><User user={user} /></li>
       ))}
     </ul>
   );
