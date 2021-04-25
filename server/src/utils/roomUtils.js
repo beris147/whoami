@@ -7,7 +7,8 @@ import type {
   RoomT,
   RoomSetT,
   UserT,
-  UserSetT 
+  UserSetT,
+  MessageT,
 } from 'common/types';
 
 const canUserJoinRoom = (
@@ -59,8 +60,13 @@ const emitRoomUpdate = (room: RoomT, io: any) => {
   io.in(room.id).emit('room-update', room);
 }
 
+const emitRoomMessage = (room: RoomT, message: MessageT, socket: any) => {
+  socket.to(room.id).emit('new-message', message);
+}
+
 module.exports = {
   createRoom,
+  emitRoomMessage,
   emitRoomUpdate,
   joinUserToRoomById,
   removeRoom,

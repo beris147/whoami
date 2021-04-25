@@ -22,7 +22,7 @@ function CreateRoom(): React$Element<any> {
   useEffect((): any => {
     socket.on('joined-room', (room: RoomT): void => {
       toast.success('Room created!');
-      setUser({ username, roomId: room.id});
+      setUser({ username, roomId: room.id, id: socket.id });
       history.push(`/room/${room.id}`);
     });
 
