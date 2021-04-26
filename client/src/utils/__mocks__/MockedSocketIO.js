@@ -1,5 +1,16 @@
 // @flow
-let EVENTS: {[string]: any} = {};
+
+type eventQueueT = {[string]: any}
+
+let EVENTS: eventQueueT = {};
+let EMITTED: eventQueueT = {};
+
+const push = (queue: eventQueueT, event: string, arg: any) => {
+    if (queue[event]) {
+      return queue[event].push(arg);
+    }
+    queue[event] = [arg];
+};
 
 function emit(event: string, ...args: any) {
   EVENTS[event].map(func => func(...args));
@@ -7,14 +18,16 @@ function emit(event: string, ...args: any) {
 
 const socket = {
   on(event: string, func) {
-    if (EVENTS[event]) {
-      return EVENTS[event].push(func);
-    }
-    EVENTS[event] = [func];
+    push(EVENTS, event, func);
   },
-  emit,
+  emit(event: string, data: any) {
+    push(EMITTED, event, data);
+  },
   has(event: string) {
     return (EVENTS[event]) ? true : false;
+  },
+  hasEmitted(event: string) {
+    return (EMITTED[event]) ? true : false;
   },
   off(event: string) {
     // with tests we need to check if the event was called, so we do not 

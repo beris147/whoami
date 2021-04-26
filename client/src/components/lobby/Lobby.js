@@ -6,6 +6,7 @@ import UserList from "./UserList";
 import ReadyButton from "./ReadyButton";
 import PlayButton from "./PlayButton";
 import SocketContext from "contexts/SocketContext";
+import errorCallBack from 'utils/errorCallBack';
 
 const mockUsers: Array<UserInLobbyT> = [
   { username: "username1", state: "Ready" },
@@ -30,6 +31,7 @@ const Lobby = (): React$Element<any> => {
       addUserToList(username);
     });
   });
+  socket.emit("get-users-in-lobby",0,errorCallBack);
   return (
     <div>
       <ReadyButton />
