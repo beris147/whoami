@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import routes from 'utils/routes';
+import PageNotFound from 'components/PageNotFound';
 import { Switch, Route, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -25,6 +26,7 @@ function MySwitch() {
           )
         )
       }
+      <Route component={PageNotFound} />
     </Switch>
   );
 }
