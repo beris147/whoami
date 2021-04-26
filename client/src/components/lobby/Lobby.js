@@ -8,26 +8,26 @@ import PlayButton from "./PlayButton";
 import SocketContext from "contexts/SocketContext";
 
 const mockUsers: Array<UserInLobbyT> = [
-  { id: "id1", username: "username1", roomId: "room", state: "Ready" },
-  { id: "id2", username: "username2", roomId: "room", state: "Waiting" },
-  { id: "id3", username: "username3", roomId: "room", state: "Waiting" },
-  { id: "id4", username: "username4", roomId: "room", state: "Ready" },
+  { username: "username1", state: "Ready" },
+  { username: "username2", state: "Waiting" },
+  { username: "username3", state: "Waiting" },
+  { username: "username4", state: "Ready" },
 ];
 
 const Lobby = (): React$Element<any> => {
   const socket = useContext(SocketContext);
   const [userList: Array<UserInLobbyT>, setUserList] = useState(mockUsers);
-  const addUserToList = (user: UserT) => {
+  const addUserToList = (username: string) => {
     const userInLobby: UserInLobbyT = {
-      ...user,
+      username: username,
       state: "Waiting",
     };
     const updatedUserList: Array<UserInLobbyT> = [...userList, userInLobby];
     setUserList(updatedUserList);
   };
   useEffect(() => {
-    socket.on("user-joined", (user: UserT) => {
-      addUserToList(user);
+    socket.on("user-joined", (username: string) => {
+      addUserToList(username);
     });
   });
   return (

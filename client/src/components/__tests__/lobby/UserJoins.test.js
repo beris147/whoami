@@ -11,7 +11,6 @@ import {
 } from "@testing-library/react";
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import io, { cleanSocket, serverSocket } from "utils/__mocks__/MockedSocketIO";
-import type { UserT } from "common/types";
 import Lobby from "components/lobby/Lobby";
 import SocketContext from "contexts/SocketContext";
 
@@ -24,13 +23,9 @@ describe("When user joins lobby", () => {
           <Lobby />
         </SocketContext.Provider>
       );
-      const user: UserT = {
-        id: "test-user-id",
-        roomId: "test-room-id",
-        username: "test-username",
-      };
+      const username: string = "test-username";
       act(() => {
-        serverSocket.emit("user-joined", user);
+        serverSocket.emit("user-joined", username);
       });
     });
 
