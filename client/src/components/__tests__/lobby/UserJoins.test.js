@@ -14,13 +14,13 @@ import io, { cleanSocket, serverSocket } from "utils/__mocks__/MockedSocketIO";
 import Lobby from "components/lobby/Lobby";
 import SocketContext from "contexts/SocketContext";
 
-describe("When user joins lobby", () => {
+describe("When user is in lobby and another user joins", () => {
   const socket = io.connect();
   describe("Given a user that wasn't already in the lobby", () => {
     beforeEach(() => {
       render(
         <SocketContext.Provider value={socket}>
-          <Lobby />
+          <Lobby roomId="room-test-id"/>
         </SocketContext.Provider>
       );
       const username: string = "test-username";

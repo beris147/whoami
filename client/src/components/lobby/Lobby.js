@@ -6,7 +6,7 @@ import UserList from "./UserList";
 import ReadyButton from "./ReadyButton";
 import PlayButton from "./PlayButton";
 import SocketContext from "contexts/SocketContext";
-import errorCallBack from 'utils/errorCallBack';
+import errorCallBack from "utils/errorCallBack";
 
 const mockUsers: Array<UserInLobbyT> = [
   { username: "username1", state: "Ready" },
@@ -15,7 +15,11 @@ const mockUsers: Array<UserInLobbyT> = [
   { username: "username4", state: "Ready" },
 ];
 
-const Lobby = (): React$Element<any> => {
+export type LobbyPropsT = {|
+  roomId: string,
+|};
+
+const Lobby = (props: LobbyPropsT): React$Element<any> => {
   const socket = useContext(SocketContext);
   const [userList: Array<UserInLobbyT>, setUserList] = useState(mockUsers);
   const addUserToList = (username: string) => {
@@ -31,7 +35,7 @@ const Lobby = (): React$Element<any> => {
       addUserToList(username);
     });
   });
-  socket.emit("get-users-in-lobby",0,errorCallBack);
+  socket.emit("get-users-in-lobby", props.roomId, errorCallBack);
   return (
     <div>
       <ReadyButton />
