@@ -11,6 +11,7 @@ const {
   removeUserFromRoom,
   removeUser,
   getUserRoom,
+  removeUserById,
 } = require('utils/userUtils');
 
 import type {
@@ -67,7 +68,7 @@ module.exports = (
     data: LeaveRoomRequestT,
     callback: ErrorCallBackT,
   ): void => {
-    removeUserFromRoom(data.user, rooms);
+    removeUserById(data.user.id, users, rooms, io);
     socket.emit('left-room');
   }
 
