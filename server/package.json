@@ -6,10 +6,9 @@
   "scripts": {
     "prebuild": "del-cli --force ./lib",
     "build": "babel src/ -d lib/",
-    "postbuild": "npm test",
-    "prepublish": "npm run build",
-    "prestart": "npm run build",
+    "prestart": "npm test",
     "start": "node lib/app.js",
+    "pretest": "npm run build",
     "test": "jest"
   },
   "keywords": [],
