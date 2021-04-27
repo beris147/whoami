@@ -31,7 +31,9 @@ const createSocket = (
     push(listenedEvents, event, func);
   },
   emit(event: string, ...args: any) {
-    emittedEvents[event].map((func) => func(...args));
+    if (event in emittedEvents) {
+      emittedEvents[event].map((func) => func(...args));
+    }
   },
   has(event: string) {
     return listenedEvents[event] ? true : false;
