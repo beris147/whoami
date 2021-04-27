@@ -8,7 +8,11 @@ import PlayButton from "./PlayButton";
 import SocketContext from "contexts/SocketContext";
 import errorCallBack from "utils/errorCallBack";
 
-const Lobby = (): React$Element<any> => {
+export type LobbyPropsT = {|
+  roomId: string,
+|};
+
+const Lobby = (props: LobbyPropsT): React$Element<any> => {
   const socket = useContext(SocketContext);
   const [userList: Array<UserInLobbyT>, setUserList] = useState([]);
   useEffect(() => {

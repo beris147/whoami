@@ -19,7 +19,7 @@ function Room(): React$Element<any> {
 	return (
 		<div>
 			<h1>Room {id}</h1> 
-			<Lobby />
+			<Lobby roomId={id} />
 			<Chat />
 		</div>
 	);
