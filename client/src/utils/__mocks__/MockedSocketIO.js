@@ -1,53 +1,61 @@
 // @flow
 
-type eventQueueT = {[string]: any}
+type eventQueueT = { [string]: any };
 
-let EVENTS: eventQueueT = {};
-let EMITTED: eventQueueT = {};
+const CLIENT_EVENTS: eventQueueT = {};
+const SERVER_EVENTS: eventQueueT = {};
 
 const push = (queue: eventQueueT, event: string, arg: any) => {
-    if (queue[event]) {
-      return queue[event].push(arg);
-    }
-    queue[event] = [arg];
+  if (queue[event]) {
+    return queue[event].push(arg);
+  }
+  queue[event] = [arg];
 };
 
-function emit(event: string, ...args: any) {
-  EVENTS[event].map(func => func(...args));
-}
+const clean = (queue: eventQueueT) => {
+  for (var event in queue) delete queue[event];
+};
 
-const socket = {
+type SocketT = {|
+  on: any,
+  emit: any,
+  has: any,
+  off: any,
+|};
+
+const createSocket = (
+  listenedEvents: eventQueueT,
+  emittedEvents: eventQueueT
+): SocketT => ({
   on(event: string, func) {
-    push(EVENTS, event, func);
+    push(listenedEvents, event, func);
   },
-  emit(event: string, data: any) {
-    push(EMITTED, event, data);
+  emit(event: string, ...args: any) {
+    emittedEvents[event].map((func) => func(...args));
   },
   has(event: string) {
-    return (EVENTS[event]) ? true : false;
-  },
-  hasEmitted(event: string) {
-    return (EMITTED[event]) ? true : false;
+    return listenedEvents[event] ? true : false;
   },
   off(event: string) {
-    // with tests we need to check if the event was called, so we do not 
+    // with tests we need to check if the event was called, so we do not
     // remove the event with this mock of socketio
     return;
-  } 
-};
+  },
+});
+
+const clientSocket: SocketT = createSocket(SERVER_EVENTS, CLIENT_EVENTS);
+export const serverSocket: SocketT = createSocket(CLIENT_EVENTS, SERVER_EVENTS);
 
 export const io = {
- connect(): any {
-  return socket;
- }
+  connect(): any {
+    return clientSocket;
+  },
 };
 
-// emulate server emit
-export const serverSocket = { emit };
- 
 // cleanup helper
 export function cleanSocket() {
-  EVENTS = {};
+  clean(CLIENT_EVENTS);
+  clean(SERVER_EVENTS);
 }
 
 export default io;
