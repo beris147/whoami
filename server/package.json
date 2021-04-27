@@ -6,7 +6,6 @@
   "scripts": {
     "prebuild": "del-cli --force ./lib",
     "build": "babel src/ -d lib/",
-    "prepublish": "npm test",
     "prestart": "npm test",
     "start": "node lib/app.js",
     "pretest": "npm run build",
