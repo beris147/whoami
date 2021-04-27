@@ -1,0 +1,22 @@
+# This workflow will do a clean install of node dependencies and and run tests 
+# across different versions of node, also will check the flow of the codebase.
+
+name: Code Health Check
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ '*' ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: beris147/whoami-action@v1
+    - run: npm test
+  flow:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: beris147/whoami-action@v1
+    - run: npm run flow
