@@ -16,7 +16,12 @@ import SocketContext from "contexts/SocketContext";
 
 describe("When user joins lobby", () => {
   const socket = io.connect();
+  const renderLobby = (socket) => {}
+  const dataEmitted: Array<any> = [];
   beforeEach(() => {
+    serverSocket.on('get-users-in-lobby', (data)=>{
+      dataEmitted.push(data);
+    });
     render(
       <SocketContext.Provider value={socket}>
         <Lobby />
@@ -27,9 +32,13 @@ describe("When user joins lobby", () => {
   afterEach(() => {
     cleanup();
     cleanSocket();
+    dataEmitted.length = 0;
   });
 
-  it("Emits an event to get the users in lobby", () => {
-    expect(socket.hasEmitted('get-users-in-lobby')).toBe(true);
+  it("Emits one event to get the users in lobby", () => {
+    expect(dataEmitted.length).toBe(1);
+  });
+  it("Sends the room id in that event", ()=> {
+    expect(dataEmitted[0]).toBe("room-test-id");
   });
 });
