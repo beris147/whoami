@@ -20,7 +20,7 @@ describe("When user is in lobby and another user joins", () => {
     beforeEach(() => {
       render(
         <SocketContext.Provider value={socket}>
-          <Lobby roomId="room-test-id"/>
+          <Lobby />
         </SocketContext.Provider>
       );
       const username: string = "test-username";

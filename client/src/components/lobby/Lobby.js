@@ -1,7 +1,7 @@
 //@flow
 
 import React, { useEffect, useContext, useState } from "react";
-import type { UserInLobbyT, UserT } from "common/types";
+import type { UserInLobbyT } from "common/types";
 import UserList from "./UserList";
 import ReadyButton from "./ReadyButton";
 import PlayButton from "./PlayButton";
@@ -15,27 +15,21 @@ const mockUsers: Array<UserInLobbyT> = [
   { username: "username4", state: "Ready" },
 ];
 
-export type LobbyPropsT = {|
-  roomId: string,
-|};
-
-const Lobby = (props: LobbyPropsT): React$Element<any> => {
+const Lobby = (): React$Element<any> => {
   const socket = useContext(SocketContext);
   const [userList: Array<UserInLobbyT>, setUserList] = useState(mockUsers);
-  const addUserToList = (username: string) => {
-    const userInLobby: UserInLobbyT = {
-      username: username,
-      state: "Waiting",
-    };
-    const updatedUserList: Array<UserInLobbyT> = [...userList, userInLobby];
-    setUserList(updatedUserList);
-  };
+
   useEffect(() => {
     socket.on("user-joined", (username: string) => {
-      addUserToList(username);
+      const userInLobby: UserInLobbyT = {
+        username: username,
+        state: "Waiting",
+      };
+      const updatedUserList: Array<UserInLobbyT> = [...userList, userInLobby];
+      setUserList(updatedUserList);
     });
-    socket.emit("get-users-in-lobby", props.roomId, errorCallBack, setUserList);
-  });
+    socket.emit("get-users-in-lobby", errorCallBack, setUserList);
+  }, [socket, userList, setUserList]);
   return (
     <div>
       <ReadyButton />
