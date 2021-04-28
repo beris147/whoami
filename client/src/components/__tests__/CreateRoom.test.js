@@ -75,8 +75,8 @@ describe('CreateRoom component', (): void => {
   });
 
   test(
-    'when we click on create room button, we expect to received the joined ' +
-    'room response, everything should be alright.', 
+    'when we click on create room button, or hit enter, we expect to ' +
+    'received the joined room response, everything should be alright.', 
     (): void => {
       const username = 'owner';
       let fakeRoom: RoomT = {
@@ -102,7 +102,7 @@ describe('CreateRoom component', (): void => {
       const button = screen.getByRole('button', { name: /Create Room/i });
       fireEvent.change(userNameInput, { target: { value: username } });
       expect(button).toBeEnabled();
-      fireEvent.click(button);
+      fireEvent.keyDown(userNameInput, {keyCode: 13});
       expect(socket.has('joined-room')).toBe(true);
       expect(history.location.pathname).toBe(`/room/${fakeRoom.id}`);
     }

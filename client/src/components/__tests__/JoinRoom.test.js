@@ -101,7 +101,7 @@ describe('JoinRoom component', (): void => {
       fireEvent.change(userNameInput, { target: { value: username } });
       fireEvent.change(roomIdInput, { target: { value: roomid } });
       expect(joinButton).toBeEnabled();
-      fireEvent.click(joinButton);
+      fireEvent.keyDown(userNameInput, {keyCode: 13});
       expect(socket.has('joined-room')).toBe(true);
       expect(history.location.pathname).toBe(`/room/${roomid}`);
     }

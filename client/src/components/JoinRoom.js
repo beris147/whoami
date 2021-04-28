@@ -5,6 +5,7 @@ import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
 import { toast } from 'react-toastify';
+import handleOnEnter from 'utils/handleOnEnter';
 
 import type { JoinRoomRequestT, RoomT } from 'common/types';
 
@@ -45,6 +46,12 @@ function JoinRoom(): React$Element<any> {
           placeholder='User Name'
           value={username}
           onChange={e => setUsername(e.target.value)}
+          onKeyDown={
+            e => {
+              if(username !== '' && roomId!=='') 
+                handleOnEnter(e, handleJoinRoom);
+            }
+          }
         /><br/>
         <input 
           type='text'
@@ -52,6 +59,12 @@ function JoinRoom(): React$Element<any> {
           placeholder='Room id'
           value={roomId}
           onChange={e => setRoomId(e.target.value)}
+          onKeyDown={
+            e => {
+              if(username !== '' && roomId!=='') 
+                handleOnEnter(e, handleJoinRoom);
+            }
+          }
         /><br/>
         <button onClick={handleJoinRoom} disabled={username===''||roomId===''}>
           Join Room
