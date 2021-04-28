@@ -26,10 +26,12 @@ describe("When server answers the users in lobby", () => {
       { username: "test-user-2", state: "Waiting" },
     ];
     const socket = io.connect();
+    const roomId = "room-test-id";
     beforeEach(() => {
       serverSocket.on(
         "get-users-in-lobby",
         (
+          roomId: string,
           errorCallBack: ErrorCallBackT,
           succesCallback: UsersInLobbyCallbackT
         ) => {
@@ -38,7 +40,7 @@ describe("When server answers the users in lobby", () => {
       );
       render(
         <SocketContext.Provider value={socket}>
-          <Lobby />
+          <Lobby roomId={roomId} />
         </SocketContext.Provider>
       );
     });
