@@ -37,4 +37,8 @@ describe("When user joins lobby", () => {
   it("Emits an event to get the users in lobby", () => {
     expect(emitted).toBe(true);
   });
+  it("Sets the user list as empty", ()=>{
+    const users = screen.queryAllByRole("listitem");
+    expect(users.length).toBe(0);
+  })
 });
