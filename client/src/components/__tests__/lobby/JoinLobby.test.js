@@ -23,7 +23,7 @@ describe("When user joins lobby", () => {
     });
     render(
       <SocketContext.Provider value={socket}>
-        <Lobby roomId="test-room-id" />
+        <Lobby />
       </SocketContext.Provider>
     );
   });
