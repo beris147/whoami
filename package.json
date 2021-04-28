@@ -6,7 +6,6 @@
     "server": "npm start --prefix ./server",
     "client": "npm start --prefix ./client",
     "test": "npm run test --prefix ./server && npm run test --prefix ./client -- --watchAll=false",
-    "predev": "npm test",
     "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
     "flow": "flow",
     "init-server": "npm i --prefix ./server",
