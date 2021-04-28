@@ -34,8 +34,8 @@ const Lobby = (props: LobbyPropsT): React$Element<any> => {
     socket.on("user-joined", (username: string) => {
       addUserToList(username);
     });
+    socket.emit("get-users-in-lobby", props.roomId, errorCallBack, setUserList);
   });
-  socket.emit("get-users-in-lobby", props.roomId, errorCallBack);
   return (
     <div>
       <ReadyButton />
