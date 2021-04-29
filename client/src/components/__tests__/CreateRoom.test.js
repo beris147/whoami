@@ -15,6 +15,7 @@ import MockRouter from 'components/__mocks__/MockRouter';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';
+import { ENTER_KEY_CODE } from 'utils/keycodes';
 
 import '@testing-library/jest-dom';
 
@@ -75,8 +76,8 @@ describe('CreateRoom component', (): void => {
   });
 
   test(
-    'when we click on create room button, we expect to received the joined ' +
-    'room response, everything should be alright.', 
+    'when we click on create room button, or hit enter, we expect to ' +
+    'receive the joined room response, everything should be alright.', 
     (): void => {
       const username = 'owner';
       let fakeRoom: RoomT = {
@@ -102,7 +103,7 @@ describe('CreateRoom component', (): void => {
       const button = screen.getByRole('button', { name: /Create Room/i });
       fireEvent.change(userNameInput, { target: { value: username } });
       expect(button).toBeEnabled();
-      fireEvent.click(button);
+      fireEvent.keyDown(userNameInput, {keyCode: ENTER_KEY_CODE});
       expect(socket.has('joined-room')).toBe(true);
       expect(history.location.pathname).toBe(`/room/${fakeRoom.id}`);
     }

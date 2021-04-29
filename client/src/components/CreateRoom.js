@@ -5,6 +5,7 @@ import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
 import { toast } from 'react-toastify';
+import handleOnEnter from 'utils/handleOnEnter';
 
 import type { CreateRoomRequestT, RoomT } from 'common/types';
 
@@ -14,7 +15,7 @@ function CreateRoom(): React$Element<any> {
   const { setUser } = useContext(UserContext);
   const [username: string, setUsername: mixed] = useState('');
 
-  const handleCreateRoom: mixed = (): void => {
+  const handleCreateRoom = (): void => {
     const data: CreateRoomRequestT = { username };
     socket.emit('create-room', data, errorCallBack);
   }
@@ -39,6 +40,11 @@ function CreateRoom(): React$Element<any> {
           type='text' 
           value={username} 
           onChange={e => setUsername(e.target.value)}
+          onKeyDown={
+            e => {
+              if(username !== '') handleOnEnter(e, handleCreateRoom);
+            }
+          }
         />
         <button onClick={handleCreateRoom} disabled={username === ''}>
           Create Room
