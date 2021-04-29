@@ -77,7 +77,7 @@ describe('CreateRoom component', (): void => {
 
   test(
     'when we click on create room button, or hit enter, we expect to ' +
-    'received the joined room response, everything should be alright.', 
+    'receive the joined room response, everything should be alright.', 
     (): void => {
       const username = 'owner';
       let fakeRoom: RoomT = {
