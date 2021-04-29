@@ -4,6 +4,7 @@ import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
 import MessageList from 'components/Chat/MessageList';
+import handleOnEnter from 'utils/handleOnEnter';
 
 import type { MessageT } from 'common/types';
 
@@ -37,6 +38,11 @@ function Chat(): React$Element<any> {
 				type='text' 
 				value={textMessage} 
 				onChange={e => setTextMessage(e.target.value)}
+				onKeyDown={
+					e => {
+						if(textMessage !== '') handleOnEnter(e, handleSendMessage);
+					}
+				}
 			/>
 			<button onClick={handleSendMessage} disabled={textMessage === ''}>
 				Send
