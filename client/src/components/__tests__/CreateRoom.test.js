@@ -15,6 +15,7 @@ import MockRouter from 'components/__mocks__/MockRouter';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';
+import { ENTER_KEY_CODE } from 'utils/keycodes';
 
 import '@testing-library/jest-dom';
 
@@ -102,7 +103,7 @@ describe('CreateRoom component', (): void => {
       const button = screen.getByRole('button', { name: /Create Room/i });
       fireEvent.change(userNameInput, { target: { value: username } });
       expect(button).toBeEnabled();
-      fireEvent.keyDown(userNameInput, {keyCode: 13});
+      fireEvent.keyDown(userNameInput, {keyCode: ENTER_KEY_CODE});
       expect(socket.has('joined-room')).toBe(true);
       expect(history.location.pathname).toBe(`/room/${fakeRoom.id}`);
     }

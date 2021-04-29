@@ -14,6 +14,7 @@ import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import MockRouter from 'components/__mocks__/MockRouter';
 import { createMemoryHistory } from 'history';
+import { ENTER_KEY_CODE } from 'utils/keycodes';
 
 import type { UserT, RoomT, JoinRoomRequestT } from 'common/types';
 
@@ -101,7 +102,7 @@ describe('JoinRoom component', (): void => {
       fireEvent.change(userNameInput, { target: { value: username } });
       fireEvent.change(roomIdInput, { target: { value: roomid } });
       expect(joinButton).toBeEnabled();
-      fireEvent.keyDown(userNameInput, {keyCode: 13});
+      fireEvent.keyDown(userNameInput, {keyCode: ENTER_KEY_CODE});
       expect(socket.has('joined-room')).toBe(true);
       expect(history.location.pathname).toBe(`/room/${roomid}`);
     }
