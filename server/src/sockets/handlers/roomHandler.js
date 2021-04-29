@@ -4,6 +4,7 @@ const {
   removeRoom,
   emitRoomMessage,
   joinUserToRoomById,
+  emitToRoom,
 } = require('utils/roomUtils');
 
 const {
@@ -106,9 +107,17 @@ module.exports = (
     });
   };
 
+  const userJoinedLobbyHandler = (
+  ): void => {
+    const user = getUser(socket.id, users);
+    if (!user) return console.error({ error: "couldn't find user" });
+    emitToRoom(user.roomId, "user-joined", user.username, io);
+  }
+
   socket.on('create-room', createRoomHandler);
   socket.on('join-room', joinRoomHandler);
   socket.on('leave-room', leaveRoomHandler);
   socket.on('send-message', sendMessageHandler);
   socket.on('get-users-in-lobby', getUsersInLobbyHandler);
+  socket.on('user-joined', userJoinedLobbyHandler);
 }
