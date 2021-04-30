@@ -1,7 +1,7 @@
 //@flow
 
 import React, { useEffect, useContext, useState, useRef } from "react";
-import type { UserInLobbyT } from "common/types";
+import type { UserInLobbyT, UsersInLobbyCallbackT } from "common/types";
 import UserList from "./UserList";
 import ReadyButton from "./ReadyButton";
 import PlayButton from "./PlayButton";
@@ -11,9 +11,20 @@ import errorCallBack from "utils/errorCallBack";
 const Lobby = (): React$Element<any> => {
   const socket = useContext(SocketContext);
   const [userList: Array<UserInLobbyT>, setUserList] = useState([]);
+
   useEffect(() => {
-    socket.emit("get-users-in-lobby", errorCallBack, (users)=>{
+    socket.on("get-users-in-lobby", (callback: UsersInLobbyCallbackT) => {
+      callback(userList);
+    });
+    return () => {
+      socket.off("get-users-in-lobby");
+    };
+  });
+
+  useEffect(() => {
+    socket.emit("get-users-in-lobby", errorCallBack, (users) => {
       setUserList(users);
+      socket.emit("user-joined");
     });
   }, []);
 
@@ -28,9 +39,9 @@ const Lobby = (): React$Element<any> => {
         const updatedUserList: Array<UserInLobbyT> = [...userList, userInLobby];
         setUserList(updatedUserList);
       });
-      return ()=>{
+      return () => {
         socket.off("user-joined");
-      }
+      };
     }
     firstUpdate.current = false;
   });
