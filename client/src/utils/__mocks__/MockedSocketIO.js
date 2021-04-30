@@ -49,7 +49,7 @@ const clientSocket: SocketT = createSocket(SERVER_EVENTS, CLIENT_EVENTS);
 export const serverSocket: SocketT = createSocket(CLIENT_EVENTS, SERVER_EVENTS);
 
 export const io = {
-  connect(): any {
+  connect(): SocketT {
     return clientSocket;
   },
 };

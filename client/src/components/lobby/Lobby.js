@@ -26,7 +26,7 @@ const Lobby = (): React$Element<any> => {
       setUserList(users);
       socket.emit("user-joined");
     });
-  }, []);
+  }, [socket]);
 
   const firstUpdate = useRef(true);
   useEffect(() => {
