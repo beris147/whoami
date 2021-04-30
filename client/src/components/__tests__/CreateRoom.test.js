@@ -88,7 +88,7 @@ describe('CreateRoom component', (): void => {
         time: 30,
       };
       // mock of what the server should do. 
-      socket.on('create-room', (data: CreateRoomRequestT) => {
+      serverSocket.on('create-room', (data: CreateRoomRequestT) => {
         fakeRoom.users = [data.username];
         fakeRoom.owner = data.username;
         serverSocket.emit('joined-room', fakeRoom);

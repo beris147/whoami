@@ -1,5 +1,5 @@
 // @flow
-import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
+import type { RoomT, RoomSetT, UserT, UserSetT, ErrorT } from 'common/types';
 const { 
   transferOwnership, 
   removeRoom, 
@@ -50,10 +50,41 @@ const removeUserById = (
   removeUserFromRoom(user, rooms, io); // handles transfer owner
 }
 
+const getUserId = (
+  username: string,
+  roomId: string,
+  users: UserSetT
+): ?string => {
+  const userId = Object.keys(users).find(
+    (userId) =>
+      users[userId].username == username && users[userId].roomId == roomId
+  );
+  return userId;
+};
+
+const getUser = (id: string, users: UserSetT): ?UserT => {
+  return users[id];
+}
+
+const getOwner = (
+  roomId: string,
+  users: UserSetT,
+  rooms: RoomSetT,
+): ?UserT => {
+  const room = rooms[roomId];
+  if (!room) return null;
+  const owner = room.owner;
+  const ownerId = getUserId(owner, roomId, users);
+  if (!ownerId) return null;
+  return getUser(ownerId, users);
+};
+
 module.exports = {
   createUser,
   removeUser,
   removeUserById,
   removeUserFromRoom,
   getUserRoom,
+  getOwner,
+  getUser,
 };
