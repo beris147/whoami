@@ -26,6 +26,7 @@ describe("When server answers the users in lobby", () => {
       { username: "test-user-2", state: "Waiting" },
     ];
     const socket = io.connect();
+    let emittedUserJoined = false;
     beforeEach(() => {
       serverSocket.on(
         "get-users-in-lobby",
@@ -36,6 +37,9 @@ describe("When server answers the users in lobby", () => {
           succesCallback(mockUsers);
         }
       );
+      serverSocket.on("user-joined", () => {
+        emittedUserJoined = true;
+      });
       render(
         <SocketContext.Provider value={socket}>
           <Lobby />
@@ -46,6 +50,7 @@ describe("When server answers the users in lobby", () => {
     afterEach(() => {
       cleanup();
       cleanSocket();
+      emittedUserJoined = true;
     });
 
     it("Resizes the list of users in lobby", () => {
@@ -60,6 +65,10 @@ describe("When server answers the users in lobby", () => {
         return queryByText(userListUi, re);
       });
       expect(userUis.every((userUi) => userUi != null)).toBe(true);
+    });
+
+    it("Emits an event to notify join", () => {
+      expect(emittedUserJoined).toBe(true);
     });
   });
 });

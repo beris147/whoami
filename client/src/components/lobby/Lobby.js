@@ -24,6 +24,7 @@ const Lobby = (): React$Element<any> => {
   useEffect(() => {
     socket.emit("get-users-in-lobby", errorCallBack, (users) => {
       setUserList(users);
+      socket.emit("user-joined");
     });
   }, []);
 
