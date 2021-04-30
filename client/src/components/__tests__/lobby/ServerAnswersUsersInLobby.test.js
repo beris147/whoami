@@ -6,8 +6,8 @@ import {
   render,
   screen,
   cleanup,
+  getAllByRole,
   queryByText,
-  act,
 } from "@testing-library/react";
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import io, { cleanSocket, serverSocket } from "utils/__mocks__/MockedSocketIO";
@@ -19,13 +19,14 @@ import type {
   UsersInLobbyCallbackT,
 } from "common/types";
 
-describe("When user is in lobby and another user joins", () => {
-  const socket = io.connect();
-  describe("Given a user that wasn't already in the lobby", () => {
+describe("When server answers the users in lobby", () => {
+  describe("Given the server found the list", () => {
     const mockUsers: Array<UserInLobbyT> = [
       { username: "test-user-1", state: "Ready" },
       { username: "test-user-2", state: "Waiting" },
     ];
+    const socket = io.connect();
+    let emittedUserJoined = false;
     beforeEach(() => {
       serverSocket.on(
         "get-users-in-lobby",
@@ -36,35 +37,38 @@ describe("When user is in lobby and another user joins", () => {
           succesCallback(mockUsers);
         }
       );
+      serverSocket.on("user-joined", () => {
+        emittedUserJoined = true;
+      });
       render(
         <SocketContext.Provider value={socket}>
           <Lobby />
         </SocketContext.Provider>
       );
-      const username: string = "test-username";
-      act(() => {
-        serverSocket.emit("user-joined", username);
-      });
     });
 
     afterEach(() => {
       cleanup();
       cleanSocket();
+      emittedUserJoined = true;
     });
 
-    it("Adds one item to the user list", () => {
-      const users = screen.getAllByRole("listitem");
-      console.log(users.length);
-      expect(users.length).toBe(mockUsers.length + 1);
+    it("Resizes the list of users in lobby", () => {
+      const userListUi = screen.getByRole("list");
+      const userUis: Array<any> = getAllByRole(userListUi, "listitem");
+      expect(userUis.length).toStrictEqual(mockUsers.length);
     });
-    it("Includes the username", () => {
-      const userDiv = screen.queryByText(/test-username/);
-      expect(userDiv).not.toBeNull();
+    it("Includes the users in the list", () => {
+      const userListUi = screen.getByRole("list");
+      const userUis = mockUsers.map((user) => {
+        const re = new RegExp(user.username);
+        return queryByText(userListUi, re);
+      });
+      expect(userUis.every((userUi) => userUi != null)).toBe(true);
     });
-    it("Sets the new user as Waiting", () => {
-      const userDiv = screen.getByText(/test-username/);
-      const waitingDiv = queryByText(userDiv, /Waiting/);
-      expect(waitingDiv).not.toBeNull();
+
+    it("Emits an event to notify join", () => {
+      expect(emittedUserJoined).toBe(true);
     });
   });
 });
