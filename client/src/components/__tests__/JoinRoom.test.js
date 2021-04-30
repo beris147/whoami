@@ -87,7 +87,7 @@ describe('JoinRoom component', (): void => {
         round: 1,
         time: 30,
       };
-      socket.on('join-room', (data: JoinRoomRequestT) => {
+      serverSocket.on('join-room', (data: JoinRoomRequestT) => {
         fakeRoom.users.push(data.username);
         serverSocket.emit('joined-room', fakeRoom);
       });

@@ -11,3 +11,5 @@ export type { CreateRoomRequestT } from 'types/createRoomRequestType';
 export type { LeaveRoomRequestT } from 'types/leaveRoomRequestType';
 export type { MessageT } from 'types/messageType';
 export type { MessageListT } from 'types/messageListType';
+export type { UserInLobbyT } from 'types/userInLobbyType';
+export type { UsersInLobbyCallbackT } from 'types/usersInLobbyCallbackType';
