@@ -16,13 +16,13 @@ function Room(): React$Element<any> {
 		else toast.info('Share the link with your friends!');
 	}, [history, id, user]);
 	
-	return (
+	return user ? (
 		<div>
 			<h1>Room {id}</h1> 
 			<Lobby />
 			<Chat />
 		</div>
-	);
+	) : <></>;
 }
 
 export default Room;
