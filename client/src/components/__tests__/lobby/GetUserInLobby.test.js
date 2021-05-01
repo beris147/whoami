@@ -21,8 +21,8 @@ import type {
 
 describe("When receive get-users-in-lobby request", () => {
   const mockUsers: Array<UserInLobbyT> = [
-    { username: "test-user-1", state: "Ready" },
-    { username: "test-user-2", state: "Waiting" },
+    { username: "test-user-1" },
+    { username: "test-user-2" },
   ];
   const socket = io.connect();
   let receivedUsers: ?Array<UserInLobbyT> = null;

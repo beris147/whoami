@@ -7,10 +7,14 @@ export type UserPropsT = {|
   user: UserInLobbyT,
 |};
 
+const isReady = (user: UserInLobbyT): bool => {
+  return 'writtenCharacter' in user;
+}
+
 const User = (props: UserPropsT): React$Element<any> => {
   return (
     <div>
-      {props.user.username} {props.user.state}
+      {props.user.username} {isReady(props.user) ? 'Ready' : 'Waiting'}
     </div>
   );
 };

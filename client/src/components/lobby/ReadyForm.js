@@ -16,6 +16,7 @@ const ReadyForm = (): React$Element<any> => {
   }
 
   const handleChange = (): void => {
+    socket.emit('change-not-ready-lobby', errorCallBack);
     setReady(false);
   }
 
