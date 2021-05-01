@@ -13,3 +13,4 @@ export type { MessageT } from 'types/messageType';
 export type { MessageListT } from 'types/messageListType';
 export type { UserInLobbyT } from 'types/userInLobbyType';
 export type { UsersInLobbyCallbackT } from 'types/usersInLobbyCallbackType';
+export type { UserIsReadyT } from 'types/userIsReadyType';

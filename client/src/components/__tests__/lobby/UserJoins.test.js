@@ -54,7 +54,6 @@ describe("When user is in lobby and another user joins", () => {
 
     it("Adds one item to the user list", () => {
       const users = screen.getAllByRole("listitem");
-      console.log(users.length);
       expect(users.length).toBe(mockUsers.length + 1);
     });
     it("Includes the username", () => {

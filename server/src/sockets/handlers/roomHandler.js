@@ -28,6 +28,7 @@ import type {
   MessageT, 
   UserInLobbyT,
   UsersInLobbyCallbackT,
+  UserIsReadyT,
 } from 'common/types';
 
 module.exports = (
@@ -114,10 +115,24 @@ module.exports = (
     emitToRoom(user.roomId, "user-joined", user.username, io);
   }
 
+  const setReadyInLobbyHandler = (
+    writtenCharacter: string,
+    errorCallBack: ErrorCallBackT,
+  ): void => {
+    const user = getUser(socket.id, users);
+    if(!user) return errorCallBack({error: 'connection error, user not found'});
+    const userIsReady: UserIsReadyT = {
+      username: user.username,
+      writtenCharacter,
+    }
+    emitToRoom(user.roomId, 'user-is-ready', userIsReady, io);
+  }
+
   socket.on('create-room', createRoomHandler);
   socket.on('join-room', joinRoomHandler);
   socket.on('leave-room', leaveRoomHandler);
   socket.on('send-message', sendMessageHandler);
   socket.on('get-users-in-lobby', getUsersInLobbyHandler);
   socket.on('user-joined', userJoinedLobbyHandler);
+  socket.on('set-ready-lobby', setReadyInLobbyHandler);
 }
