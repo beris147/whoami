@@ -1,23 +1,27 @@
 // @flow
 import React from 'react';
+import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
-import type { UserT } from 'common/types';
+import type { RoomT, UserT } from 'common/types';
 import MockedProvider from 'providers/__mocks__/MockedProvider';
 
 type ElementWithProvidersT = {|
-  ui: React$Element<any>,
-  mockUserState: { user: ?UserT, setUser: mixed },
-  socket: Object,
+  children: React$Element<any>,
+  mockedRoomState?: ?{ room: ?RoomT, setRoom: (r: ?RoomT) => void },
+  mockedUserState?: ?{ user: ?UserT, setUser: (u: ?UserT) => void },
+  socket?: ?Object,
 |};
 
 function ElementWithProviders (
   props: ElementWithProvidersT
 ): React$Element<any> {
   return (
-    <MockedProvider value={props.mockUserState} context={UserContext}>
+    <MockedProvider value={props.mockedUserState} context={UserContext}>
       <MockedProvider value={props.socket} context={SocketContext}>
-        {props.ui}
+        <MockedProvider value={props.mockedRoomState} context={RoomContext}>
+          {props.children}
+        </MockedProvider>
       </MockedProvider>
     </MockedProvider>
   );

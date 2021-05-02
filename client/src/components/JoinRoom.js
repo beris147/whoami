@@ -1,6 +1,7 @@
 // @flow
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
@@ -13,6 +14,7 @@ function JoinRoom(): React$Element<any> {
   const { id } = useParams();
   const history = useHistory();
   const socket = useContext(SocketContext);
+  const { setRoom } = useContext(RoomContext);
   const { setUser } = useContext(UserContext);
   const [username: string, setUsername ] = useState('');
   const [roomId: string, setRoomId ] = useState('');
@@ -27,6 +29,7 @@ function JoinRoom(): React$Element<any> {
 
     socket.on('joined-room', (room: RoomT): void => {
       toast.success('Hey you joined!');
+      setRoom(room);
       setUser({ username, roomId: room.id, id: socket.id });
       history.push(`/room/${room.id}`);
     });

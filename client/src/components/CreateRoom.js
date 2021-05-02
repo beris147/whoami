@@ -1,6 +1,7 @@
 // @flow
 import React, { useContext, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
@@ -12,6 +13,7 @@ import type { CreateRoomRequestT, RoomT } from 'common/types';
 function CreateRoom(): React$Element<any> {
   const history: any = useHistory();
   const socket: any = useContext(SocketContext);
+  const { setRoom } = useContext(RoomContext);
   const { setUser } = useContext(UserContext);
   const [username: string, setUsername: mixed] = useState('');
 
@@ -23,6 +25,7 @@ function CreateRoom(): React$Element<any> {
   useEffect((): any => {
     socket.on('joined-room', (room: RoomT): void => {
       toast.success('Room created!');
+      setRoom(room);
       setUser({ username, roomId: room.id, id: socket.id });
       history.push(`/room/${room.id}`);
     });

@@ -16,36 +16,31 @@ import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';
 import { ENTER_KEY_CODE } from 'utils/keycodes';
+import mockedRoomState from 'utils/__mocks__/mockedRoomState';
+import mockedUserState from 'utils/__mocks__/mockedUserState';
 
 import '@testing-library/jest-dom';
 
 describe('CreateRoom component', (): void => {
 
   const socket = io.connect();
-  let user: ?UserT;
   let history: any;
   let ui: React$Element<any>;
   let elementToRender: React$Element<any>;
 
-  const setUser = (newUser: ?UserT): void => { user = newUser; };
-
   beforeEach((): void => {
-    user = undefined;
     history = createMemoryHistory();
     history.push('/create');
-    ui = (
-      <MockRouter 
-        ui={<CreateRoom/>}
-        history={history}
-        path={'/create'}
-      />
-    );
     elementToRender = (
       <ElementWithProviders 
-        ui={ui}
-        mockUserState={{ user, setUser }}
+        mockedRoomState={mockedRoomState}
+        mockedUserState={mockedUserState}
         socket={socket}
-      />
+      >
+        <MockRouter history={history} path={'/create'}>
+          <CreateRoom/>
+        </MockRouter>
+      </ElementWithProviders>
     );
   });
 

@@ -15,10 +15,12 @@ function Chat(): React$Element<any> {
   const [messages: MessageT, setMessages] = useState([]);
 
   const handleSendMessage = (): void => {
-		const newMessage: MessageT = { message: textMessage, sender: user };
-		socket.emit('send-message', newMessage, errorCallBack);
-		setTextMessage('');
-    setMessages([...messages, newMessage]);
+		if(user) {
+			const newMessage: MessageT = { message: textMessage, sender: user };
+			socket.emit('send-message', newMessage, errorCallBack);
+			setTextMessage('');
+			setMessages([...messages, newMessage]);
+		}
 	}
 
   useEffect((): any => {

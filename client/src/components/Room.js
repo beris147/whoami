@@ -1,6 +1,7 @@
 // @flow
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
+import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
 import { toast } from 'react-toastify';
 import Chat from 'components/Chat/Chat';

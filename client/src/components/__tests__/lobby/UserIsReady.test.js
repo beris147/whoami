@@ -18,7 +18,6 @@ import {
 import Lobby from 'components/lobby/Lobby';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
-import SocketContext from 'contexts/SocketContext';
 import type { 
   UserT, 
   UserIsReadyT, 
@@ -64,9 +63,9 @@ describe('user is ready functionality', () => {
       }
     );
     render(
-      <SocketContext.Provider value={socket}>
+      <ElementWithProviders socket={socket}>
         <Lobby />
-      </SocketContext.Provider>
+      </ElementWithProviders>
     );
   });
   describe('the user is not ready yet', () => {

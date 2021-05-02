@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import RoomProvider from 'providers/RoomProvider';
 import SocketProvider from 'providers/SocketProvider';
 import UserProvider from 'providers/UserProvider';
 import './index.css';
@@ -10,13 +11,15 @@ import reportWebVitals from './vitals/reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserProvider>
-      <SocketProvider>
-        <Router>
-          <App />
-        </Router>
-      </SocketProvider>
-    </UserProvider>
+    <RoomProvider>
+      <UserProvider>
+        <SocketProvider>
+          <Router>
+            <App />
+          </Router>
+        </SocketProvider>
+      </UserProvider>
+    </RoomProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

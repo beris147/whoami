@@ -4,6 +4,7 @@ import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { test, expect, describe, afterEach, beforeEach } from '@jest/globals';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
+import { user, setUser } from 'utils/__mocks__/mockedUserState';
 import Chat from 'components/Chat/Chat';
 
 import type { UserT, MessageT } from 'common/types';
@@ -11,20 +12,16 @@ import type { UserT, MessageT } from 'common/types';
 import '@testing-library/jest-dom';
 
 describe('Chat component', (): void => {
-
   const socket = io.connect();
-  let user: ?UserT = { username: 'user', id: 'id', roomId: 'roomid' };
   let ui: React$Element<any>;
 
-  const setUser = (newUser: ?UserT): void => { user = newUser; };
-
   beforeEach(() => {
+    const auxUser: ?UserT = { username: 'user', id: 'id', roomId: 'roomid' };
+    setUser(auxUser);
     ui = (
-      <ElementWithProviders 
-        ui={<Chat/>}
-        mockUserState={{ user, setUser }}
-        socket={socket}
-      />
+      <ElementWithProviders mockedUserState={{ user, setUser }} socket={socket}>
+        <Chat/>
+      </ElementWithProviders>
     );
   });
 
