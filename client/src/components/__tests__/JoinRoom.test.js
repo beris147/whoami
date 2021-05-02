@@ -15,8 +15,6 @@ import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import MockRouter from 'components/__mocks__/MockRouter';
 import { createMemoryHistory } from 'history';
 import { ENTER_KEY_CODE } from 'utils/keycodes';
-import mockedRoomState from 'utils/__mocks__/mockedRoomState';
-import mockedUserState from 'utils/__mocks__/mockedUserState';
 
 import type { RoomT, JoinRoomRequestT } from 'common/types';
 
@@ -33,11 +31,7 @@ describe('JoinRoom component', (): void => {
     history = createMemoryHistory();
     history.push('/join');
     elementToRender = (
-      <ElementWithProviders 
-        mockedRoomState={mockedRoomState}
-        mockedUserState={mockedUserState}
-        socket={socket}
-      >
+      <ElementWithProviders socket={socket}>
         <MockRouter history={history} path={'/join'}>
           <JoinRoom/>
         </MockRouter>

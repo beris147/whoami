@@ -16,8 +16,6 @@ import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import type { UserT, RoomT, CreateRoomRequestT } from 'common/types';
 import { ENTER_KEY_CODE } from 'utils/keycodes';
-import mockedRoomState from 'utils/__mocks__/mockedRoomState';
-import mockedUserState from 'utils/__mocks__/mockedUserState';
 
 import '@testing-library/jest-dom';
 
@@ -32,11 +30,7 @@ describe('CreateRoom component', (): void => {
     history = createMemoryHistory();
     history.push('/create');
     elementToRender = (
-      <ElementWithProviders 
-        mockedRoomState={mockedRoomState}
-        mockedUserState={mockedUserState}
-        socket={socket}
-      >
+      <ElementWithProviders socket={socket}>
         <MockRouter history={history} path={'/create'}>
           <CreateRoom/>
         </MockRouter>

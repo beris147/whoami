@@ -13,13 +13,12 @@ import '@testing-library/jest-dom';
 
 describe('Chat component', (): void => {
   const socket = io.connect();
-  let ui: React$Element<any>;
 
   beforeEach(() => {
     const auxUser: ?UserT = { username: 'user', id: 'id', roomId: 'roomid' };
     setUser(auxUser);
-    ui = (
-      <ElementWithProviders mockedUserState={{ user, setUser }} socket={socket}>
+    render(
+      <ElementWithProviders socket={socket} mockedUserState={{user, setUser}}>
         <Chat/>
       </ElementWithProviders>
     );
@@ -31,7 +30,6 @@ describe('Chat component', (): void => {
   });
 
   test('Chat renders wihtout crashing', (): void => {
-    render(ui);
     expect(screen.getByText(/Chat/i)).toBeInTheDocument();
   });
 
@@ -40,7 +38,6 @@ describe('Chat component', (): void => {
     socket.on('send-message', (newMessage: MessageT) => {
       serverSocket.emit('new-message', newMessage);
     });
-    render(ui);
     const messageInput = screen.getByRole('textbox', {type: 'text'});
     const button = screen.getByRole('button', { name: /Send/i });
     expect(button).toBeDisabled();
