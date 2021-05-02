@@ -22,6 +22,7 @@ import SocketContext from 'contexts/SocketContext';
 import type { 
   UserT, 
   UserIsReadyT, 
+  UserIsNotReadyT,
   UserInLobbyT,
   ErrorCallBackT,
   UsersInLobbyCallbackT,
@@ -36,7 +37,7 @@ describe('user is ready functionality', () => {
   beforeEach(() => {
     socket = io.connect();
     const mockUsers: Array<UserInLobbyT> = [
-      { username: 'test-user', state: 'Waiting' },
+      { username: 'test-user' },
     ];
     serverSocket.on(
       'get-users-in-lobby',
@@ -54,6 +55,14 @@ describe('user is ready functionality', () => {
       }
       serverSocket.emit('user-is-ready', userIsReady);
     });
+    serverSocket.on(
+      'change-not-ready-lobby', (): void => {
+        const userIsNotReady: UserIsNotReadyT = {
+          username: user.username,
+        } 
+        serverSocket.emit('user-is-not-ready', userIsNotReady);
+      }
+    );
     render(
       <SocketContext.Provider value={socket}>
         <Lobby />
@@ -82,6 +91,18 @@ describe('user is ready functionality', () => {
       const userDiv = screen.getByText(/test-user/);
       const readyDiv = queryByText(userDiv, /Ready/i);
       expect(readyDiv).not.toBeNull();
+    });
+    describe('if the user clicks on change', (): void => {
+      let changeButton;
+      beforeEach(() => {
+        changeButton = screen.getByRole('button', { name: /Change/i });
+        fireEvent.click(changeButton);
+      });
+      test('the user must appear as waiting inside the userList', (): void => {
+        const userDiv = screen.getByText(/test-user/i);
+        const waitingDiv = queryByText(userDiv, /Waiting/i);
+        expect(waitingDiv).not.toBeNull();
+      });
     });
   });
 });

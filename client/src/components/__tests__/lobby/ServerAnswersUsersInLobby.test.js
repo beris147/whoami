@@ -22,8 +22,8 @@ import type {
 describe("When server answers the users in lobby", () => {
   describe("Given the server found the list", () => {
     const mockUsers: Array<UserInLobbyT> = [
-      { username: "test-user-1", state: "Ready" },
-      { username: "test-user-2", state: "Waiting" },
+      { username: "test-user-1" },
+      { username: "test-user-2" },
     ];
     const socket = io.connect();
     let emittedUserJoined = false;

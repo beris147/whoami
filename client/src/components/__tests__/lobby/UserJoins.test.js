@@ -23,8 +23,8 @@ describe("When user is in lobby and another user joins", () => {
   const socket = io.connect();
   describe("Given a user that wasn't already in the lobby", () => {
     const mockUsers: Array<UserInLobbyT> = [
-      { username: "test-user-1", state: "Ready" },
-      { username: "test-user-2", state: "Waiting" },
+      { username: "test-user-1" },
+      { username: "test-user-2" },
     ];
     beforeEach(() => {
       serverSocket.on(

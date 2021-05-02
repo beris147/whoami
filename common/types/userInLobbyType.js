@@ -1,9 +1,6 @@
 // @flow
-import type { UserReadyStateT } from "./userReadyStateType";
+import type { UserIsReadyT } from "./userIsReadyType";
+import type { UserIsNotReadyT } from "./userIsNotReadyType";
 
-export type UserInLobbyT = {|
-  username: string,
-  state: UserReadyStateT,
-  writtenCharacter?: string,
-  assignedCharacter?: string,
-|};
+
+export type UserInLobbyT = UserIsReadyT | UserIsNotReadyT;

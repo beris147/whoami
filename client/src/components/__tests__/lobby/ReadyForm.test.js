@@ -20,51 +20,59 @@ import type { UserT } from 'common/types';
 import '@testing-library/jest-dom';
 
 describe('ReadyForm component', (): void => {
-  const socket = io.connect();
-  const elementToRender: React$Element<any> = (
-    <ElementWithProviders 
-      ui={<ReadyForm />}
-      mockUserState={{ user: null, setUser: null }}
-      socket={socket}
-    />
-  );
+  let socket;
+  let characterInput;
+  let readyButton;
+  const character: string = 'Linus Torvalds'; 
+  beforeEach(() => {
+    socket = io.connect();
+    render(
+      <ElementWithProviders 
+        ui={<ReadyForm />}
+        mockUserState={{ user: null, setUser: null }}
+        socket={socket}
+      />
+    );
+    readyButton = screen.getByRole('button', { name: /Ready/i });
+    characterInput = screen.getByRole('textbox', {type: 'text'});
+  });
   afterEach(() => {
     cleanup();
     cleanSocket();
   });
   test('button ready is disabled if no character is given', (): void => {
-    render(elementToRender);
-    const readyButton = screen.getByRole('button', { name: /Ready/i });
     expect(readyButton).toBeDisabled();
   });
   test('button ready is enabled if a character is given', (): void => {
-    render(elementToRender);
-    const characterInput = screen.getByRole('textbox', {type: 'text'});
-    const readyButton = screen.getByRole('button', { name: /Ready/i });
-    fireEvent.change(characterInput, { target: { value: 'Linus' } });
+    fireEvent.change(characterInput, { target: { value: character } });
     expect(readyButton).toBeEnabled();
   });
-  test(
-    'when we click on ready button, the server should receive a message ' +
-    'titled set-ready-lobby, with the character, and the change button ' +
-    'should appear in the render', 
-    (): void => {
-      const character: string = 'Linus Torvalds'; 
-      // mock of what the server should do. 
-      serverSocket.on('set-ready-lobby', (writtenCharacter: string) => {
-        expect(writtenCharacter).toEqual(character);
-      });
-      render(elementToRender);
-      const characterInput = screen.getByRole('textbox', {type: 'text'});
-      const readyButton = screen.getByRole('button', { name: /Ready/i });
+  describe('when user clicks on ready', () => {
+    let changeButton;
+    beforeEach(() => {
       fireEvent.change(characterInput, { target: { value: character } });
-      expect(readyButton).toBeEnabled();
-      fireEvent.keyDown(characterInput, {keyCode: ENTER_KEY_CODE});
-      expect(characterInput).toBeDisabled();
-      const changeButton = screen.getByRole('button', { name: /Change/i });
+      fireEvent.click(readyButton);
+      changeButton = screen.getByRole('button', { name: /Change/i });
+    });
+    test(
+      'the server should receive a message titled set-ready-lobby, with the ' + 
+      'character written by the user',
+      (): void => {
+        serverSocket.on('set-ready-lobby', (writtenCharacter: string) => {
+          expect(writtenCharacter).toEqual(character);
+        });
+      }
+    );
+    test('the change button should be redered', (): void => {
       expect(changeButton).toBeEnabled();
-      fireEvent.click(changeButton);
-      expect(characterInput).toBeEnabled();
-    }
-  );
+    });
+    describe('after being ready, user clicks on change', (): void => {
+      beforeEach(() => {
+        fireEvent.click(changeButton);
+      });
+      test('the character input should be enabled again', (): void => {
+        expect(characterInput).toBeEnabled();
+      });
+    });
+  });
 });
