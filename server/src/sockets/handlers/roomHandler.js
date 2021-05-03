@@ -24,7 +24,6 @@ import type {
   RoomSetT,
   UserSetT,
   CreateRoomRequestT,
-  LeaveRoomRequestT,
   MessageT, 
   UserInLobbyT,
   UsersInLobbyCallbackT,
@@ -72,10 +71,11 @@ module.exports = (
   }
 
   const leaveRoomHandler = (
-    data: LeaveRoomRequestT,
-    callback: ErrorCallBackT,
+    errorCallback: ErrorCallBackT,
   ): void => {
-    removeUserById(data.user.id, users, rooms, io);
+    const user = getUser(socket.id, users);
+    if(!user) return errorCallback({error: 'connection error, user not found'});
+    removeUserById(user.id, users, rooms, io);
     socket.emit('left-room');
   }
 

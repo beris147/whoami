@@ -37,7 +37,7 @@ function JoinRoom(): React$Element<any> {
     return function cleanup() {
       socket.off('joined-room');
     };
-  }, [history, id, setUser, socket, username]);
+  }, [history, id, setUser, socket, username, setRoom]);
 
   return (
     <div>

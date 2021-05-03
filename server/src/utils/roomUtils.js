@@ -59,7 +59,9 @@ const removeRoom = (room: RoomT, rooms: RoomSetT): void => {
 const transferOwnership = (
   room: RoomT,
   newOwnerUsername: string,
+  io: any, 
 ): RoomT => {
+  if(io) emitToRoom(room.id, 'room-owner-changed', newOwnerUsername, io);
   return {
     ...room,
     owner: newOwnerUsername,
