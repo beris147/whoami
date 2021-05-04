@@ -33,7 +33,7 @@ function Chat(): React$Element<any> {
 	}, [socket, messages, setMessages]);
   
   return (
-    <>
+    <div>
       <h1>Chat</h1>
       <MessageList messages={messages}/>
       <input
@@ -49,7 +49,7 @@ function Chat(): React$Element<any> {
 			<button onClick={handleSendMessage} disabled={textMessage === ''}>
 				Send
 			</button> 
-    </>
+    </div>
   );
 }
 
