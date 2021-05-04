@@ -14,7 +14,7 @@ import io, { cleanSocket, serverSocket } from "utils/__mocks__/MockedSocketIO";
 import Room from "components/Room";
 import ElementWithProviders from "components/__mocks__/ElementWithProviders";
 import MockRouter from 'components/__mocks__/MockRouter';
-import {user, setUser} from 'utils/__mocks__/mockedUserState';
+import { ROOMID } from 'utils/__mocks__/mockedRoomState';
 import type {
   UserT,
   UserInLobbyT,
@@ -39,15 +39,9 @@ describe("When user is in lobby and another user joins", () => {
           succesCallback(mockUsers);
         }
       );
-      const fakeUser: UserT = {
-        id: 'id',
-        username: 'username',
-        roomId: '1234',
-      }
-      setUser(fakeUser);
       render(
-        <ElementWithProviders socket={socket} mockedUserState={{user, setUser}}>
-          <MockRouter initialEntries={['/room/1234']} path={'/room/:id'}>
+        <ElementWithProviders socket={socket}>
+          <MockRouter initialEntries={[`/room/${ROOMID}`]} path={'/room/:id'}>
             <Room />
           </MockRouter>
         </ElementWithProviders>
