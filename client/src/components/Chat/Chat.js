@@ -74,7 +74,7 @@ function Chat(props: ChatPropsT): React$Element<any> {
 				</div>
 			)
 			}
-    </>
+    </div>
   );
 }
 
