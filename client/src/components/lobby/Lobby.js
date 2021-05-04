@@ -4,7 +4,9 @@ import React, { useEffect, useContext, useState, useCallback, useImperativeHandl
 import UserList from "./UserList";
 import ReadyForm from "./ReadyForm";
 import PlayButton from "./PlayButton";
+import RoomContext from 'contexts/RoomContext';
 import SocketContext from "contexts/SocketContext";
+import UserContext from 'contexts/UserContext';
 import errorCallBack from "utils/errorCallBack";
 import { useIsMounted } from "utils/hooks/mounted";
 
@@ -22,11 +24,14 @@ export type LobbyHandleT = {
 
 const Lobby: React$AbstractComponent<{}, LobbyHandleT> = 
   React.forwardRef<{}, LobbyHandleT>((props, ref): React$Element<any> => {
+    const { room } = useContext(RoomContext);
+    const { user } = useContext(UserContext);
     const socket = useContext(SocketContext);
     const isMounted = useIsMounted();
     // TODO?: maybe we can change this array to a map, with the username as a key
     // to avoid iterate through the array to update stuff.
     const [userList: Array<UserInLobbyT>, setUserList] = useState([]);
+    const [isPlayable: bool, setPlayable: (p: bool) => void] = useState(false);
     const updateUserList = useCallback(
       (updatedUserList: Array<UserInLobbyT>) => {
         if(isMounted.current) setUserList(updatedUserList); 
@@ -88,7 +93,13 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
         socket.off("user-is-not-ready");
       };
     });
-
+    useEffect(() => {
+      const playable = userList.reduce(
+        (aux: bool, user: UserInLobbyT) => aux && 'writtenCharacter' in user,
+        true,
+      );
+      setPlayable(playable);
+    }, [userList, setPlayable]);
     return (
       <div>
         <button onClick={handleLeaveRoom}>
@@ -96,7 +107,7 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
         </button>
         <ReadyForm />
         <UserList users={userList} />
-        <PlayButton />
+        {room?.owner === user?.username && <PlayButton disabled={!isPlayable}/>}
       </div>
     );
   }

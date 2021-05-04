@@ -140,6 +140,14 @@ module.exports = (
     emitToRoom(user.roomId, 'user-is-not-ready', userIsNotReady, io);
   }
 
+  const startGameHandler = (
+    errorCallBack: ErrorCallBackT,
+  ) => {
+    const user = getUser(socket.id, users);
+    if(!user) return errorCallBack({error: 'connection error, user not found'});
+    emitToRoom(user.roomId, 'game-started', null, io);
+  };
+
   socket.on('create-room', createRoomHandler);
   socket.on('join-room', joinRoomHandler);
   socket.on('leave-room', leaveRoomHandler);
@@ -148,4 +156,5 @@ module.exports = (
   socket.on('user-joined', userJoinedLobbyHandler);
   socket.on('set-ready-lobby', setReadyInLobbyHandler);
   socket.on('change-not-ready-lobby', changeNotReadyInLobbyHandler);
+  socket.on('start-game', startGameHandler);
 }
