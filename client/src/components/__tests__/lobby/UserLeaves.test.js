@@ -80,8 +80,6 @@ describe('When a user in lobby leaves', () => {
           id: ROOMID,
           owner: leaverUsername,
           users: mockedUsernames,
-          round: 0,
-          time: 30,
         };
         setRoom(testRoom);
         serverSocket.on('leave-room', (errorCallback: ErrorCallBackT) => {
