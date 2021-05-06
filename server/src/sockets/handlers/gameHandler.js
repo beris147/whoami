@@ -1,7 +1,7 @@
 // @flow
 const { getUser } = require('utils/userUtils');
 const { emitToRoom } = require('utils/roomUtils');
-import type { RoomSetT, UserSetT, ErrorCallBackT } from 'common/types';
+import type { GameT, RoomSetT, UserSetT, ErrorCallBackT } from 'common/types';
 
 module.exports = (
   io: Object,
@@ -10,11 +10,12 @@ module.exports = (
   users: UserSetT,
 ) => {
   const startGameHandler = (
+    game: GameT,
     errorCallBack: ErrorCallBackT,
   ) => {
     const user = getUser(socket.id, users);
     if(!user) return errorCallBack({error: 'connection error, user not found'});
-    emitToRoom(user.roomId, 'game-started', null, io);
+    emitToRoom(user.roomId, 'game-started', game, io);
   };
 
   const nextTurnHandler = (
@@ -41,7 +42,6 @@ module.exports = (
     if(!user) return errorCallBack({error: 'connection error, user not found'});
     // TODO if we store the sockets id in the room, we can comunicate directly
     // to the user that is currently playing instead of sending this to the room
-    console.log(typeof answer);
     emitToRoom(user.roomId, 'send-answer', answer, io);
   };
 
