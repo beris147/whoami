@@ -14,8 +14,9 @@ import io, { cleanSocket, serverSocket } from 'utils/__mocks__/MockedSocketIO';
 import MockRouter from 'components/__mocks__/MockRouter';
 import Room from 'components/Room';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
-import { room, setRoom, ROOMID } from 'utils/__mocks__/mockedRoomState';
+import { room, setRoom } from 'utils/__mocks__/mockedRoomState';
 import { user, setUser } from 'utils/__mocks__/mockedUserState';
+import { createMemoryHistory } from 'history';
 import type {
   RoomT,
   UserT,
@@ -26,15 +27,15 @@ import type {
 import '@testing-library/jest-dom';
 
 describe('When all the users in the lobby are ready', () => {
-  const owner: UserT = user || {
+  const owner: UserT = {
     id: 'ownerid',
     username: 'owner',
-    roomId: ROOMID,
+    roomId: room?.id || 'room-id',
   };
   const notOwner: UserT = {
     id: 'userid',
     username: 'not-owner',
-    roomId: ROOMID,
+    roomId: room?.id || 'room-id',
   }
   const socket = io.connect();
   let playButton;
@@ -42,7 +43,12 @@ describe('When all the users in the lobby are ready', () => {
     { username: owner.username, writtenCharacter: 'character1' },
     { username: notOwner.username, writtenCharacter: 'character2' },
   ];
+  const history = createMemoryHistory();
   beforeEach(() => {
+    if(room) {
+      setRoom({...room, owner: owner.username});
+      history.push(`/room/${room.id}`);
+    }
     serverSocket.on(
       'get-users-in-lobby',
       (
@@ -67,8 +73,9 @@ describe('When all the users in the lobby are ready', () => {
         <ElementWithProviders 
           socket={socket} 
           mockedUserState={{user, setUser}}
+          mockedRoomState={{room, setRoom}}
         >
-          <MockRouter initialEntries={[`/room/${ROOMID}`]} path={'/room/:id'}>
+          <MockRouter history={history} path={'/room/:id'}>
             <Room />
           </MockRouter>
         </ElementWithProviders>
@@ -86,8 +93,9 @@ describe('When all the users in the lobby are ready', () => {
         <ElementWithProviders 
           socket={socket} 
           mockedUserState={{user, setUser}}
+          mockedRoomState={{room, setRoom}}
         >
-          <MockRouter initialEntries={[`/room/${ROOMID}`]} path={'/room/:id'}>
+          <MockRouter history={history} path={'/room/:id'}>
             <Room />
           </MockRouter>
         </ElementWithProviders>
@@ -99,6 +107,7 @@ describe('When all the users in the lobby are ready', () => {
     });
     test('Click on play button should initialize the game', () => {
       fireEvent.click(playButton);
+      expect(history.location.pathname).toBe('/game');
     });
   });
 });

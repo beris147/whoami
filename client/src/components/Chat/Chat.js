@@ -8,10 +8,16 @@ import handleOnEnter from 'utils/handleOnEnter';
 
 import type { MessageT } from 'common/types';
 
-function Chat(): React$Element<any> {
+const YES: bool = true;
+const NO: bool = false;
+type ChatPropsT = {
+	normal: bool,
+};
+
+function Chat(props: ChatPropsT): React$Element<any> {
   const socket = useContext(SocketContext);
 	const { user } = useContext(UserContext);
-  const [textMessage: string, setTextMessage] = useState('');
+  const [textMessage: string | bool, setTextMessage] = useState('');
   const [messages: MessageT, setMessages] = useState([]);
 
   const handleSendMessage = (): void => {
@@ -21,6 +27,10 @@ function Chat(): React$Element<any> {
 			setTextMessage('');
 			setMessages([...messages, newMessage]);
 		}
+	}
+
+	const handleYesOrNoAnswer = (answer: bool) => {
+		socket.emit('send-answer', answer, errorCallBack);
 	}
 
   useEffect((): any => {
@@ -35,22 +45,41 @@ function Chat(): React$Element<any> {
   return (
     <div>
       <h1>Chat</h1>
-      <MessageList messages={messages}/>
-      <input
-				type='text' 
-				value={textMessage} 
-				onChange={e => setTextMessage(e.target.value)}
-				onKeyDown={
-					e => {
-						if(textMessage !== '') handleOnEnter(e, handleSendMessage);
-					}
-				}
-			/>
-			<button onClick={handleSendMessage} disabled={textMessage === ''}>
-				Send
-			</button> 
-    </div>
+			<MessageList messages={messages}/>
+      {props.normal 
+			? (
+				<div>
+					<input
+						type='text' 
+						value={textMessage} 
+						onChange={e => setTextMessage(e.target.value)}
+						onKeyDown={
+							e => {
+								if(textMessage !== '') handleOnEnter(e, handleSendMessage);
+							}
+						}
+					/>
+					<button onClick={handleSendMessage} disabled={textMessage === ''}>
+						Send
+					</button>
+				</div>
+			): (
+				<div>
+					<button onClick={() => handleYesOrNoAnswer(YES)}>
+						YES
+					</button>
+					<button onClick={() => handleYesOrNoAnswer(NO)}>
+						NO
+					</button>
+				</div>
+			)
+			}
+    </>
   );
+}
+
+Chat.defaultProps = {
+	normal: true,
 }
 
 export default Chat;

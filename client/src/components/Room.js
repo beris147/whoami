@@ -20,7 +20,7 @@ function Room(): React$Element<any> {
 	const history = useHistory();
 	const isMounted = useIsMounted();
 
-	const lobbyRef = useRef<?LobbyHandleT>(null);
+	const lobbyRef = useRef<LobbyHandleT | null>(null);
 
 	const updateRoom = useCallback(
     (updatedRoom: ?RoomT) => {
