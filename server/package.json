@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prebuild": "del-cli --force ./lib",
+    "prebuild": "rm -rf ./lib",
     "build": "babel src/ -d lib/",
     "prestart": "npm test",
     "start": "node lib/app.js",
@@ -28,7 +28,6 @@
     "babel-jest": "^26.6.3",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "common": "file:../common",
-    "del-cli": "^3.0.1",
     "jest": "^26.6.3",
     "sockets": "file:./src/sockets",
     "utils": "file:./src/utils"
