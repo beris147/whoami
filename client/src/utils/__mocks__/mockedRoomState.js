@@ -8,8 +8,6 @@ export let room: ?RoomT = {
   id: ROOMID,
   owner: USERNAME,
   users: [USERNAME],
-  round: 0,
-  time: 30,
 };
 export const setRoom = (r: ?RoomT): void => { room = r };
 

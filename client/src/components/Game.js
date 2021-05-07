@@ -99,6 +99,7 @@ function Game(): React$Element<any> {
     <>
       <h1>Game</h1>
       <p>Player: {game.users[game.turn].username}</p>
+      {!isMyTurn && <p>{game.users[game.turn].assignedCharacter}</p>}
       <Chat normal={isMyTurn}/>
       {
         // TODO next turn should be called when more than the 50% of the party
