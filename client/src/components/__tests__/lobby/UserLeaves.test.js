@@ -68,7 +68,7 @@ describe('When a user in lobby leaves', () => {
       const users = screen.getAllByRole('listitem');
       expect(users.length).toBe(mockUsers.length - 1);
     });
-    test('Does not includes the username', () => {
+    test('Does not include the username', () => {
       const userDiv = screen.queryByText(/test-leaver/);
       expect(userDiv).toBeNull();
     });
