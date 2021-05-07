@@ -73,8 +73,6 @@ describe('CreateRoom component', (): void => {
         id: 'my-id',
         users: [ ],
         owner: '',
-        round: 1,
-        time: 30,
       };
       // mock of what the server should do. 
       serverSocket.on('create-room', (data: CreateRoomRequestT) => {

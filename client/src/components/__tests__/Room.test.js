@@ -15,16 +15,16 @@ import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import MockRouter from 'components/__mocks__/MockRouter';
 import { createMemoryHistory } from 'history';
 import { user, setUser } from 'utils/__mocks__/mockedUserState';
+import { ROOMID } from 'utils/__mocks__/mockedRoomState';
 import '@testing-library/jest-dom';
 
 
 describe('Room component', (): void => {
   const socket = io.connect();
-  const roomId = '1234';
   let history: any;
   beforeEach((): void => {
     history = createMemoryHistory();
-    history.push(`/room/${roomId}`);
+    history.push(`/room/${ROOMID}`);
   });
 
   afterEach(() => {
@@ -33,12 +33,6 @@ describe('Room component', (): void => {
   });
 
   test('Load room view if the user is defined', (): void => {
-    const fakeUser = {
-      id: 'mock-id',
-      username: 'mock-username',
-      roomId: 'mock-roomId',
-    }
-    setUser(fakeUser);
     render(
       <ElementWithProviders mockedUserState={{ user, setUser }} socket={socket}>
         <MockRouter history={history} path={'/room/:id'}>
@@ -46,7 +40,7 @@ describe('Room component', (): void => {
         </MockRouter>
       </ElementWithProviders>
     );
-    const re = new RegExp(`Room ${roomId}`);
+    const re = new RegExp(`Room ${ROOMID}`);
     const search = screen.getByText(re);
     expect(search).toBeInTheDocument();
   });
@@ -60,7 +54,7 @@ describe('Room component', (): void => {
         </MockRouter>
       </ElementWithProviders>
     );
-    expect(history.location.pathname).toBe(`/join/${roomId}`);
+    expect(history.location.pathname).toBe(`/join/${ROOMID}`);
   });
   
 });
