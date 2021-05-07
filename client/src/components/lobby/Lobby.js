@@ -94,9 +94,8 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
       };
     });
     useEffect(() => {
-      const playable = userList.reduce(
-        (aux: bool, user: UserInLobbyT) => aux && 'writtenCharacter' in user,
-        true,
+      const playable = userList.every(
+        (user: UserInLobbyT) => 'writtenCharacter' in user,
       );
       setPlayable(playable);
     }, [userList, setPlayable]);
