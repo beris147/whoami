@@ -14,10 +14,7 @@ import { useHistory } from 'react-router-dom';
 
 import type { 
   GameT,
-<<<<<<< HEAD
-=======
   UserInGameT,
->>>>>>> basi game functionality
   UserInLobbyT,
   UsersInLobbyCallbackT,
   UserIsReadyT,
