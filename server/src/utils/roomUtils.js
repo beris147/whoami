@@ -47,8 +47,6 @@ const createRoom = (owner: string, rooms: RoomSetT): RoomT => {
     id,
     users: Array(),
     owner,
-    round: 1,
-    time: 30,
   };
 }
 

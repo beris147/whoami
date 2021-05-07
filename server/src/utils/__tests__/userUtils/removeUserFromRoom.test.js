@@ -13,8 +13,6 @@ const user: UserT = {
 const roomTemplate: RoomT = {
   id: user.roomId,
   owner: "owner-id",
-  round: 1,
-  time: 1,
   users: ["username-1", "username-2", "username-3"],
 };
 

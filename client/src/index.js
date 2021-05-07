@@ -2,6 +2,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
+import GameProvider from 'providers/GameProvider';
 import RoomProvider from 'providers/RoomProvider';
 import SocketProvider from 'providers/SocketProvider';
 import UserProvider from 'providers/UserProvider';
@@ -14,9 +15,11 @@ ReactDOM.render(
     <RoomProvider>
       <UserProvider>
         <SocketProvider>
-          <Router>
-            <App />
-          </Router>
+          <GameProvider>
+            <Router>
+              <App />
+            </Router>
+          </GameProvider>
         </SocketProvider>
       </UserProvider>
     </RoomProvider>
