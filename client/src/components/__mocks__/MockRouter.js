@@ -3,7 +3,7 @@ import React from 'react';
 import { MemoryRouter, Route, Router } from 'react-router-dom';
 
 type MockRouterT = {
-  ui: React$Element<any>,
+  children: React$Element<any>,
   initialEntries?: [string],
   path: string,
   history?: any,
@@ -14,7 +14,7 @@ function MockRouter(props: MockRouterT): React$Element<any>{
     return (
       <Router history={props.history}>
         <Route path={props.path}>
-          {props.ui}
+          {props.children}
         </Route>
       </Router>
     );
@@ -22,7 +22,7 @@ function MockRouter(props: MockRouterT): React$Element<any>{
   return (
     <MemoryRouter initialEntries={props.initialEntries}>
       <Route path={props.path}>
-        {props.ui}
+        {props.children}
       </Route>
     </MemoryRouter>
   );

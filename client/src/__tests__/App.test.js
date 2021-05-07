@@ -10,20 +10,13 @@ import {
   jest,
 } from '@jest/globals';
 import { MemoryRouter } from 'react-router-dom';
-import MockedProvider from 'providers/__mocks__/MockedProvider';
-import SocketContext from 'contexts/SocketContext';
-import UserContext from 'contexts/UserContext';
-import io from 'utils/__mocks__/MockedSocketIO';
 import App from '../App';
+import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 
 import '@testing-library/jest-dom';
 
 describe('App component', () => {
-
-  const socket = io.connect();
-
   afterEach(cleanup);
-
   test('App renders wihtout crashing', () => {
     render(
       <MemoryRouter>
@@ -34,15 +27,12 @@ describe('App component', () => {
   });
 
   test('App routing test', () => {
-    const mockUserState = {user: undefined, setUser: () => {}};
     render(
-      <MockedProvider value={mockUserState} context={UserContext}>
-        <MockedProvider value={socket} context={SocketContext}>
-          <MemoryRouter initialEntries={['/create']}>
-            <App />
-          </MemoryRouter>
-        </MockedProvider>
-      </MockedProvider>
+      <MemoryRouter initialEntries={['/create']}>
+        <ElementWithProviders>
+          <App/>
+        </ElementWithProviders>
+      </MemoryRouter>
     );
     expect(
       screen.getByRole(

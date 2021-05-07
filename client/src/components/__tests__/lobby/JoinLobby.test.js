@@ -12,7 +12,7 @@ import {
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import io, { cleanSocket, serverSocket } from "utils/__mocks__/MockedSocketIO";
 import Lobby from "components/lobby/Lobby";
-import SocketContext from "contexts/SocketContext";
+import ElementWithProviders from "components/__mocks__/ElementWithProviders";
 
 describe("When user joins lobby", () => {
   const socket = io.connect();
@@ -26,9 +26,9 @@ describe("When user joins lobby", () => {
     });
     
     render(
-      <SocketContext.Provider value={socket}>
+      <ElementWithProviders socket={socket}>
         <Lobby />
-      </SocketContext.Provider>
+      </ElementWithProviders>
     );
   });
 

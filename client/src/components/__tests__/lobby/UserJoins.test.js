@@ -11,9 +11,12 @@ import {
 } from "@testing-library/react";
 import { describe, it, expect, beforeEach, afterEach } from "@jest/globals";
 import io, { cleanSocket, serverSocket } from "utils/__mocks__/MockedSocketIO";
-import Lobby from "components/lobby/Lobby";
-import SocketContext from "contexts/SocketContext";
+import Room from "components/Room";
+import ElementWithProviders from "components/__mocks__/ElementWithProviders";
+import MockRouter from 'components/__mocks__/MockRouter';
+import { ROOMID } from 'utils/__mocks__/mockedRoomState';
 import type {
+  UserT,
   UserInLobbyT,
   ErrorCallBackT,
   UsersInLobbyCallbackT,
@@ -37,9 +40,11 @@ describe("When user is in lobby and another user joins", () => {
         }
       );
       render(
-        <SocketContext.Provider value={socket}>
-          <Lobby />
-        </SocketContext.Provider>
+        <ElementWithProviders socket={socket}>
+          <MockRouter initialEntries={[`/room/${ROOMID}`]} path={'/room/:id'}>
+            <Room />
+          </MockRouter>
+        </ElementWithProviders>
       );
       const username: string = "test-username";
       act(() => {

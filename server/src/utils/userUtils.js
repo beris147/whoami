@@ -1,10 +1,17 @@
 // @flow
-import type { RoomT, RoomSetT, UserT, UserSetT, ErrorT } from 'common/types';
 const { 
   transferOwnership, 
   removeRoom, 
   emitToRoom,
 } = require("utils/roomUtils");
+
+import type { 
+  RoomT, 
+  RoomSetT, 
+  UserT, 
+  UserSetT, 
+  ErrorT,
+} from 'common/types';
 
 const createUser = (
   id: string, 
@@ -24,9 +31,9 @@ const removeUserFromRoom = (user: UserT, rooms: RoomSetT, io: any): void => {
   }
   rooms[room.id] = 
     room.owner == user.username
-    ? transferOwnership(room, room.users[0])
+    ? transferOwnership(room, room.users[0], io)
     : room;
-  if(io) emitToRoom(room.id, 'room-update', rooms[room.id], io);
+  if(io) emitToRoom(room.id, 'user-left', user.username, io);
 }
 
 const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {

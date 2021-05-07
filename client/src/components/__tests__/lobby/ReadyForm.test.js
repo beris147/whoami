@@ -27,11 +27,9 @@ describe('ReadyForm component', (): void => {
   beforeEach(() => {
     socket = io.connect();
     render(
-      <ElementWithProviders 
-        ui={<ReadyForm />}
-        mockUserState={{ user: null, setUser: null }}
-        socket={socket}
-      />
+      <ElementWithProviders socket={socket}>
+        <ReadyForm />
+      </ElementWithProviders>
     );
     readyButton = screen.getByRole('button', { name: /Ready/i });
     characterInput = screen.getByRole('textbox', {type: 'text'});

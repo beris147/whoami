@@ -16,37 +16,26 @@ import MockRouter from 'components/__mocks__/MockRouter';
 import { createMemoryHistory } from 'history';
 import { ENTER_KEY_CODE } from 'utils/keycodes';
 
-import type { UserT, RoomT, JoinRoomRequestT } from 'common/types';
+import type { RoomT, JoinRoomRequestT } from 'common/types';
 
 import '@testing-library/jest-dom';
 
 describe('JoinRoom component', (): void => {
 
   const socket = io.connect();
-  let user: ?UserT;
   let history: any;
   let ui: React$Element<any>;
   let elementToRender: React$Element<any>;
 
-  const setUser: mixed = (user: UserT): void => { user = user; };
-
   beforeEach((): void => {
-    user = undefined;
     history = createMemoryHistory();
     history.push('/join');
-    ui = (
-      <MockRouter 
-        ui={<JoinRoom/>}
-        history={history}
-        path={'/join'}
-      />
-    );
     elementToRender = (
-      <ElementWithProviders 
-        ui={ui}
-        mockUserState={{ user, setUser }}
-        socket={socket}
-      />
+      <ElementWithProviders socket={socket}>
+        <MockRouter history={history} path={'/join'}>
+          <JoinRoom/>
+        </MockRouter>
+      </ElementWithProviders>
     );
   });
 
@@ -84,8 +73,6 @@ describe('JoinRoom component', (): void => {
         id: roomid,
         users: [ ],
         owner: '',
-        round: 1,
-        time: 30,
       };
       serverSocket.on('join-room', (data: JoinRoomRequestT) => {
         fakeRoom.users.push(data.username);

@@ -4,6 +4,7 @@ import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { test, expect, describe, afterEach, beforeEach } from '@jest/globals';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
+import { user, setUser } from 'utils/__mocks__/mockedUserState';
 import Chat from 'components/Chat/Chat';
 
 import type { UserT, MessageT } from 'common/types';
@@ -11,20 +12,15 @@ import type { UserT, MessageT } from 'common/types';
 import '@testing-library/jest-dom';
 
 describe('Chat component', (): void => {
-
   const socket = io.connect();
-  let user: ?UserT = { username: 'user', id: 'id', roomId: 'roomid' };
-  let ui: React$Element<any>;
-
-  const setUser = (newUser: ?UserT): void => { user = newUser; };
 
   beforeEach(() => {
-    ui = (
-      <ElementWithProviders 
-        ui={<Chat/>}
-        mockUserState={{ user, setUser }}
-        socket={socket}
-      />
+    const auxUser: ?UserT = { username: 'user', id: 'id', roomId: 'roomid' };
+    setUser(auxUser);
+    render(
+      <ElementWithProviders socket={socket} mockedUserState={{user, setUser}}>
+        <Chat/>
+      </ElementWithProviders>
     );
   });
 
@@ -34,7 +30,6 @@ describe('Chat component', (): void => {
   });
 
   test('Chat renders wihtout crashing', (): void => {
-    render(ui);
     expect(screen.getByText(/Chat/i)).toBeInTheDocument();
   });
 
@@ -43,7 +38,6 @@ describe('Chat component', (): void => {
     socket.on('send-message', (newMessage: MessageT) => {
       serverSocket.emit('new-message', newMessage);
     });
-    render(ui);
     const messageInput = screen.getByRole('textbox', {type: 'text'});
     const button = screen.getByRole('button', { name: /Send/i });
     expect(button).toBeDisabled();

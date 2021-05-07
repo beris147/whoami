@@ -22,30 +22,19 @@ import '@testing-library/jest-dom';
 describe('CreateRoom component', (): void => {
 
   const socket = io.connect();
-  let user: ?UserT;
   let history: any;
   let ui: React$Element<any>;
   let elementToRender: React$Element<any>;
 
-  const setUser = (newUser: ?UserT): void => { user = newUser; };
-
   beforeEach((): void => {
-    user = undefined;
     history = createMemoryHistory();
     history.push('/create');
-    ui = (
-      <MockRouter 
-        ui={<CreateRoom/>}
-        history={history}
-        path={'/create'}
-      />
-    );
     elementToRender = (
-      <ElementWithProviders 
-        ui={ui}
-        mockUserState={{ user, setUser }}
-        socket={socket}
-      />
+      <ElementWithProviders socket={socket}>
+        <MockRouter history={history} path={'/create'}>
+          <CreateRoom/>
+        </MockRouter>
+      </ElementWithProviders>
     );
   });
 
@@ -84,8 +73,6 @@ describe('CreateRoom component', (): void => {
         id: 'my-id',
         users: [ ],
         owner: '',
-        round: 1,
-        time: 30,
       };
       // mock of what the server should do. 
       serverSocket.on('create-room', (data: CreateRoomRequestT) => {
