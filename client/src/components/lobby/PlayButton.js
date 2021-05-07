@@ -12,7 +12,6 @@ type PlayButtonT = {
 
 const PlayButton = (props: PlayButtonT): React$Element<any> => {
   const socket = useContext(SocketContext);
-<<<<<<< HEAD
   const shuffleList = (list: Array<string>): Array<string> => {
     const len = list.length;
     let shuffledList: Array<string> = list;
@@ -24,8 +23,6 @@ const PlayButton = (props: PlayButtonT): React$Element<any> => {
     }
     return shuffledList;
   }
-=======
->>>>>>> basi game functionality
   const handlePlayGame = () => {
     const characters: Array<string> = props.userList.map(
       (user: UserInLobbyT): string => 

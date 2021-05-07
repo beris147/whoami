@@ -108,10 +108,6 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
       socket.on("user-is-not-ready", (userIsNotReady: UserIsNotReadyT) => {
         updateUserInUserList(userIsNotReady);
       });
-<<<<<<< HEAD
-      socket.on('game-started', (game: GameT) => {
-        setGame(game);
-=======
       socket.on('game-started', () => {
         const characters: Array<string> = userList.map(
           (user: UserInLobbyT): string => 
@@ -135,7 +131,6 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
           users: usersInGame,
         }
         setGame(newGame);
->>>>>>> basi game functionality
         history.push('/game');
       })
       return () => {
