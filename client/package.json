@@ -17,7 +17,6 @@
     "common": "file:../common",
     "components": "file:./src/components",
     "contexts": "file:./src/contexts",
-    "minimist": "^1.2.5",
     "providers": "file:./src/providers",
     "react-toastify": "^7.0.4",
     "utils": "file:./src/utils"
@@ -28,8 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "preinstall": "npx npm-force-resolutions"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
