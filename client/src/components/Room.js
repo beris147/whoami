@@ -32,7 +32,7 @@ function Room(): React$Element<any> {
 
 	useEffect(() => {
 		if(user) toast.info('Share the link with your friends!');
-	}, [history, id, user]);
+	}, [history, user]);
 	
 	useEffect(()=> {
 		if(!room) return;
@@ -68,8 +68,8 @@ function Room(): React$Element<any> {
 	}, [history, room, setRoom, socket, updateRoom]);
 	if(!user || !room) {
 		return (
-			<DisplayError 
-				error='User or room is not defined, them will be defined in join'
+			<DisplayError
+				error='User or room is not defined, define them in /join'
 				redirectTo={`/join/${id}`}
 			/>
 		);
