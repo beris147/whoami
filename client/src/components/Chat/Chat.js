@@ -5,6 +5,7 @@ import UserContext from 'contexts/UserContext';
 import errorCallBack from 'utils/errorCallBack';
 import MessageList from 'components/Chat/MessageList';
 import handleOnEnter from 'utils/handleOnEnter';
+import DisplayError from 'components/Error/DisplayError';
 
 import type { MessageT } from 'common/types';
 
@@ -41,7 +42,7 @@ function Chat(props: ChatPropsT): React$Element<any> {
 			socket.off('new-message');
 		}
 	}, [socket, messages, setMessages]);
-  
+	if(!user) return <DisplayError error='User is not defined' />
   return (
     <div>
       <h1>Chat</h1>
