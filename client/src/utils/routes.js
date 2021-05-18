@@ -1,17 +1,21 @@
 // @flow
+import React from 'react';
 import CreateRoom from 'components/CreateRoom';
 import Game from 'components/Game';
 import Home from 'components/Home';
 import JoinRoom from 'components/JoinRoom';
 import Room from 'components/Room';
+import { useCreateRoomApp } from '../app/CreateRoomApp';
 
-const routes = {
-  '/': Home,
-  '/create': CreateRoom,
-  '/join': JoinRoom,
-  '/join/:id': JoinRoom,
-  '/room/:id': Room,
-  '/game': Game,
-};
-
-export default routes;
+export const useRoutes = (): {[string]: any} => {
+  const createRoomApp = useCreateRoomApp();
+  const routes = {
+    '/': () => <Home />,
+    '/create': () => <CreateRoom app={createRoomApp}/>,
+    '/join': () => <JoinRoom />,
+    '/join/:id': () => <JoinRoom />,
+    '/room/:id': () => <Room />,
+    '/game': () => <Game />,
+  }
+  return routes;
+}

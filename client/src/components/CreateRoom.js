@@ -1,39 +1,25 @@
 // @flow
-import React, { useContext, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import RoomContext from 'contexts/RoomContext';
-import SocketContext from 'contexts/SocketContext';
-import UserContext from 'contexts/UserContext';
-import errorCallBack from 'utils/errorCallBack';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState, useCallback } from 'react';
 import handleOnEnter from 'utils/handleOnEnter';
 
-import type { CreateRoomRequestT, RoomT } from 'common/types';
+import type { CreateRoomAppT } from '../app/CreateRoomApp';
 
-function CreateRoom(): React$Element<any> {
-  const history: any = useHistory();
-  const socket: any = useContext(SocketContext);
-  const { setRoom } = useContext(RoomContext);
-  const { setUser } = useContext(UserContext);
+type CreateRoomPropsT = {
+  app?: CreateRoomAppT,
+}
+
+function CreateRoom(props: CreateRoomPropsT): React$Element<any> {
   const [username: string, setUsername: mixed] = useState('');
+  const [app] = useState(props.app);
+  
+  const handleCreateRoom = useCallback(() => {
+    app?.createRoom(username);
+  },[app, username]);
 
-  const handleCreateRoom = (): void => {
-    const data: CreateRoomRequestT = { username };
-    socket.emit('create-room', data, errorCallBack);
-  }
-
-  useEffect((): any => {
-    socket.on('joined-room', (room: RoomT): void => {
-      toast.success('Room created!');
-      setRoom(room);
-      setUser({ username, roomId: room.id, id: socket.id });
-      history.push(`/room/${room.id}`);
-    });
-
-    return function cleanup() {
-      socket.off('joined-room');
-    };
-  }, [history, setUser, socket, username, setRoom]);
+  useEffect(() => {
+    app?.subscribeToEvents();
+    return () => app?.unsubscribeFromEvents();
+  }, [app]);
 
   return (
     <div>

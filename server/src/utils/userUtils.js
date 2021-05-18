@@ -9,6 +9,7 @@ import type {
   RoomT, 
   RoomSetT, 
   UserT, 
+  UserJoinedRoomT,
   UserSetT, 
   ErrorT,
 } from 'common/types';
@@ -86,6 +87,13 @@ const getOwner = (
   return getUser(ownerId, users);
 };
 
+const emitUserJoinedRoom = (room: RoomT, user: UserT, socket: any) => {
+  if (socket) {
+    const userJoined: UserJoinedRoomT = { room, user };
+    socket.emit('joined-room', userJoined);
+  }
+}
+
 module.exports = {
   createUser,
   removeUser,
@@ -94,4 +102,5 @@ module.exports = {
   getUserRoom,
   getOwner,
   getUser,
+  emitUserJoinedRoom,
 };

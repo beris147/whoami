@@ -16,3 +16,4 @@ export type { UserIsReadyT } from 'types/userIsReadyType';
 export type { UserIsNotReadyT } from 'types/userIsNotReadyType';
 export type { UserInGameT } from 'types/userInGameType';
 export type { GameT } from 'types/gameType';
+export type { UserJoinedRoomT } from 'types/userJoinedRoomType';
