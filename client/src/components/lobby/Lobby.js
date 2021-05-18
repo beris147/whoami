@@ -11,6 +11,7 @@ import UserContext from 'contexts/UserContext';
 import errorCallBack from "utils/errorCallBack";
 import { useIsMounted } from "utils/hooks/mounted";
 import { useHistory } from 'react-router-dom';
+import DisplayError from 'components/Error/DisplayError';
 
 import type { 
   GameT,
@@ -143,6 +144,8 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
       );
       setPlayable(playable);
     }, [userList, setPlayable]);
+    if(!user) return <DisplayError error='User is not defined' />;
+    if(!room) return <DisplayError error='Room is not defined' />;
     return (
       <div>
         <button onClick={handleLeaveRoom}>
@@ -151,7 +154,7 @@ const Lobby: React$AbstractComponent<{}, LobbyHandleT> =
         <ReadyForm />
         <UserList users={userList} />
         {
-          room?.owner === user?.username && 
+          room.owner === user.username && 
           <PlayButton userList={userList} disabled={!isPlayable}/>
         }
       </div>

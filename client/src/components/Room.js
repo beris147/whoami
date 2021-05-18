@@ -7,6 +7,7 @@ import UserContext from 'contexts/UserContext';
 import { toast } from 'react-toastify';
 import Chat from 'components/Chat/Chat';
 import Lobby from 'components/lobby/Lobby';
+import DisplayError from 'components/Error/DisplayError';
 import { useIsMounted } from "utils/hooks/mounted";
 
 import type { RoomT } from 'common/types';
@@ -30,39 +31,33 @@ function Room(): React$Element<any> {
   );
 
 	useEffect(() => {
-		if(!user) history.push(`/join/${id}`);
-		else toast.info('Share the link with your friends!');
-	}, [history, id, user]);
+		if(user) toast.info('Share the link with your friends!');
+	}, [history, user]);
 	
 	useEffect(()=> {
+		if(!room) return;
 		socket.on('user-joined', (username: string) => {
-			if(room){
-				const updatedRoomUsers = [...room.users, username];
-				const updatedRoom = {...room, users: updatedRoomUsers};
-				updateRoom(updatedRoom);
-			}
+			const updatedRoomUsers = [...room.users, username];
+			const updatedRoom = {...room, users: updatedRoomUsers};
+			updateRoom(updatedRoom);
 			lobbyRef.current?.addUserToLobby(username);
 		});
 		socket.on('user-left', (username: string) => {
-			if(room) {
-				const updatedRoomUsers = 
-					room.users.filter(
-						(roomUsername: string) => roomUsername !== username
-					);
-				const updatedRoom = {...room, users: updatedRoomUsers};
-				updateRoom(updatedRoom);
-			}
+			const updatedRoomUsers = 
+				room.users.filter(
+					(roomUsername: string) => roomUsername !== username
+				);
+			const updatedRoom = {...room, users: updatedRoomUsers};
+			updateRoom(updatedRoom);
 			lobbyRef.current?.removeUserFromLobby(username);
 		});
 		socket.on('left-room', () => {
-			setRoom(undefined);
 			history.push('/');
+			updateRoom(undefined);
 		});
 		socket.on('room-owner-changed', (username: string) => {
-			if(room) {
-				const updatedRoom = {...room, owner: username};
-				updateRoom(updatedRoom);
-			}
+			const updatedRoom = {...room, owner: username};
+			updateRoom(updatedRoom);
 		});
 		return () => {
 			socket.off('user-joined');
@@ -71,13 +66,21 @@ function Room(): React$Element<any> {
 			socket.off('left-room');
 		}
 	}, [history, room, setRoom, socket, updateRoom]);
-	return user ? (
+	if(!user || !room) {
+		return (
+			<DisplayError
+				error='User or room is not defined, define them in /join'
+				redirectTo={`/join/${id}`}
+			/>
+		);
+	}
+	return (
 		<div>
 			<h1>Room {id}</h1> 
 			<Lobby ref={lobbyRef}/>
 			<Chat />
 		</div>
-	) : <></>;
+	);
 }
 
 export default Room;

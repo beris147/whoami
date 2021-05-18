@@ -7,8 +7,8 @@ import { useIsMounted } from 'utils/hooks/mounted';
 import { useHistory } from 'react-router-dom';
 import Chat from 'components/Chat/Chat';
 import { toast } from 'react-toastify';
+import DisplayError from 'components/Error/DisplayError';
 import type { GameT, UserInGameT } from 'common/types';
-
 
 function Game(): React$Element<any> {
   const { game, setGame } = useContext(GameContext);
@@ -30,9 +30,6 @@ function Game(): React$Element<any> {
     socket.emit('user-got-it', game?.users[game.turn].username);
     socket.emit('next-turn');
   }
-  useEffect(() => {
-   if(!game || !user) history.push('/'); 
-  }, [game, user, history]);
 
   useEffect(() => {
     if(user && game) setMyTurn(game.users[game.turn].username===user.username);
@@ -95,7 +92,15 @@ function Game(): React$Element<any> {
       socket.off('send-answer');
     }
   }, [socket, updateGame, game, history, user, isMyTurn]);
-  return game && user ? (
+  if (!game || !user) {
+    return (
+      <DisplayError 
+        error='User or game is not definded, we cannot play, redirect to home' 
+        redirectTo='/'
+      />
+    );
+  }
+  return (
     <>
       <h1>Game</h1>
       <p>Player: {game.users[game.turn].username}</p>
@@ -110,8 +115,6 @@ function Game(): React$Element<any> {
         !isMyTurn && <button onClick={handleUserGotIt}> DONE! </button>
       }
     </>
-  ): (
-    <>Error</>
   );
 }
 
