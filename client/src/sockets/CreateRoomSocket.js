@@ -1,4 +1,5 @@
 // @flow
+import { useCallback } from 'react';
 import errorCallBack from 'utils/errorCallBack';
 import type { CreateRoomRequestT, UserJoinedRoomT } from 'common/types';
 
@@ -9,15 +10,15 @@ type CreateRoomSocketT = {
 }
 
 export const useCreateRoomSocket = (socket: any): CreateRoomSocketT => {
-  const emitCreateRoom = (data) => {
+  const emitCreateRoom = useCallback((data) => {
     socket.emit('create-room', data, errorCallBack);
-  }
-  const subscribeToJoinedRoom = (callback) => {
+  }, [socket]);
+  const subscribeToJoinedRoom = useCallback((callback) => {
     socket.on('joined-room', callback);
-  }
-  const unsubscribeFromJoinedRoom = () => {
+  }, [socket]);
+  const unsubscribeFromJoinedRoom = useCallback(() => {
     socket.off('joined-room');
-  }
+  }, [socket]);
   return {
     emitCreateRoom,
     subscribeToJoinedRoom,
