@@ -11,13 +11,13 @@ type CreateRoomSocketT = {
 export const useCreateRoomSocket = (socket: any): CreateRoomSocketT => {
   const emitCreateRoom = (data) => {
     socket.emit('create-room', data, errorCallBack);
-  };
+  }
   const subscribeToJoinedRoom = (callback) => {
     socket.on('joined-room', callback);
-  };
+  }
   const unsubscribeFromJoinedRoom = () => {
     socket.off('joined-room');
-  };
+  }
   return {
     emitCreateRoom,
     subscribeToJoinedRoom,
