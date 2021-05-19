@@ -14,11 +14,13 @@
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
+    "app": "file:./src/app",
     "common": "file:../common",
     "components": "file:./src/components",
     "contexts": "file:./src/contexts",
     "providers": "file:./src/providers",
     "react-toastify": "^7.0.4",
+    "sockets": "file:./src/sockets",
     "utils": "file:./src/utils"
   },
   "scripts": {

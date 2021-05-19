@@ -5,7 +5,7 @@ import Game from 'components/Game';
 import Home from 'components/Home';
 import JoinRoom from 'components/JoinRoom';
 import Room from 'components/Room';
-import { useCreateRoomApp } from '../app/CreateRoomApp';
+import { useCreateRoomApp } from 'app/CreateRoomApp';
 
 export const useRoutes = (): {[string]: any} => {
   const createRoomApp = useCreateRoomApp();

@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import handleOnEnter from 'utils/handleOnEnter';
 
-import type { CreateRoomAppT } from '../app/CreateRoomApp';
+import type { CreateRoomAppT } from 'app/CreateRoomApp';
 
 type CreateRoomPropsT = {
   app?: CreateRoomAppT,
