@@ -2,7 +2,7 @@
 import errorCallBack from 'utils/errorCallBack';
 import type { CreateRoomRequestT, UserJoinedRoomT } from 'common/types';
 
-type CreateRoomSocketT = {
+export type CreateRoomSocketT = {
   subscribeToJoinedRoom: (callback: (data: UserJoinedRoomT) => void) => void,
   unsubscribeFromJoinedRoom: () => void,
   emitCreateRoom: (data: CreateRoomRequestT) => void,
