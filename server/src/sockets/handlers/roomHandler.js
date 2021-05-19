@@ -68,7 +68,7 @@ module.exports = (
       rooms
     );
     if (error) return callback(error);
-    socket.emit('joined-room', room);
+    if (room) emitUserJoinedRoom(room, user, socket);
   }
 
   const leaveRoomHandler = (
