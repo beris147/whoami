@@ -4,7 +4,7 @@ import RoomContext from 'contexts/RoomContext';
 import UserContext from 'contexts/UserContext';
 import SocketContext from 'contexts/SocketContext';
 import { useHistory } from 'react-router-dom';
-import { useCreateRoomSocket } from '../sockets/CreateRoomSubscriptions';
+import { useCreateRoomSocket } from '../sockets/CreateRoomSocket';
 
 import type { CreateRoomRequestT, UserJoinedRoomT } from 'common/types';
 
