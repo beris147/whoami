@@ -2,6 +2,7 @@
 import React from 'react';
 import JoinRoom from 'components/JoinRoom';
 import MockRouter from 'components/__mocks__/MockRouter';
+import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import { test, expect, describe, beforeEach } from '@jest/globals';
 import '@testing-library/jest-dom';
@@ -12,9 +13,11 @@ describe('JoinRoom component', (): void => {
   let roomIdInput;
   beforeEach((): void => {
     render(
-      <MockRouter initialEntries={['/join']} path={'/join'}>
-        <JoinRoom/>
-      </MockRouter>
+      <ElementWithProviders>
+        <MockRouter initialEntries={['/join']} path={'/join'}>
+          <JoinRoom/>
+        </MockRouter>
+      </ElementWithProviders>
     );
     joinButton = screen.getByRole('button', { name: /Join Room/i });
     userNameInput = screen.getByTestId('username');
