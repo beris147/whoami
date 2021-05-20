@@ -1,16 +1,9 @@
 // @flow
-import type { UserInLobbyT, UserIsNotReadyT, UserIsReadyT } from 'common/types';
+import type { UserInLobbyT, UserIsNotReadyT } from 'common/types';
 import type { UsersInLobbyListT } from 'domain/models/LobbyDomainModels';
 
 const createNotReadyUser = (username: string): UserIsNotReadyT => {
   return { username };
-}
-
-const createReadyUser = (
-  username: string,
-  writtenCharacter: string,
-): UserIsReadyT => {
-  return { username, writtenCharacter };
 }
 
 export const addUserToLobbyList = (

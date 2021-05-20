@@ -1,12 +1,14 @@
 // @flow
 import { useContext } from 'react';
 import LobbyContext from 'contexts/Lobby/LobbyContext';
+import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
+import UserContext from 'contexts/UserContext';
 import { useLobbySocket } from 'sockets/Lobby/LobbySocket';
 import { useRoomSocket } from 'sockets/RoomSocket';
 import { useIsMounted } from 'utils/hooks/mounted';
 import { 
-  addUserToLobbyList, 
+  addUserToLobbyList,
   removeUserFromLobbyList,
   updateUserInList,
 } from 'domain/logic/LobbyDomainLogic';
@@ -14,34 +16,43 @@ import {
 import type { 
   GameT,
   UserInLobbyT, 
-  UsersInLobbyCallbackT, 
-  UserIsReadyT, 
+  UsersInLobbyCallbackT,
 } from 'common/types';
 
 import type { UsersInLobbyListT } from 'domain/models/LobbyDomainModels';
 
-export const useJoinRoomApp = (): any => {
+export type LobbyAppT = {
+  amIOwner: bool,
+  getUsers: () => void,
+  leaveRoom: () => void,
+  subscribeToEvents: () => void,
+  unsubscribeFromEvents: () => void,
+  userList: UsersInLobbyListT,
+};
+
+export const useLobbyApp = (): ?LobbyAppT => {
   const { userList, setUserList } = useContext(LobbyContext); 
+  const { user } = useContext(UserContext);
+  const { room } = useContext(RoomContext);
   const socketContext = useContext(SocketContext);
   const lobbySocket = useLobbySocket(socketContext);
   const roomSocket = useRoomSocket(socketContext);
 	const isMounted = useIsMounted();
 
-  const updateUserList = (updatedUserList: UsersInLobbyListT): void => {
-    if(isMounted.current) setUserList(updatedUserList);
-  }
-  const userJoined = (username: string) => {
+  if(!user || !room) return undefined;
+
+  const userJoinedLobby = (username: string) => {
     const updatedUserList = addUserToLobbyList(username, userList);
-    updateUserList(updatedUserList);
+    setUserList(updatedUserList);
   }
-  const userLeft = (username: string) => {
+  const userLeftLobby = (username: string) => {
     const updatedUserList = removeUserFromLobbyList(username, userList);
-    updateUserList(updatedUserList);
+    setUserList(updatedUserList);
   }
-  const emitGetUsers = () => {
+  const getUsers = () => {
+    lobbySocket.emitUserJoined();
     lobbySocket.emitGetUsersInLobby((users: UsersInLobbyListT) => {
       setUserList(users);
-      lobbySocket.emitUserJoined();
     });
   }
   const getUsersInLobby = (callback: UsersInLobbyCallbackT) => {
@@ -49,7 +60,7 @@ export const useJoinRoomApp = (): any => {
   }
   const updateUserState = (user: UserInLobbyT) => {
     const updatedUserList = updateUserInList(user, userList);
-    updateUserList(updatedUserList); 
+    setUserList(updatedUserList); 
   }
   const gameStarted = (game: GameT) => {
     // TODO set game context and redirect to /game
@@ -60,8 +71,8 @@ export const useJoinRoomApp = (): any => {
     lobbySocket.subscribeToGetUsersInLobby(getUsersInLobby);
     lobbySocket.subscribeToUserIsNotReady(updateUserState);
     lobbySocket.subscribeToUserIsReady(updateUserState);
-    roomSocket.subscribeToUserJoined(userJoined);
-    roomSocket.subscribeToUserLeft(userLeft);
+    roomSocket.subscribeToUserJoined(userJoinedLobby);
+    roomSocket.subscribeToUserLeft(userLeftLobby);
   }
   const unsubscribeFromEvents = () => {
     lobbySocket.unsubscribeFromGameStarted();
@@ -71,8 +82,16 @@ export const useJoinRoomApp = (): any => {
     roomSocket.unsubscribeFromUserJoined();
     roomSocket.unsubscribeFromUserLeft();
   }
+  const leaveRoom = () => {
+    lobbySocket.emitLeaveRoom();
+  }
+  const amIOwner = user.username === room.owner;
   return {
+    amIOwner,
+    getUsers,
+    leaveRoom,
     subscribeToEvents,
     unsubscribeFromEvents,
+    userList,
   };
 }

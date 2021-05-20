@@ -8,6 +8,7 @@ type CallbackForUsersInLobbyCallbackT =
 
 export type LobbySocketT = {
   emitGetUsersInLobby: (callback: UsersInLobbyCallbackT) => void,
+  emitLeaveRoom: () => void,
   emitUserJoined: () => void,
   subscribeToGetUsersInLobby: (callback: CallbackForUsersInLobbyCallbackT) => void,
   subscribeToUserIsNotReady: (callback: (user: UserInLobbyT) => void) => void,
@@ -25,6 +26,9 @@ export const useLobbySocket = (socket: any): LobbySocketT => {
   }
   const emitGetUsersInLobby = (callback) => {
     socket.emit('get-users-in-lobby', errorCallBack, callback);
+  }
+  const emitLeaveRoom = () => {
+    socket.emit('leave-room');
   }
   const subscribeToGetUsersInLobby = (callback) => {
     socket.on('get-users-in-lobby', callback);
@@ -52,6 +56,7 @@ export const useLobbySocket = (socket: any): LobbySocketT => {
   }
   return {
     emitGetUsersInLobby,
+    emitLeaveRoom,
     emitUserJoined,
     subscribeToGetUsersInLobby,
     subscribeToUserIsNotReady,
