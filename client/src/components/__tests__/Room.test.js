@@ -15,17 +15,12 @@ describe('Room component', (): void => {
   beforeEach((): void => {
     history.push(`/room/${ROOMID}`);
   });
-  describe('app is defined', () => {
+  describe('room is defined', () => {
     beforeEach(() => {
-      const mockApp = {
-        roomId: ROOMID,
-        subscribeToEvents: () => {},
-        unsubscribeFromEvents: () => {},
-      }
       render(
         <ElementWithProviders>
           <MockRouter history={history} path={'/room/:id'}>
-            <Room app={mockApp}/>
+            <Room />
           </MockRouter>
         </ElementWithProviders>
       );
@@ -36,10 +31,10 @@ describe('Room component', (): void => {
       expect(search).toBeInTheDocument();
     });
   });
-  describe('app is undefined due to room beign undefined', () => {
+  describe('room is undefined', () => {
     beforeEach(() => {
       render(
-        <ElementWithProviders>
+        <ElementWithProviders mockedRoomState={{room: null, setRoom: () => {}}}>
           <MockRouter history={history} path={'/room/:id'}>
             <Room />
           </MockRouter>

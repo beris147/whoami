@@ -1,19 +1,14 @@
 // @flow
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Chat from 'components/Chat/Chat';
 import Lobby from 'components/lobby/Lobby';
 import DisplayError from 'components/Error/DisplayError';
+import { useRoomApp } from 'app/RoomApp';
 
-import type { RoomAppT } from 'app/RoomApp';
-
-type RoomPropsT = {
-	app?: ?RoomAppT,
-}
-
-function Room(props: RoomPropsT): React$Element<any> {
+function Room(): React$Element<any> {
 	const { id } = useParams();
-	const [app] = useState(props.app);
+	const app = useRoomApp();
 
 	useEffect(()=> {
 		app?.subscribeToEvents();
@@ -23,7 +18,7 @@ function Room(props: RoomPropsT): React$Element<any> {
 	if(!app) {
 		return (
 			<DisplayError
-				error='App is not defined, define it in /join'
+				error='room is not defined, define it in /join'
 				redirectTo={`/join/${id}`}
 			/>
 		);
