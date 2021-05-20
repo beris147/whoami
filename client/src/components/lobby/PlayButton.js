@@ -4,7 +4,7 @@ import React from 'react';
 
 import type { UsersInLobbyListT } from 'domain/models/LobbyDomainModels';
 type PlayButtonT = {
-  userList: ?UsersInLobbyListT,
+  userList: UsersInLobbyListT,
   disabled: bool,
 }
 

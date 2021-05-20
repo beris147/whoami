@@ -4,15 +4,12 @@ import React, { useEffect, useState } from "react";
 import UserList from "./UserList";
 import ReadyForm from "./ReadyForm";
 import PlayButton from "./PlayButton";
+import DisplayError from 'components/Error/DisplayError';
+import { useLobbyApp } from 'app/Lobby/LobbyApp';
 
-import type { LobbyAppT } from 'app/Lobby/LobbyApp';
-type LobbyPropsT = {
-  app?: ?LobbyAppT,
-}
-
-const Lobby = (props: LobbyPropsT): React$Element<any> => {
+const Lobby = (): React$Element<any> => {
   const [isPlayable: bool] = useState(false);
-  const [app] = useState(props.app);
+  const app = useLobbyApp();
   const handleLeaveRoom = () => {
     app?.leaveRoom();
   }
@@ -21,16 +18,17 @@ const Lobby = (props: LobbyPropsT): React$Element<any> => {
     app?.getUsers();
     return () => app?.unsubscribeFromEvents();
   }, [app]);
+  if(!app) return <DisplayError error='room or user is undefined'/>;
   return (
     <div>
       <button onClick={handleLeaveRoom}>
         Leave
       </button>
       <ReadyForm />
-      <UserList userList={app?.userList} />
+      <UserList userList={app.userList} />
       {
-        app?.amIOwner && 
-        <PlayButton userList={app?.userList} disabled={!isPlayable}/>
+        app.amIOwner && 
+        <PlayButton userList={app.userList} disabled={!isPlayable}/>
       }
     </div>
   );

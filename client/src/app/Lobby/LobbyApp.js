@@ -40,19 +40,21 @@ export const useLobbyApp = (): ?LobbyAppT => {
 	const isMounted = useIsMounted();
 
   if(!user || !room) return undefined;
-
+  const updateUserList = (newUserList: UsersInLobbyListT) => {
+    if(isMounted.current) setUserList(newUserList);
+  }
   const userJoinedLobby = (username: string) => {
     const updatedUserList = addUserToLobbyList(username, userList);
-    setUserList(updatedUserList);
+    updateUserList(updatedUserList);
   }
   const userLeftLobby = (username: string) => {
     const updatedUserList = removeUserFromLobbyList(username, userList);
-    setUserList(updatedUserList);
+    updateUserList(updatedUserList);
   }
   const getUsers = () => {
     lobbySocket.emitUserJoined();
     lobbySocket.emitGetUsersInLobby((users: UsersInLobbyListT) => {
-      setUserList(users);
+      updateUserList(users);
     });
   }
   const getUsersInLobby = (callback: UsersInLobbyCallbackT) => {
@@ -60,7 +62,7 @@ export const useLobbyApp = (): ?LobbyAppT => {
   }
   const updateUserState = (user: UserInLobbyT) => {
     const updatedUserList = updateUserInList(user, userList);
-    setUserList(updatedUserList); 
+    updateUserList(updatedUserList); 
   }
   const gameStarted = (game: GameT) => {
     // TODO set game context and redirect to /game
