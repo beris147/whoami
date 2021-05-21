@@ -52,9 +52,9 @@ export const useLobbyApp = (): ?LobbyAppT => {
     updateUserList(updatedUserList);
   }
   const getUsers = () => {
-    lobbySocket.emitUserJoined();
     lobbySocket.emitGetUsersInLobby((users: UsersInLobbyListT) => {
       updateUserList(users);
+      lobbySocket.emitUserJoined();
     });
   }
   const getUsersInLobby = (callback: UsersInLobbyCallbackT) => {

@@ -18,6 +18,7 @@ export type RoomAppT = {
   roomId: string,
   subscribeToEvents: () => void,
   unsubscribeFromEvents: () => void,
+  room: RoomT,
 } 
 
 export const useRoomApp = (): ?RoomAppT => {
@@ -64,5 +65,6 @@ export const useRoomApp = (): ?RoomAppT => {
     roomId: room.id,
     subscribeToEvents,
     unsubscribeFromEvents,
+    room,
   };
 }

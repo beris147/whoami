@@ -5,6 +5,7 @@ import Chat from 'components/Chat/Chat';
 import Lobby from 'components/lobby/Lobby';
 import DisplayError from 'components/Error/DisplayError';
 import { useRoomApp } from 'app/RoomApp';
+import LobbyProvider from 'providers/Lobby/LobbyProvider';
 
 function Room(): React$Element<any> {
 	const { id } = useParams();
@@ -26,7 +27,9 @@ function Room(): React$Element<any> {
 	return (
 		<div>
 			<h1>Room {app.roomId}</h1> 
-			<Lobby />
+			<LobbyProvider>
+				<Lobby />
+			</LobbyProvider>
 			<Chat />
 		</div>
 	);

@@ -6,6 +6,7 @@ import ReadyForm from "./ReadyForm";
 import PlayButton from "./PlayButton";
 import DisplayError from 'components/Error/DisplayError';
 import { useLobbyApp } from 'app/Lobby/LobbyApp';
+import { useMountedEffect } from 'utils/hooks/mounted';
 
 const Lobby = (): React$Element<any> => {
   const [isPlayable: bool] = useState(false);
@@ -13,9 +14,9 @@ const Lobby = (): React$Element<any> => {
   const handleLeaveRoom = () => {
     app?.leaveRoom();
   }
+  useMountedEffect(() => app?.getUsers());
   useEffect(() => {
     app?.subscribeToEvents();
-    app?.getUsers();
     return () => app?.unsubscribeFromEvents();
   }, [app]);
   if(!app) return <DisplayError error='room or user is undefined'/>;
