@@ -19,6 +19,7 @@
     "common": "file:../common",
     "components": "file:./src/components",
     "contexts": "file:./src/contexts",
+    "domain": "file:./src/domain",
     "providers": "file:./src/providers",
     "react-toastify": "^7.0.4",
     "sockets": "file:./src/sockets",

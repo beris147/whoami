@@ -2,21 +2,16 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import handleOnEnter from 'utils/handleOnEnter';
+import { useJoinRoomApp } from 'app/JoinRoomApp';
 
-import type { JoinRoomAppT } from 'app/JoinRoomApp';
-
-type JoinRoomPropsT = {
-  app?: JoinRoomAppT,
-}
-
-function JoinRoom(props: JoinRoomPropsT): React$Element<any> {
+function JoinRoom(): React$Element<any> {
   const { id } = useParams();
   const [username: string, setUsername ] = useState('');
   const [roomId: string, setRoomId ] = useState('');
-  const [app] = useState(props.app);
+  const app = useJoinRoomApp();
 
   const handleJoinRoom = useCallback(() => {
-    app?.joinRoomRequest(username, roomId);
+    app.joinRoomRequest(username, roomId);
   }, [app, roomId, username]);
 
   useEffect((): any => {
@@ -24,8 +19,8 @@ function JoinRoom(props: JoinRoomPropsT): React$Element<any> {
   }, [id]);
 
   useEffect((): any => {
-    app?.subscribeToEvents();
-    return () => app?.unsubscribeFromEvents();
+    app.subscribeToEvents();
+    return () => app.unsubscribeFromEvents();
   }, [app]);
 
   return (
