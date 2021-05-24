@@ -5,6 +5,7 @@
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
+    "@testing-library/react-hooks": "^6.0.0",
     "@testing-library/user-event": "^12.8.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -14,11 +15,14 @@
     "web-vitals": "^1.1.1"
   },
   "devDependencies": {
+    "app": "file:./src/app",
     "common": "file:../common",
     "components": "file:./src/components",
     "contexts": "file:./src/contexts",
+    "domain": "file:./src/domain",
     "providers": "file:./src/providers",
     "react-toastify": "^7.0.4",
+    "sockets": "file:./src/sockets",
     "utils": "file:./src/utils"
   },
   "scripts": {

@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import routes from 'utils/routes';
 import PageNotFound from 'components/PageNotFound';
 import { Switch, Route, Link } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import { useRoutes } from 'utils/routes';
 import 'react-toastify/dist/ReactToastify.css';
 
 function TemporalLinkLi() {
@@ -16,26 +16,25 @@ function TemporalLinkLi() {
   );
 }
 
-function MySwitch() {
-  return (
-    <Switch>
-      {
-        Object.keys(routes).map(
-          path => (
-            <Route exact path={path} component={routes[path]} key={path} />
-          )
-        )
-      }
-      <Route component={PageNotFound} />
-    </Switch>
-  );
-}
-
 function App(): React$Element<any> {
+  const routes = useRoutes();
   return (
     <>
       <TemporalLinkLi />
-      <MySwitch />
+      <Switch>
+        {
+          Object.keys(routes).map(
+            path => (
+              <Route exact
+                path={path} 
+                component={routes[path]}
+                key={path}
+              />
+            )
+          )
+        }
+        <Route component={PageNotFound} />
+      </Switch>
       <ToastContainer 
         position="top-right"
         autoClose={2000}
