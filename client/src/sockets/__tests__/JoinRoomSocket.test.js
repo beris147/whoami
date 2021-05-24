@@ -4,23 +4,23 @@ import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 import io from 'utils/__mocks__/MockedSocketIO';
 import { renderHook, act, cleanup } from '@testing-library/react-hooks/dom';
 import { test, expect, describe, jest, beforeEach, afterEach } from '@jest/globals';
-import { useCreateRoomSocket } from 'sockets/CreateRoomSocket';
-import { useCreateRoomServer } from 'sockets/__mocks__/MockedCreateRoomServer';
+import { useJoinRoomSocket } from 'sockets/JoinRoomSocket';
+import { useJoinRoomServer } from 'sockets/__mocks__/MockedJoinRoomServer';
 
 import type { RoomT, UserT, UserJoinedRoomT } from 'common/types';
-import type { CreateRoomSocketT } from 'sockets/CreateRoomSocket';
+import type { JoinRoomSocketT } from 'sockets/JoinRoomSocket';
 
 const socketContext = io.connect();
-const serverSocket = useCreateRoomServer();
+const serverSocket = useJoinRoomServer();
 
-let socket: CreateRoomSocketT;
+let socket: JoinRoomSocketT;
 
 beforeEach(() => {
   const wrapper = ({children}) => <ElementWithProviders socket={socketContext}>
     {children}
   </ElementWithProviders>
   socket = renderHook(
-    () => useCreateRoomSocket(socketContext),
+    () => useJoinRoomSocket(socketContext),
     {wrapper},
   ).result.current;
   serverSocket.subscribeToEvents();
@@ -29,7 +29,7 @@ afterEach(() => {
   cleanup();
   serverSocket.unsubscribeFromEvents();
 })
-describe('useCreateRoomSocket hook', () => {
+describe('useJoinRoomSocket hook', () => {
   let testRoom: ?RoomT = undefined;
   let testUser: ?UserT = undefined;
   let callback: () => void;
@@ -43,10 +43,10 @@ describe('useCreateRoomSocket hook', () => {
   afterEach((): void => {
     socket.unsubscribeFromJoinedRoom();
   });
-  describe('on emitCreateRoom', () => {
+  describe('on emitJoinRoom', () => {
     beforeEach(() => {
       act(() => {
-        socket.emitCreateRoom({ username: 'testUser' });
+        socket.emitJoinRoom({ username: 'testUser', roomId: 'roomid' });
       });
     });
     test('the callback should be called', () => {
