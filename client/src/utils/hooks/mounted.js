@@ -11,3 +11,6 @@ export function useIsMounted(): any {
 
   return isMounted;
 }
+
+// eslint-disable-next-line
+export const useMountedEffect = (func: () => void): void => useEffect(func, []);
