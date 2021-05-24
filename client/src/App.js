@@ -27,7 +27,7 @@ function App(): React$Element<any> {
             path => (
               <Route exact
                 path={path} 
-                render={routes[path]}
+                component={routes[path]}
                 key={path}
               />
             )

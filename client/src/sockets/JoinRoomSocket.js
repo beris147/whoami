@@ -1,16 +1,16 @@
 // @flow
 import errorCallBack from 'utils/errorCallBack';
-import type { CreateRoomRequestT, UserJoinedRoomT } from 'common/types';
+import type { JoinRoomRequestT, UserJoinedRoomT } from 'common/types';
 
-export type CreateRoomSocketT = {
+export type JoinRoomSocketT = {
+  emitJoinRoom: (data: JoinRoomRequestT) => void,
   subscribeToJoinedRoom: (callback: (data: UserJoinedRoomT) => void) => void,
-  unsubscribeFromJoinedRoom: () => void,
-  emitCreateRoom: (data: CreateRoomRequestT) => void,
+  unsubscribeFromJoinedRoom: () => void, 
 }
 
-export const useCreateRoomSocket = (socket: any): CreateRoomSocketT => {
-  const emitCreateRoom = (data) => {
-    socket.emit('create-room', data, errorCallBack);
+export const useJoinRoomSocket = (socket: any): JoinRoomSocketT => {
+  const emitJoinRoom = (data) => {
+    socket.emit('join-room', data, errorCallBack);
   }
   const subscribeToJoinedRoom = (callback) => {
     socket.on('joined-room', callback);
@@ -19,7 +19,7 @@ export const useCreateRoomSocket = (socket: any): CreateRoomSocketT => {
     socket.off('joined-room');
   }
   return {
-    emitCreateRoom,
+    emitJoinRoom,
     subscribeToJoinedRoom,
     unsubscribeFromJoinedRoom,
   }

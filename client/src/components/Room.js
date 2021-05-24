@@ -1,83 +1,35 @@
 // @flow
-import React, { useContext, useEffect, useCallback, useRef } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import RoomContext from 'contexts/RoomContext';
-import SocketContext from 'contexts/SocketContext';
-import UserContext from 'contexts/UserContext';
-import { toast } from 'react-toastify';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Chat from 'components/Chat/Chat';
 import Lobby from 'components/lobby/Lobby';
 import DisplayError from 'components/Error/DisplayError';
-import { useIsMounted } from "utils/hooks/mounted";
-
-import type { RoomT } from 'common/types';
-import type { LobbyHandleT } from 'components/lobby/Lobby';
+import { useRoomApp } from 'app/RoomApp';
+import LobbyProvider from 'providers/Lobby/LobbyProvider';
 
 function Room(): React$Element<any> {
-	const socket = useContext(SocketContext);
-	const { room, setRoom } = useContext(RoomContext); 
-	const { user } = useContext(UserContext);
 	const { id } = useParams();
-	const history = useHistory();
-	const isMounted = useIsMounted();
+	const app = useRoomApp();
 
-	const lobbyRef = useRef<LobbyHandleT | null>(null);
-
-	const updateRoom = useCallback(
-    (updatedRoom: ?RoomT) => {
-      if(isMounted.current) setRoom(updatedRoom);
-    },
-    [isMounted, setRoom],
-  );
-
-	useEffect(() => {
-		if(user) toast.info('Share the link with your friends!');
-	}, [history, user]);
-	
 	useEffect(()=> {
-		if(!room) return;
-		socket.on('user-joined', (username: string) => {
-			const updatedRoomUsers = [...room.users, username];
-			const updatedRoom = {...room, users: updatedRoomUsers};
-			updateRoom(updatedRoom);
-			lobbyRef.current?.addUserToLobby(username);
-		});
-		socket.on('user-left', (username: string) => {
-			const updatedRoomUsers = 
-				room.users.filter(
-					(roomUsername: string) => roomUsername !== username
-				);
-			const updatedRoom = {...room, users: updatedRoomUsers};
-			updateRoom(updatedRoom);
-			lobbyRef.current?.removeUserFromLobby(username);
-		});
-		socket.on('left-room', () => {
-			history.push('/');
-			updateRoom(undefined);
-		});
-		socket.on('room-owner-changed', (username: string) => {
-			const updatedRoom = {...room, owner: username};
-			updateRoom(updatedRoom);
-		});
-		return () => {
-			socket.off('user-joined');
-			socket.off('user-left');
-			socket.off('room-owner-changed');
-			socket.off('left-room');
-		}
-	}, [history, room, setRoom, socket, updateRoom]);
-	if(!user || !room) {
+		app?.subscribeToEvents();
+		return () => app?.unsubscribeFromEvents();
+	}, [app]);
+
+	if(!app) {
 		return (
 			<DisplayError
-				error='User or room is not defined, define them in /join'
+				error='room is not defined, define it in /join'
 				redirectTo={`/join/${id}`}
 			/>
 		);
 	}
 	return (
 		<div>
-			<h1>Room {id}</h1> 
-			<Lobby ref={lobbyRef}/>
+			<h1>Room {app.roomId}</h1> 
+			<LobbyProvider>
+				<Lobby />
+			</LobbyProvider>
 			<Chat />
 		</div>
 	);
