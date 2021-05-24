@@ -1,9 +1,9 @@
 //@flow
 
-import React, { useEffect, useState } from "react";
-import UserList from "./UserList";
-import ReadyForm from "./ReadyForm";
-import PlayButton from "./PlayButton";
+import React, { useEffect, useState } from 'react';
+import UserList from './UserList';
+import ReadyForm from './ReadyForm';
+import PlayButton from './PlayButton';
 import DisplayError from 'components/Error/DisplayError';
 import { useLobbyApp } from 'app/Lobby/LobbyApp';
 import { useMountedEffect } from 'utils/hooks/mounted';

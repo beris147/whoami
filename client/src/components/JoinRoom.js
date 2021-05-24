@@ -29,7 +29,7 @@ function JoinRoom(): React$Element<any> {
       <div>
         <input 
           type='text' 
-          data-testid="username"
+          data-testid='username'
           placeholder='User Name'
           value={username}
           onChange={e => setUsername(e.target.value)}
@@ -42,7 +42,7 @@ function JoinRoom(): React$Element<any> {
         /><br/>
         <input 
           type='text'
-          data-testid="roomid"
+          data-testid='roomid'
           placeholder='Room id'
           value={roomId}
           onChange={e => setRoomId(e.target.value)}

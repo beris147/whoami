@@ -101,11 +101,11 @@ module.exports = (
     successCallback: UsersInLobbyCallbackT
   ): void => {
     const user = getUser(socket.id, users);
-    if (!user) return console.error({ error: "couldn't find user" });
+    if (!user) return console.error({ error: 'couldn\'t find user' });
     const ownerSocket = getOwnerSocket(user.roomId);
     if (!ownerSocket)
-      return errorCallback({ error: "couldn't get owner socket" });
-    ownerSocket.emit("get-users-in-lobby", (response: Array<UserInLobbyT>) => {
+      return errorCallback({ error: 'couldn\'t get owner socket' });
+    ownerSocket.emit('get-users-in-lobby', (response: Array<UserInLobbyT>) => {
       successCallback(response);
     });
   };
@@ -113,8 +113,8 @@ module.exports = (
   const userJoinedLobbyHandler = (
   ): void => {
     const user = getUser(socket.id, users);
-    if (!user) return console.error({ error: "couldn't find user" });
-    emitToRoom(user.roomId, "user-joined", user.username, io);
+    if (!user) return console.error({ error: 'couldn\'t find user' });
+    emitToRoom(user.roomId, 'user-joined', user.username, io);
   }
 
   const setReadyInLobbyHandler = (

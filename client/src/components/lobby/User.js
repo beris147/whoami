@@ -1,7 +1,7 @@
 //@flow
 
-import React from "react";
-import type { UserInLobbyT } from "common/types";
+import React from 'react';
+import type { UserInLobbyT } from 'common/types';
 
 export type UserPropsT = {|
   user: UserInLobbyT,

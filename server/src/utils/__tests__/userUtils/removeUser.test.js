@@ -1,22 +1,22 @@
 // @flow
-const { describe, it, expect } = require("@jest/globals");
-const { removeUser } = require("utils/userUtils");
+const { describe, it, expect } = require('@jest/globals');
+const { removeUser } = require('utils/userUtils');
 
-import type { RoomT, RoomSetT, UserT, UserSetT } from "common/types";
+import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
 
-describe("removeUser", () => {
-  describe("Given a user in the user set", () => {
-    it("Removes the user from the user set", () => {
+describe('removeUser', () => {
+  describe('Given a user in the user set', () => {
+    it('Removes the user from the user set', () => {
       const user: UserT = {
-        id: "user-id",
-        roomId: "room-id",
-        username: "user-username",
+        id: 'user-id',
+        roomId: 'room-id',
+        username: 'user-username',
       };
       const remainingUsers: UserSetT = {
-        "user-id-2": {
-          id: "user-id-2",
-          roomId: "room-id",
-          username: "user-username-2",
+        'user-id-2': {
+          id: 'user-id-2',
+          roomId: 'room-id',
+          username: 'user-username-2',
         },
       };
       const users: UserSetT = {
@@ -27,18 +27,18 @@ describe("removeUser", () => {
       expect(users).toStrictEqual(remainingUsers);
     });
   });
-  describe("Given a user not in the user set", () => {
-    it("Does nothing", () => {
+  describe('Given a user not in the user set', () => {
+    it('Does nothing', () => {
       const user: UserT = {
-        id: "user-id",
-        roomId: "room-id",
-        username: "user-username",
+        id: 'user-id',
+        roomId: 'room-id',
+        username: 'user-username',
       };
       const users: UserSetT = {
-        "user-id-2": {
-          id: "user-id-2",
-          roomId: "room-id",
-          username: "user-username-2",
+        'user-id-2': {
+          id: 'user-id-2',
+          roomId: 'room-id',
+          username: 'user-username-2',
         },
       };
       const usersCopy = users;

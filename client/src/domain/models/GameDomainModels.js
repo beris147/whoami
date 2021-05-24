@@ -2,7 +2,7 @@
 
 export type QuestionT = string;
 
-export type AnswerT = "yes" | "no" | "done";
+export type AnswerT = 'yes' | 'no' | 'done';
 
 export type TryT = {|
   question: QuestionT,
