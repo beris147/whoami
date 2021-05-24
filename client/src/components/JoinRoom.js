@@ -1,43 +1,27 @@
 // @flow
-import React, { useContext, useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
-import RoomContext from 'contexts/RoomContext';
-import SocketContext from 'contexts/SocketContext';
-import UserContext from 'contexts/UserContext';
-import errorCallBack from 'utils/errorCallBack';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import handleOnEnter from 'utils/handleOnEnter';
-
-import type { JoinRoomRequestT, RoomT } from 'common/types';
+import { useJoinRoomApp } from 'app/JoinRoomApp';
 
 function JoinRoom(): React$Element<any> {
   const { id } = useParams();
-  const history = useHistory();
-  const socket = useContext(SocketContext);
-  const { setRoom } = useContext(RoomContext);
-  const { setUser } = useContext(UserContext);
   const [username: string, setUsername ] = useState('');
   const [roomId: string, setRoomId ] = useState('');
+  const app = useJoinRoomApp();
 
-  const handleJoinRoom = (): void => {
-    const data: JoinRoomRequestT = { username, roomId };
-    socket.emit('join-room', data, errorCallBack);
-  }
+  const handleJoinRoom = useCallback(() => {
+    app.joinRoomRequest(username, roomId);
+  }, [app, roomId, username]);
 
   useEffect((): any => {
     if(id) setRoomId(id);
+  }, [id]);
 
-    socket.on('joined-room', (room: RoomT): void => {
-      toast.success('Hey you joined!');
-      setRoom(room);
-      setUser({ username, roomId: room.id, id: socket.id });
-      history.push(`/room/${room.id}`);
-    });
-
-    return function cleanup() {
-      socket.off('joined-room');
-    };
-  }, [history, id, setUser, socket, username, setRoom]);
+  useEffect((): any => {
+    app.subscribeToEvents();
+    return () => app.unsubscribeFromEvents();
+  }, [app]);
 
   return (
     <div>
