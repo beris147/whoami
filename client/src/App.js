@@ -9,9 +9,9 @@ import 'react-toastify/dist/ReactToastify.css';
 function TemporalLinkLi() {
   return (
     <ul>
-      <li><Link to="/">Home</Link></li>
-      <li><Link to="/create">Create new room</Link></li>
-      <li><Link to="/join">Join room</Link></li>
+      <li><Link to='/'>Home</Link></li>
+      <li><Link to='/create'>Create new room</Link></li>
+      <li><Link to='/join'>Join room</Link></li>
     </ul>
   );
 }
@@ -36,7 +36,7 @@ function App(): React$Element<any> {
         <Route component={PageNotFound} />
       </Switch>
       <ToastContainer 
-        position="top-right"
+        position='top-right'
         autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}

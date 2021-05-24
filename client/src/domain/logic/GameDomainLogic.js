@@ -13,7 +13,7 @@ import type {
   TurnListT,
   TryT,
   TurnT,
-} from "./models";
+} from 'domain/models/GameDomainModels';
 
 export const startGame = (
   characterAssignation: CharacterAssignationT
@@ -53,13 +53,13 @@ const judge = (answers: AnswerListT): AnswerT => {
     return Object.values(answers).filter((answer) => answer === targetAnswer)
       .length;
   };
-  const yes = countAnswer(answers, "yes");
-  const no = countAnswer(answers, "no");
-  const done = countAnswer(answers, "done");
+  const yes = countAnswer(answers, 'yes');
+  const no = countAnswer(answers, 'no');
+  const done = countAnswer(answers, 'done');
   const max = Math.max(yes, no, done);
-  if (done == max) return "done";
-  if (yes == max) return "yes";
-  return "no";
+  if (done == max) return 'done';
+  if (yes == max) return 'yes';
+  return 'no';
 };
 
 const createGameInJudgeStage = (
@@ -115,7 +115,7 @@ export const nextTry = (game: GameInJudgeStageT): GameInAskStageT => {
     ...game.ongoingTurn,
     tries: tries,
   };
-  if (game.verdict === "yes") {
+  if (game.verdict === 'yes') {
     return {
       characterAssignation: game.characterAssignation,
       turns: game.turns,
