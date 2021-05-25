@@ -1,5 +1,5 @@
 // @flow
-import { useContext } from 'react';
+import { useContext, useEffect, useCallback } from 'react';
 import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
 import { useRoomSocket } from 'sockets/RoomSocket';
@@ -16,8 +16,6 @@ import type { RoomT } from 'common/types';
 
 export type RoomAppT = {
   roomId: string,
-  subscribeToEvents: () => void,
-  unsubscribeFromEvents: () => void,
 } 
 
 export const useRoomApp = (): ?RoomAppT => {
@@ -26,43 +24,37 @@ export const useRoomApp = (): ?RoomAppT => {
   const socket = useRoomSocket(socketContext);
 	const isMounted = useIsMounted();
   const history = useHistory();
-
-  if(!room) return undefined;
-  const updateRoom = (newRoom: ?RoomT): void => {
+  const updateRoom = useCallback((newRoom: ?RoomT): void => {
     if(isMounted.current) setRoom(newRoom);
-  }
-  const userJoined = (username: string) => {
-    const updatedRoom = addUserToRoom(username, room);
-    updateRoom(updatedRoom);
-  }
-  const userLeft = (username: string) => {
-    const updatedRoom = removeUserFromRoom(username, room);
-    updateRoom(updatedRoom);
-  }
-  const leftRoom = () => {
-    const removedRoom = removeRoom(room);
-    history.push('/');
-    updateRoom(removedRoom);
-  }
-  const roomOwnerChanged = (username: string) => {
-    const updatedRoom = changeRoomOwner(username, room);
-    updateRoom(updatedRoom);
-  } 
-  const subscribeToEvents = () => {
-    socket.subscribeToLeftRoom(leftRoom);
-    socket.subscribeToRoomOwnerChanged(roomOwnerChanged);
-    socket.subscribeToUserJoined(userJoined);
-    socket.subscribeToUserLeft(userLeft);
-  }
-  const unsubscribeFromEvents = () => {
-    socket.unsubscribeFromLeftRoom();
-    socket.unsubscribeFromRoomOwnerChanged();
-    socket.unsubscribeFromUserJoined();
-    socket.unsubscribeFromUserLeft();
-  }
+  }, [isMounted, setRoom]);
+  useEffect(() => {
+    if(!room) return;
+    socket.onLeftRoom(() => {
+      const removedRoom = removeRoom(room);
+      history.push('/');
+      updateRoom(removedRoom);
+    });
+    socket.onRoomOwnerChanged((username: string) => {
+      const updatedRoom = changeRoomOwner(username, room);
+      updateRoom(updatedRoom);
+    });
+    socket.onUserJoined((username: string) => {
+      const updatedRoom = addUserToRoom(username, room);
+      updateRoom(updatedRoom);
+    });
+    socket.onUserLeft((username: string) => {
+      const updatedRoom = removeUserFromRoom(username, room);
+      updateRoom(updatedRoom);
+    });
+    return () => {
+      socket.offLeftRoom();
+      socket.offRoomOwnerChanged();
+      socket.offUserJoined();
+      socket.offUserLeft();
+    }
+  }, [socket, history, room, setRoom, updateRoom]);
+  if(!room) return undefined;
   return {
     roomId: room.id,
-    subscribeToEvents,
-    unsubscribeFromEvents,
   };
 }

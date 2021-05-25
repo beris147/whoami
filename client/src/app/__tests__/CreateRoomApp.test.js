@@ -6,6 +6,7 @@ import { renderHook, act, cleanup } from '@testing-library/react-hooks/dom';
 import { test, expect, describe, jest, beforeEach, afterEach } from '@jest/globals';
 import { createMemoryHistory } from 'history';
 import { useCreateRoomApp } from 'app/CreateRoomApp';
+import { useJoinRoomApp } from 'app/JoinRoomApp';
 import { useCreateRoomServer } from 'sockets/__mocks__/MockedCreateRoomServer';
 
 const PATH = '/create';
@@ -21,18 +22,17 @@ beforeEach(() => {
     </MockRouter>
   </ElementWithProviders>
   app = renderHook(() => useCreateRoomApp(), {wrapper}).result.current;
+  renderHook(() => useJoinRoomApp(), {wrapper});
 });
 afterEach(() => {
   cleanup();
 })
 describe('useCreateApp hook', () => {
   beforeEach((): void => {
-    app.subscribeToEvents();
-    serverSocket.subscribeToEvents();
+    serverSocket.onEvents();
   });
   afterEach((): void => {
-    app.unsubscribeFromEvents();
-    serverSocket.unsubscribeFromEvents();
+    serverSocket.offEvents();
   });
   test('should redirect to the room page', () => {
     expect(history.location.pathname).toBe(PATH);

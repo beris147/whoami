@@ -12,6 +12,10 @@ const push = (queue: eventQueueT, event: string, arg: any) => {
   queue[event] = [arg];
 };
 
+const remove = (queue: eventQueueT, event: string) => {
+  delete queue[event];
+}
+
 const clean = (queue: eventQueueT) => {
   for (var event in queue) delete queue[event];
 };
@@ -39,9 +43,7 @@ const createSocket = (
     return listenedEvents[event] ? true : false;
   },
   off(event: string) {
-    // with tests we need to check if the event was called, so we do not
-    // remove the event with this mock of socketio
-    return;
+    remove(listenedEvents, event);
   },
 });
 

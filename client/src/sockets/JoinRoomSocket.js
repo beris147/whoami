@@ -4,23 +4,18 @@ import type { JoinRoomRequestT, UserJoinedRoomT } from 'common/types';
 
 export type JoinRoomSocketT = {
   emitJoinRoom: (data: JoinRoomRequestT) => void,
-  subscribeToJoinedRoom: (callback: (data: UserJoinedRoomT) => void) => void,
-  unsubscribeFromJoinedRoom: () => void, 
+  onJoinedRoom: (callback: (data: UserJoinedRoomT) => void) => void,
+  offJoinedRoom: () => void, 
 }
 
 export const useJoinRoomSocket = (socket: any): JoinRoomSocketT => {
-  const emitJoinRoom = (data) => {
+  const emitJoinRoom = (data) => 
     socket.emit('join-room', data, errorCallBack);
-  }
-  const subscribeToJoinedRoom = (callback) => {
-    socket.on('joined-room', callback);
-  }
-  const unsubscribeFromJoinedRoom = () => {
-    socket.off('joined-room');
-  }
+  const onJoinedRoom = (callback) => socket.on('joined-room', callback);
+  const offJoinedRoom = () => socket.off('joined-room');
   return {
     emitJoinRoom,
-    subscribeToJoinedRoom,
-    unsubscribeFromJoinedRoom,
+    onJoinedRoom,
+    offJoinedRoom,
   }
 }

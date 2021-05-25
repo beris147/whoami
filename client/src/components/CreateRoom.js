@@ -1,21 +1,15 @@
 // @flow
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import handleOnEnter from 'utils/handleOnEnter';
 import { useCreateRoomApp } from 'app/CreateRoomApp';
+import { useJoinRoomApp } from 'app/JoinRoomApp';
 
 function CreateRoom(): React$Element<any> {
   const [username: string, setUsername: mixed] = useState('');
-  const app = useCreateRoomApp();
-  
-  const handleCreateRoom = useCallback(() => {
+  const app = useCreateRoomApp(); useJoinRoomApp();
+  const handleCreateRoom = () => {
     app.createRoom(username);
-  },[app, username]);
-
-  useEffect(() => {
-    app.subscribeToEvents();
-    return () => app.unsubscribeFromEvents();
-  }, [app]);
-
+  }
   return (
     <div>
       <h1>Create Room</h1>
@@ -23,9 +17,9 @@ function CreateRoom(): React$Element<any> {
         <input 
           type='text' 
           value={username} 
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           onKeyDown={
-            e => {
+            (e) => {
               if(username !== '') handleOnEnter(e, handleCreateRoom);
             }
           }

@@ -1,21 +1,14 @@
 // @flow
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import Chat from 'components/Chat/Chat';
 import Lobby from 'components/lobby/Lobby';
 import DisplayError from 'components/Error/DisplayError';
 import { useRoomApp } from 'app/RoomApp';
-import LobbyProvider from 'providers/Lobby/LobbyProvider';
 
 function Room(): React$Element<any> {
 	const { id } = useParams();
 	const app = useRoomApp();
-
-	useEffect(()=> {
-		app?.subscribeToEvents();
-		return () => app?.unsubscribeFromEvents();
-	}, [app]);
-
 	if(!app) {
 		return (
 			<DisplayError
@@ -27,9 +20,7 @@ function Room(): React$Element<any> {
 	return (
 		<div>
 			<h1>Room {app.roomId}</h1> 
-			<LobbyProvider>
-				<Lobby />
-			</LobbyProvider>
+			<Lobby />
 			<Chat />
 		</div>
 	);
