@@ -1,5 +1,5 @@
 // @flow
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import handleOnEnter from 'utils/handleOnEnter';
 import { useJoinRoomApp } from 'app/JoinRoomApp';
@@ -10,18 +10,13 @@ function JoinRoom(): React$Element<any> {
   const [roomId: string, setRoomId ] = useState('');
   const app = useJoinRoomApp();
 
-  const handleJoinRoom = useCallback(() => {
+  const handleJoinRoom = () => {
     app.joinRoomRequest(username, roomId);
-  }, [app, roomId, username]);
+  }
 
   useEffect((): any => {
     if(id) setRoomId(id);
   }, [id]);
-
-  useEffect((): any => {
-    app.subscribeToEvents();
-    return () => app.unsubscribeFromEvents();
-  }, [app]);
 
   return (
     <div>
@@ -32,11 +27,12 @@ function JoinRoom(): React$Element<any> {
           data-testid='username'
           placeholder='User Name'
           value={username}
-          onChange={e => setUsername(e.target.value)}
+          onChange={(e) => setUsername(e.target.value)}
           onKeyDown={
-            e => {
-              if(username !== '' && roomId!=='') 
+            (e) => {
+              if(username !== '' && roomId!=='') {
                 handleOnEnter(e, handleJoinRoom);
+              }
             }
           }
         /><br/>
@@ -45,9 +41,9 @@ function JoinRoom(): React$Element<any> {
           data-testid='roomid'
           placeholder='Room id'
           value={roomId}
-          onChange={e => setRoomId(e.target.value)}
+          onChange={(e) => setRoomId(e.target.value)}
           onKeyDown={
-            e => {
+            (e) => {
               if(username !== '' && roomId!=='') 
                 handleOnEnter(e, handleJoinRoom);
             }

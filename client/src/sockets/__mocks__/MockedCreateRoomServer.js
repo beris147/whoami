@@ -6,21 +6,21 @@ import { user } from 'utils/__mocks__/mockedUserState';
 import type { CreateRoomRequestT } from 'common/types';
 
 type CreateRoomServerT = { 
-  subscribeToEvents: () => void,
-  unsubscribeFromEvents: () => void,
+  onEvents: () => void,
+  offEvents: () => void,
 }
 
 export const useCreateRoomServer = (): CreateRoomServerT => {
-  const subscribeToEvents = () => {
+  const onEvents = () => {
     serverSocket.on('create-room', (data: CreateRoomRequestT) => {
       serverSocket.emit('joined-room', {room, user});
     });
   }
-  const unsubscribeFromEvents = () => {
+  const offEvents = () => {
     serverSocket.off('create-room');
   }
   return {
-    subscribeToEvents,
-    unsubscribeFromEvents,
+    onEvents,
+    offEvents,
   };
 }

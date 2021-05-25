@@ -29,12 +29,10 @@ afterEach(() => {
 })
 describe('useCreateApp hook', () => {
   beforeEach((): void => {
-    app.subscribeToEvents();
-    serverSocket.subscribeToEvents();
+    serverSocket.onEvents();
   });
   afterEach((): void => {
-    app.unsubscribeFromEvents();
-    serverSocket.unsubscribeFromEvents();
+    serverSocket.offEvents();
   });
   test('should redirect to the room page', () => {
     expect(history.location.pathname).toBe(PATH);
