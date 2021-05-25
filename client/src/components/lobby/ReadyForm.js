@@ -1,47 +1,42 @@
 //@flow
-
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import handleOnEnter from 'utils/handleOnEnter';
-import SocketContext from 'contexts/SocketContext';
-import errorCallBack from 'utils/errorCallBack';
+import { useReadyFormApp } from 'app/Lobby/ReadyFormApp';
 
 const ReadyForm = (): React$Element<any> => {
-  const socket = useContext(SocketContext);
+  const [isReady: bool, setIsReady: (r: bool) => void] = useState(false);
   const [character: string, setCharacter: (c: string) => void] = useState('');
-  const [isReady: boolean, setReady] = useState(false);
-
-  const handleReady = (): void => {
-    socket.emit('set-ready-lobby', character, errorCallBack);
-    setReady(true);
+  const app = useReadyFormApp(character);
+  const userIsReady = () => {
+    app.userIsReady();
+    setIsReady(true);
   }
-
-  const handleChange = (): void => {
-    socket.emit('change-not-ready-lobby', errorCallBack);
-    setReady(false);
+  const userIsNotReady = () => {
+    app.userIsNotReady();
+    setIsReady(false);
   }
-
   return (
     <div>
       <input 
         type='text' 
         value={character} 
-        onChange={e => setCharacter(e.target.value)}
+        onChange={(e) => setCharacter(e.target.value)}
         disabled={isReady}
         onKeyDown={
-          e => {
-            if(character !== '') handleOnEnter(e, handleReady);
+          (e) => {
+            if(character !== '') handleOnEnter(e, userIsReady);
           }
         }
       />
       {
         isReady
         ? (
-          <button onClick={handleChange}>
+          <button onClick={userIsNotReady}>
             Change
           </button>
         )
         : (
-          <button disabled={character === ''} onClick={handleReady}>
+          <button disabled={character === ''} onClick={userIsReady}>
             Ready
           </button>
         )

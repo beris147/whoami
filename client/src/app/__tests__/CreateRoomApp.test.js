@@ -37,7 +37,7 @@ describe('useCreateApp hook', () => {
   test('should redirect to the room page', () => {
     expect(history.location.pathname).toBe(PATH);
     act(() => {
-      app.createRoom('username');
+      app.createRoomRequest('username');
     });
     expect(history.location.pathname).toMatch(/room/);
   });

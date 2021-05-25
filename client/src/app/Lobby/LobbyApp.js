@@ -1,5 +1,6 @@
 // @flow
 import { useContext, useEffect, useState, useCallback } from 'react';
+import GameContext from 'contexts/GameContext';
 import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
@@ -7,8 +8,11 @@ import { useLobbySocket } from 'sockets/Lobby/LobbySocket';
 import { useRoomSocket } from 'sockets/RoomSocket';
 import { useIsMounted } from 'utils/hooks/mounted';
 import { useMountedEffect } from 'utils/hooks/mounted';
+import { createGame } from 'domain/logic/GameDomainLogic';
+import { useHistory } from 'react-router-dom';
 import { 
   addUserToLobbyList,
+  isEverybodyReadyInList,
   removeUserFromLobbyList,
   updateUserInList,
 } from 'domain/logic/LobbyDomainLogic';
@@ -18,19 +22,26 @@ import type {
   UserInLobbyT, 
   UsersInLobbyCallbackT,
 } from 'common/types';
+
 import type { UsersInLobbyListT } from 'domain/models/LobbyDomainModels';
 
 export type LobbyAppT = {
   amIOwner: bool,
+  isPlayable: bool,
+  roomOwner: string,
   userList: UsersInLobbyListT,
-  leaveRoom: () => void,
+  playGameRequest: () => void,
 };
 
 export const useLobbyApp = (): ?LobbyAppT => {
-  const [userList, setUserList] = useState([]); 
+  const [userList: UsersInLobbyListT, setUserList] = useState([]);
+  const [isPlayable: bool, setIsPlayable: (p: bool) => void] = useState(false);
+  const { setGame } = useContext(GameContext);
   const { user } = useContext(UserContext);
   const { room } = useContext(RoomContext);
   const socketContext = useContext(SocketContext);
+  const history = useHistory();
+
   const lobbySocket = useLobbySocket(socketContext);
   const roomSocket = useRoomSocket(socketContext);
 	const isMounted = useIsMounted();
@@ -43,14 +54,19 @@ export const useLobbyApp = (): ?LobbyAppT => {
       lobbySocket.emitUserJoined();
     });
   }, [lobbySocket, updateUserList]);
-  const leaveRoom = () => {
-    lobbySocket.emitLeaveRoom();
+  const playGameRequest = () => {
+    const game = createGame(userList);
+    lobbySocket.emitStartGame(game);
   }
   useMountedEffect(getUsers);
   useEffect(() => {
+    const playable = isEverybodyReadyInList(userList);
+    setIsPlayable(playable);
+  }, [userList]);
+  useEffect(() => {
     lobbySocket.onGameStarted((game: GameT) => {
-      // TODO set game context and redirect to /game
-      console.log(game);
+      setGame(game);
+      history.push('/game');
     });
     lobbySocket.onGetUsersInLobby(
       (callback: UsersInLobbyCallbackT) => {
@@ -79,12 +95,14 @@ export const useLobbyApp = (): ?LobbyAppT => {
       lobbySocket.offUserIsNotReady();
       lobbySocket.offUserIsReady();
     }
-  }, [lobbySocket, roomSocket, updateUserList, userList]);
+  }, [lobbySocket, history, roomSocket, setGame, updateUserList, userList]);
   if(!user || !room) return undefined;
   const amIOwner = user.username === room.owner;
   return {
     amIOwner,
+    isPlayable,
+    roomOwner: room.owner,
     userList,
-    leaveRoom,
+    playGameRequest,
   };
 }

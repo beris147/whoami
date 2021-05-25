@@ -8,7 +8,7 @@ function CreateRoom(): React$Element<any> {
   const [username: string, setUsername: mixed] = useState('');
   const app = useCreateRoomApp(); useJoinRoomApp();
   const handleCreateRoom = () => {
-    app.createRoom(username);
+    app.createRoomRequest(username);
   }
   return (
     <div>

@@ -35,3 +35,7 @@ export const updateUserInList = (
       : userInLobby 
   )
 }
+
+export const isEverybodyReadyInList = (userList: UsersInLobbyListT): bool => {
+  return userList.every((user) => 'writtenCharacter' in user);
+}

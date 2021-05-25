@@ -1,4 +1,5 @@
 // @flow
+import type { GameT, UserInGameT } from 'common/types';
 
 import type {
   CharacterAssignationT,
@@ -10,10 +11,46 @@ import type {
   GameInAnswerStageT,
   GameInJudgeStageT,
   AnswerListT,
-  TurnListT,
+  // TurnListT,
   TryT,
   TurnT,
 } from 'domain/models/GameDomainModels';
+
+import type { UsersInLobbyListT } from 'domain/models/LobbyDomainModels';
+
+const shuffleList = (list: Array<string>): Array<string> => {
+  const len = list.length;
+  let shuffledList: Array<string> = list;
+  for (let i = 0; i < len - 1; i++) { 
+    let j = Math.floor(Math.random() * (len-(i+1)) ) + (i+1);
+    let temp = shuffledList[i];
+    shuffledList[i] = shuffledList[j];
+    shuffledList[j] = temp;
+  }
+  return shuffledList;
+}
+
+export const createGame = (userList: UsersInLobbyListT): GameT => {
+  const characters: Array<string> = userList.map(
+    (user): string => user.writtenCharacter || 'random character'
+  );
+  const shuffledCharacters: Array<string> = shuffleList(characters);
+  const usersInGame: Array<UserInGameT> =
+    shuffledCharacters.map(
+      (character, i): UserInGameT => {
+        return {
+          username: userList[i].username,
+          assignedCharacter: character,
+          points: 0,
+        }
+      }
+    );
+  return {
+    round: 0,
+    turn: 0,
+    users: usersInGame,
+  }
+}
 
 export const startGame = (
   characterAssignation: CharacterAssignationT
@@ -57,8 +94,8 @@ const judge = (answers: AnswerListT): AnswerT => {
   const no = countAnswer(answers, 'no');
   const done = countAnswer(answers, 'done');
   const max = Math.max(yes, no, done);
-  if (done == max) return 'done';
-  if (yes == max) return 'yes';
+  if (done === max) return 'done';
+  if (yes === max) return 'yes';
   return 'no';
 };
 
