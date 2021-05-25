@@ -1,5 +1,6 @@
 // @flow
 export type RoomSocketT = {
+  emitLeaveRoom: () => void,
   onUserJoined: (callback: (data: any) => void) => void,
   onUserLeft:  (callback: (data: any) => void) => void,
   onLeftRoom: (callback: (data: any) => void) => void,
@@ -11,6 +12,7 @@ export type RoomSocketT = {
 }
 
 export const useRoomSocket = (socket: any): RoomSocketT => {
+  const emitLeaveRoom = () => socket.emit('leave-room');
   const onUserJoined = (callback) => socket.on('user-joined', callback);
   const onUserLeft = (callback) => socket.on('user-left', callback);
   const onLeftRoom = (callback) => socket.on('left-room', callback);
@@ -21,6 +23,7 @@ export const useRoomSocket = (socket: any): RoomSocketT => {
   const offLeftRoom = () => socket.off('left-room');
   const offRoomOwnerChanged = () => socket.off('room-owner-changed');
   return {
+    emitLeaveRoom,
     onUserJoined,
     onUserLeft,
     onLeftRoom,

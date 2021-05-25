@@ -15,6 +15,7 @@ import {
 import type { RoomT } from 'common/types';
 
 export type RoomAppT = {
+  leaveRoomRequest: () => void,
   roomId: string,
 } 
 
@@ -27,6 +28,9 @@ export const useRoomApp = (): ?RoomAppT => {
   const updateRoom = useCallback((newRoom: ?RoomT): void => {
     if(isMounted.current) setRoom(newRoom);
   }, [isMounted, setRoom]);
+  const leaveRoomRequest = () => {
+    socket.emitLeaveRoom();
+  } 
   useEffect(() => {
     if(!room) return;
     socket.onLeftRoom(() => {
@@ -55,6 +59,7 @@ export const useRoomApp = (): ?RoomAppT => {
   }, [socket, history, room, setRoom, updateRoom]);
   if(!room) return undefined;
   return {
+    leaveRoomRequest,
     roomId: room.id,
   };
 }

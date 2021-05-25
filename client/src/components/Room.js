@@ -5,7 +5,6 @@ import Chat from 'components/Chat/Chat';
 import Lobby from 'components/lobby/Lobby';
 import DisplayError from 'components/Error/DisplayError';
 import { useRoomApp } from 'app/RoomApp';
-
 function Room(): React$Element<any> {
 	const { id } = useParams();
 	const app = useRoomApp();
@@ -17,9 +16,11 @@ function Room(): React$Element<any> {
 			/>
 		);
 	}
+	const handleLeaveRoom = () => app.leaveRoomRequest();
 	return (
 		<div>
-			<h1>Room {app.roomId}</h1> 
+			<h1>Room {app.roomId}</h1>
+			<button onClick={handleLeaveRoom}>Leave</button>
 			<Lobby />
 			<Chat />
 		</div>
