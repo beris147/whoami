@@ -4,9 +4,8 @@ import { render, screen } from '@testing-library/react';
 import { test, expect, describe } from '@jest/globals';
 import MessageList from 'components/Chat/MessageList';
 
-import type { MessageListT } from 'common/types';
-import type { MessageT } from 'common/types';
-import type { UserT } from 'common/types';
+import type { MessageT, MessageListT } from 'domain/models/MessageModels';
+import type { UserT } from 'domain/models/UserModels';
 
 import '@testing-library/jest-dom';
 
@@ -17,7 +16,7 @@ describe('MessageList component', (): void => {
       message: 'expect to found this',
       sender: testUser,
     };
-    render(<MessageList messages={[testMessage]}/>);
+    render(<MessageList messages={[testMessage]} />);
     expect(screen.getByText(/expect to found this/i)).toBeInTheDocument();
   });
 });

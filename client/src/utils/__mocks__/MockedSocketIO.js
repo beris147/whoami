@@ -14,7 +14,7 @@ const push = (queue: eventQueueT, event: string, arg: any) => {
 
 const remove = (queue: eventQueueT, event: string) => {
   delete queue[event];
-}
+};
 
 const clean = (queue: eventQueueT) => {
   for (var event in queue) delete queue[event];

@@ -13,7 +13,7 @@ describe('PageNotFound component', (): void => {
     render(<PageNotFound />);
     expect(screen.getByText(/Page Not Found/i)).toBeInTheDocument();
   });
-  
+
   test('Router redirects to page not found with invalid routes', (): void => {
     render(
       <MemoryRouter initialEntries={['/invalid/route']}>

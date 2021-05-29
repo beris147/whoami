@@ -1,7 +1,7 @@
 [ignore]
-.*/lib/*.
-[include]
 
+[include]
+domain/logic
 [libs]
 
 [lints]

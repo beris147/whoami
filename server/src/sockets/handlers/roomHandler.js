@@ -1,13 +1,13 @@
 // @flow
-const {
+import {
   createRoom,
   removeRoom,
   emitRoomMessage,
   joinUserToRoomById,
   emitToRoom,
-} = require('utils/roomUtils');
+} from 'utils/roomUtils';
 
-const {
+import {
   createUser,
   removeUserFromRoom,
   removeUser,
@@ -16,31 +16,34 @@ const {
   getOwner,
   getUser,
   emitUserJoinedRoom,
-} = require('utils/userUtils');
+} from 'utils/userUtils';
 
+import type { ErrorCallbackT } from 'domain/models/ErrorModels';
+import type { MessageT } from 'domain/models/MessageModels';
 import type {
-  ErrorCallBackT,
+  CreateRoomRequestT,
   JoinRoomRequestT,
   RoomT,
   RoomSetT,
+} from 'domain/models/RoomModels';
+import type {
+  UserT,
   UserSetT,
-  CreateRoomRequestT,
-  MessageT, 
-  UserInLobbyT,
+  UsersInLobbyListT,
   UsersInLobbyCallbackT,
   UserIsReadyT,
   UserIsNotReadyT,
-} from 'common/types';
+} from 'domain/models/UserModels';
 
-module.exports = (
-  io: Object, 
+const roomHandler = (
+  io: Object,
   socket: Object,
   rooms: RoomSetT,
-  users: UserSetT,
+  users: UserSetT
 ) => {
   const createRoomHandler = (
-    data: CreateRoomRequestT, 
-    callback: ErrorCallBackT,
+    data: CreateRoomRequestT,
+    callback: ErrorCallbackT
   ): void => {
     const newRoom = createRoom(data.username, rooms);
     const user = createUser(socket.id, data.username, newRoom.id, users);
@@ -49,15 +52,15 @@ module.exports = (
       newRoom.id,
       user,
       io,
-      rooms,
+      rooms
     );
     if (error) return callback(error);
     if (room) emitUserJoinedRoom(room, user, socket);
-  }
+  };
 
   const joinRoomHandler = (
-    data: JoinRoomRequestT, 
-    callback: ErrorCallBackT,
+    data: JoinRoomRequestT,
+    callback: ErrorCallbackT
   ): void => {
     const user = createUser(socket.id, data.username, data.roomId, users);
     const { room, error } = joinUserToRoomById(
@@ -69,26 +72,24 @@ module.exports = (
     );
     if (error) return callback(error);
     if (room) emitUserJoinedRoom(room, user, socket);
-  }
+  };
 
-  const leaveRoomHandler = (
-    errorCallback: ErrorCallBackT,
-  ): void => {
+  const leaveRoomHandler = (errorCallback: ErrorCallbackT): void => {
     const user = getUser(socket.id, users);
-    if(!user) return errorCallback({error: 'connection error, user not found'});
+    if (!user) return errorCallback('connection error, user not found');
     removeUserById(user.id, users, rooms, io);
     socket.emit('left-room');
-  }
+  };
 
   const sendMessageHandler = (
     data: MessageT,
-    callback: ErrorCallBackT,
+    callback: ErrorCallbackT
   ): void => {
-    if(!users[data.sender.id]) return callback({error: 'disconnection error'});
+    if (!users[data.sender.id]) return callback('disconnection error');
     const room = getUserRoom(data.sender, rooms);
-    if(!room) return callback({error: 'disconnection error'});
+    if (!room) return callback('disconnection error');
     emitRoomMessage(room, data, socket);
-  }
+  };
 
   const getOwnerSocket = (roomId: string): ?any => {
     const owner = getOwner(roomId, users, rooms);
@@ -97,49 +98,47 @@ module.exports = (
   };
 
   const getUsersInLobbyHandler = (
-    errorCallback: ErrorCallBackT,
+    errorCallback: ErrorCallbackT,
     successCallback: UsersInLobbyCallbackT
   ): void => {
     const user = getUser(socket.id, users);
-    if (!user) return console.error({ error: 'couldn\'t find user' });
+    if (!user) return console.error("couldn't find user");
     const ownerSocket = getOwnerSocket(user.roomId);
-    if (!ownerSocket)
-      return errorCallback({ error: 'couldn\'t get owner socket' });
-    ownerSocket.emit('get-users-in-lobby', (response: Array<UserInLobbyT>) => {
+    if (!ownerSocket) return errorCallback("couldn't get owner socket");
+    ownerSocket.emit('get-users-in-lobby', (response: UsersInLobbyListT) => {
       successCallback(response);
     });
   };
 
-  const userJoinedLobbyHandler = (
-  ): void => {
+  const userJoinedLobbyHandler = (): void => {
     const user = getUser(socket.id, users);
-    if (!user) return console.error({ error: 'couldn\'t find user' });
+    if (!user) return console.error("couldn't find user");
     emitToRoom(user.roomId, 'user-joined', user.username, io);
-  }
+  };
 
   const setReadyInLobbyHandler = (
     writtenCharacter: string,
-    errorCallBack: ErrorCallBackT,
+    errorCallback: ErrorCallbackT
   ): void => {
     const user = getUser(socket.id, users);
-    if(!user) return errorCallBack({error: 'connection error, user not found'});
+    if (!user) return errorCallback('connection error, user not found');
     const userIsReady: UserIsReadyT = {
       username: user.username,
       writtenCharacter,
-    }
+    };
     emitToRoom(user.roomId, 'user-is-ready', userIsReady, io);
-  }
+  };
 
   const changeNotReadyInLobbyHandler = (
-    errorCallBack: ErrorCallBackT
+    errorCallback: ErrorCallbackT
   ): void => {
     const user = getUser(socket.id, users);
-    if(!user) return errorCallBack({error: 'connection error, user not found'});
+    if (!user) return errorCallback('connection error, user not found');
     const userIsNotReady: UserIsNotReadyT = {
       username: user.username,
-    }
+    };
     emitToRoom(user.roomId, 'user-is-not-ready', userIsNotReady, io);
-  }
+  };
 
   socket.on('create-room', createRoomHandler);
   socket.on('join-room', joinRoomHandler);
@@ -149,4 +148,6 @@ module.exports = (
   socket.on('user-joined', userJoinedLobbyHandler);
   socket.on('set-ready-lobby', setReadyInLobbyHandler);
   socket.on('change-not-ready-lobby', changeNotReadyInLobbyHandler);
-}
+};
+
+export default roomHandler;

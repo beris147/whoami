@@ -1,10 +1,11 @@
 // @flow
-const { describe, it, expect, beforeEach } = require('@jest/globals');
-const { createUser, removeUserById } = require('utils/userUtils');
+import { describe, it, expect, beforeEach } from '@jest/globals';
+import { createUser, removeUserById } from 'utils/userUtils';
 
-import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
+import type { RoomT, RoomSetT } from 'domain/models/RoomModels';
+import type { UserT, UserSetT } from 'domain/models/UserModels';
 
-let user: UserT; 
+let user: UserT;
 
 const roomId: string = 'room-id';
 const userId: string = 'user-id';
@@ -20,12 +21,7 @@ const rooms: RoomSetT = {};
 
 describe('When removing a user by id', () => {
   beforeEach(() => {
-    user = createUser(
-      userId,
-      'user-username',
-      roomId,
-      users,
-    );
+    user = createUser(userId, 'user-username', roomId, users);
   });
   it('Should not be in the userSet anymore', () => {
     removeUserById(userId, users, rooms);
@@ -38,9 +34,9 @@ describe('When removing a user by id', () => {
         id: roomId,
         owner: user.username,
         users: [user.username],
-      }
+      };
     });
-    describe('When it\'s alone in the room', () => {
+    describe("When it's alone in the room", () => {
       it('The room should be removed', () => {
         removeUserById(userId, users, rooms);
         expect(rooms[roomId]).toBeUndefined();

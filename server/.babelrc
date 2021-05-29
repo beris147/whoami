@@ -1,4 +1,7 @@
 {
-    "presets": ["@babel/preset-flow"],
-    "plugins": ["transform-flow-strip-types"]
+  "presets": ["@babel/preset-flow"],
+  "plugins": [
+    "transform-flow-strip-types",
+    "@babel/plugin-transform-modules-commonjs"
+  ]
 }

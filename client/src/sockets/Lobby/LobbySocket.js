@@ -1,10 +1,14 @@
 // @flow
 import errorCallBack from 'utils/errorCallBack';
 
-// @flow
-import type { GameT, UserInLobbyT, UsersInLobbyCallbackT } from 'common/types';
-type CallbackForUsersInLobbyCallbackT = 
-  (callback: UsersInLobbyCallbackT) => void;
+import type { GameT } from 'domain/models/GameModels';
+import type {
+  UserInLobbyT,
+  UsersInLobbyCallbackT,
+} from 'domain/models/UserModels';
+type CallbackForUsersInLobbyCallbackT = (
+  callback: UsersInLobbyCallbackT
+) => void;
 
 export type LobbySocketT = {
   emitGetUsersInLobby: (callback: UsersInLobbyCallbackT) => void,
@@ -18,18 +22,18 @@ export type LobbySocketT = {
   offUserIsNotReady: () => void,
   offUserIsReady: () => void,
   offGameStarted: () => void,
-}
+};
 
 export const useLobbySocket = (socket: any): LobbySocketT => {
   const emitUserJoined = () => socket.emit('user-joined');
   const emitStartGame = (game) =>
     socket.emit('start-game', game, errorCallBack);
-  const emitGetUsersInLobby = (callback) => 
+  const emitGetUsersInLobby = (callback) =>
     socket.emit('get-users-in-lobby', errorCallBack, callback);
-  const onGetUsersInLobby = (callback) => 
+  const onGetUsersInLobby = (callback) =>
     socket.on('get-users-in-lobby', callback);
   const onUserIsReady = (callback) => socket.on('user-is-ready', callback);
-  const onUserIsNotReady = (callback) => 
+  const onUserIsNotReady = (callback) =>
     socket.on('user-is-not-ready', callback);
   const onGameStarted = (callback) => socket.on('game-started', callback);
   const offGetUsersInLobby = () => socket.off('get-users-in-lobby');
@@ -48,5 +52,5 @@ export const useLobbySocket = (socket: any): LobbySocketT => {
     offUserIsNotReady,
     offUserIsReady,
     offGameStarted,
-  }
-}
+  };
+};

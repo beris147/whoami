@@ -1,66 +1,67 @@
 // @flow
-const { 
-  transferOwnership, 
-  removeRoom, 
-  emitToRoom,
-} = require('utils/roomUtils');
+import { transferOwnership, removeRoom, emitToRoom } from 'utils/roomUtils';
 
-import type { 
-  RoomT, 
-  RoomSetT, 
-  UserT, 
+import type { ErrorT } from 'domain/models/ErrorModels';
+import type { RoomT, RoomSetT, RoomIdT } from 'domain/models/RoomModels';
+import type {
+  UserT,
+  UserIdT,
+  UsernameT,
   UserJoinedRoomT,
-  UserSetT, 
-  ErrorT,
-} from 'common/types';
+  UserSetT,
+} from 'domain/models/UserModels';
 
-const createUser = (
-  id: string, 
-  username: string, 
-  roomId: string,
-  users: UserSetT,
+export const createUser = (
+  id: UserIdT,
+  username: UsernameT,
+  roomId: RoomIdT,
+  users: UserSetT
 ): UserT => {
-  return users[id] = { id, username, roomId };
-}
+  return (users[id] = { id, username, roomId });
+};
 
-const removeUserFromRoom = (user: UserT, rooms: RoomSetT, io: any): void => {
+export const removeUserFromRoom = (
+  user: UserT,
+  rooms: RoomSetT,
+  io: any
+): void => {
   const room = getUserRoom(user, rooms);
-  room.users = room.users.filter(name => name != user.username);
-  if(!room.users.length) {
+  room.users = room.users.filter((name) => name != user.username);
+  if (!room.users.length) {
     removeRoom(room, rooms);
     return;
   }
-  rooms[room.id] = 
+  rooms[room.id] =
     room.owner == user.username
-    ? transferOwnership(room, room.users[0], io)
-    : room;
-  if(io) emitToRoom(room.id, 'user-left', user.username, io);
-}
+      ? transferOwnership(room, room.users[0], io)
+      : room;
+  if (io) emitToRoom(room.id, 'user-left', user.username, io);
+};
 
-const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {
+export const getUserRoom = (user: UserT, rooms: RoomSetT): RoomT => {
   return rooms[user.roomId];
-}
+};
 
-const removeUser = (user: UserT, users: UserSetT): void => {
+export const removeUser = (user: UserT, users: UserSetT): void => {
   delete users[user.id];
-}
+};
 
-const removeUserById = (
-  userId: string,
+export const removeUserById = (
+  userId: UserIdT,
   users: UserSetT,
   rooms: RoomSetT,
-  io: any,
+  io: any
 ): void => {
-  if(!users[userId]) return;
+  if (!users[userId]) return;
   const user = users[userId];
   removeUser(user, users);
-  if(!rooms[user.roomId]) return;
+  if (!rooms[user.roomId]) return;
   removeUserFromRoom(user, rooms, io); // handles transfer owner
-}
+};
 
-const getUserId = (
-  username: string,
-  roomId: string,
+export const getUserId = (
+  username: UsernameT,
+  roomId: RoomIdT,
   users: UserSetT
 ): ?string => {
   const userId = Object.keys(users).find(
@@ -70,14 +71,14 @@ const getUserId = (
   return userId;
 };
 
-const getUser = (id: string, users: UserSetT): ?UserT => {
+export const getUser = (id: string, users: UserSetT): ?UserT => {
   return users[id];
-}
+};
 
-const getOwner = (
-  roomId: string,
+export const getOwner = (
+  roomId: RoomIdT,
   users: UserSetT,
-  rooms: RoomSetT,
+  rooms: RoomSetT
 ): ?UserT => {
   const room = rooms[roomId];
   if (!room) return null;
@@ -87,20 +88,9 @@ const getOwner = (
   return getUser(ownerId, users);
 };
 
-const emitUserJoinedRoom = (room: RoomT, user: UserT, socket: any) => {
+export const emitUserJoinedRoom = (room: RoomT, user: UserT, socket: any) => {
   if (socket) {
     const userJoined: UserJoinedRoomT = { room, user };
     socket.emit('joined-room', userJoined);
   }
-}
-
-module.exports = {
-  createUser,
-  removeUser,
-  removeUserById,
-  removeUserFromRoom,
-  getUserRoom,
-  getOwner,
-  getUser,
-  emitUserJoinedRoom,
 };

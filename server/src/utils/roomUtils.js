@@ -1,84 +1,88 @@
 // @flow
-const { v4: uuidv4 } = require('uuid');
-
-import type { 
-  ErrorT,
-  JoinRoomResponseT,
+import type { ErrorT } from 'domain/models/ErrorModels';
+import type { MessageT } from 'domain/models/MessageModels';
+import type {
   RoomT,
   RoomSetT,
+  RoomIdT,
+  JoinRoomResponseT,
+} from 'domain/models/RoomModels';
+import type {
   UserT,
+  UserIdT,
+  UsernameT,
+  UserJoinedRoomT,
   UserSetT,
-  MessageT,
-} from 'common/types';
+} from 'domain/models/UserModels';
 
-const canUserJoinRoom = (
-  roomId: string, 
-  user: UserT, 
+export const canUserJoinRoom = (
+  roomId: string,
+  user: UserT,
   rooms: RoomSetT
 ): ?ErrorT => {
-  if(!rooms[roomId]) { 
-    return { error: `no room with id ${roomId}` };
+  if (!rooms[roomId]) {
+    return `no room with id ${roomId}`;
   }
-  if(rooms[roomId].users.includes(user.username)) {
-    return { error: `username ${user.username} already in use` };
+  if (rooms[roomId].users.includes(user.username)) {
+    return `username ${user.username} already in use`;
   }
-}
+};
 
-const joinUserToRoomById = (
+export const joinUserToRoomById = (
   socket: any,
   roomId: string,
   user: UserT,
   io: any,
-  rooms: RoomSetT,
+  rooms: RoomSetT
 ): JoinRoomResponseT => {
   const error = canUserJoinRoom(roomId, user, rooms);
-  if(error) return { room: undefined, error };
+  if (error) return { room: undefined, error };
   rooms[roomId].users.push(user.username);
   io.in(roomId).emit('room-update', rooms[roomId]);
   socket.join(roomId);
   console.log(`User ${socket.id} joined room ${roomId}`);
   return { room: rooms[roomId], error: undefined };
-}
+};
 
-
-const createRoom = (owner: string, rooms: RoomSetT): RoomT => {
-  const id = uuidv4();
-  return rooms[id] = {
+export const createRoom = (owner: UsernameT, rooms: RoomSetT): RoomT => {
+  const size = Object.keys(rooms).length;
+  const id = (100000000 + size).toString(36);
+  return (rooms[id] = {
     id,
     users: Array(),
     owner,
-  };
-}
+  });
+};
 
-const removeRoom = (room: RoomT, rooms: RoomSetT): void => {
+export const removeRoom = (room: RoomT, rooms: RoomSetT): void => {
   delete rooms[room.id];
-}
+};
 
-const transferOwnership = (
+export const transferOwnership = (
   room: RoomT,
   newOwnerUsername: string,
-  io: any, 
+  io: any
 ): RoomT => {
-  if(io) emitToRoom(room.id, 'room-owner-changed', newOwnerUsername, io);
+  if (io) emitToRoom(room.id, 'room-owner-changed', newOwnerUsername, io);
   return {
     ...room,
     owner: newOwnerUsername,
   };
 };
 
-const emitToRoom = (roomId: string, petition: string, data: any, io: any) => {
+export const emitToRoom = (
+  roomId: string,
+  petition: string,
+  data: any,
+  io: any
+) => {
   io.in(roomId).emit(petition, data);
-}
+};
 
-const emitRoomMessage = (room: RoomT, message: MessageT, socket: any) => {
+export const emitRoomMessage = (
+  room: RoomT,
+  message: MessageT,
+  socket: any
+) => {
   socket.to(room.id).emit('new-message', message);
-}
-
-module.exports = {
-  createRoom,
-  emitRoomMessage,
-  emitToRoom,
-  joinUserToRoomById,
-  removeRoom,
-  transferOwnership,
 };

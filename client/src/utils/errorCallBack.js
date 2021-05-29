@@ -1,11 +1,11 @@
 // @flow
-import type { ErrorCallBackT, ErrorT } from 'common/types';
+import type { ErrorCallbackT, ErrorT } from 'domain/models/ErrorModels';
 import { toast } from 'react-toastify';
 
-const errorCallBack: ErrorCallBackT = (error: ?ErrorT): void => {
-  if(error) {
-    toast.error(error.error);
+const errorCallBack: ErrorCallbackT = (error: ?ErrorT): void => {
+  if (error) {
+    toast.error(error);
   }
-}
+};
 
 export default errorCallBack;

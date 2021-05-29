@@ -15,7 +15,7 @@ describe('JoinRoom component', (): void => {
     render(
       <ElementWithProviders>
         <MockRouter initialEntries={['/join']} path={'/join'}>
-          <JoinRoom/>
+          <JoinRoom />
         </MockRouter>
       </ElementWithProviders>
     );

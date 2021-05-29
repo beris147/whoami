@@ -4,13 +4,15 @@ import GameContext from 'contexts/GameContext';
 import RoomContext from 'contexts/RoomContext';
 import SocketContext from 'contexts/SocketContext';
 import UserContext from 'contexts/UserContext';
-import type { RoomT, UserT, GameT } from 'common/types';
 import MockedProvider from 'providers/__mocks__/MockedProvider';
 import mockedGameState from 'utils/__mocks__/mockedGameState';
 import mockedRoomState from 'utils/__mocks__/mockedRoomState';
 import mockedUserState from 'utils/__mocks__/mockedUserState';
 import io from 'utils/__mocks__/MockedSocketIO';
 
+import type { GameT } from 'domain/models/GameModels';
+import type { RoomT } from 'domain/models/RoomModels';
+import type { UserT } from 'domain/models/UserModels';
 type ElementWithProvidersT = {|
   children: React$Element<any>,
   mockedRoomState?: ?{ room: ?RoomT, setRoom: (r: ?RoomT) => void },
@@ -19,7 +21,7 @@ type ElementWithProvidersT = {|
   socket?: ?Object,
 |};
 
-function ElementWithProviders (
+function ElementWithProviders(
   props: ElementWithProvidersT
 ): React$Element<any> {
   const gameState = props.mockedGameState || mockedGameState;
