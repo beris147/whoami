@@ -2,7 +2,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import Chat from 'components/Chat/Chat';
-import Lobby from 'components/lobby/Lobby';
+import Lobby from 'components/Lobby/Lobby';
 import DisplayError from 'components/Error/DisplayError';
 import { useRoomApp } from 'app/RoomApp';
 function Room(): React$Element<any> {
