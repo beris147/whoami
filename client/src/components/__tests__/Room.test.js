@@ -9,7 +9,6 @@ import { createMemoryHistory } from 'history';
 import { ROOMID } from 'utils/__mocks__/mockedRoomState';
 import '@testing-library/jest-dom';
 
-
 describe('Room component', (): void => {
   const history = createMemoryHistory();
   beforeEach((): void => {
@@ -34,11 +33,13 @@ describe('Room component', (): void => {
   describe('room is undefined', () => {
     beforeEach(() => {
       render(
-        <ElementWithProviders mockedRoomState={{room: null, setRoom: () => {}}}>
+        <ElementWithProviders
+          mockedRoomState={{ room: null, setRoom: () => {} }}
+        >
           <MockRouter history={history} path={'/room/:id'}>
             <Room />
           </MockRouter>
-        </ElementWithProviders> 
+        </ElementWithProviders>
       );
     });
     test('redirect to join/roomid to define app', () => {

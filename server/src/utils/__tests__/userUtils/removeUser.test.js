@@ -1,8 +1,9 @@
 // @flow
-const { describe, it, expect } = require('@jest/globals');
-const { removeUser } = require('utils/userUtils');
+import { describe, it, expect } from '@jest/globals';
+import { removeUser } from 'utils/userUtils';
 
-import type { RoomT, RoomSetT, UserT, UserSetT } from 'common/types';
+import type { RoomT, RoomSetT } from 'domain/models/RoomModels';
+import type { UserT, UserSetT } from 'domain/models/UserModels';
 
 describe('removeUser', () => {
   describe('Given a user in the user set', () => {

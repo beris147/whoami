@@ -1,18 +1,21 @@
 // @flow
-const { removeUserById } = require('utils/userUtils');
+import { removeUserById } from 'utils/userUtils';
 
-import type { RoomSetT, UserSetT } from 'common/types';
+import type { RoomSetT } from 'domain/models/RoomModels';
+import type { UserSetT } from 'domain/models/UserModels';
 
-module.exports = (
+const userHandler = (
   io: Object,
   socket: Object,
   rooms: RoomSetT,
-  users: UserSetT,
+  users: UserSetT
 ) => {
   const disconnect = (): void => {
     console.log(`Client ${socket.id} disconnected`);
     removeUserById(socket.id, users, rooms, io);
-  }
-  
+  };
+
   socket.on('disconnect', disconnect);
-}
+};
+
+export default userHandler;

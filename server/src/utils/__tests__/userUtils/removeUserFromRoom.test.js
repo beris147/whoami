@@ -1,8 +1,10 @@
 // @flow
-const { describe, it, expect, beforeEach } = require('@jest/globals');
-const { removeUserFromRoom } = require('utils/userUtils');
+import { describe, it, expect, beforeEach } from '@jest/globals';
+import { removeUserFromRoom } from 'utils/userUtils';
 
-import type { RoomT, RoomSetT, UserT, UserSetT, ErrorT } from 'common/types';
+import type { ErrorT } from 'domain/models/ErrorModels';
+import type { RoomT, RoomSetT } from 'domain/models/RoomModels';
+import type { UserT, UserSetT } from 'domain/models/UserModels';
 
 const user: UserT = {
   id: 'user-id',
@@ -19,7 +21,7 @@ const roomTemplate: RoomT = {
 describe('When removing a user from a room', () => {
   describe(
     'Given a user whose room exists and their username appears in the ' +
-    'room\'s list', 
+      "room's list",
     () => {
       it('Removes the username from the room user list', () => {
         const room: RoomT = {
@@ -36,8 +38,8 @@ describe('When removing a user from a room', () => {
     }
   );
   describe(
-    'Given a user whose room exists and their username is the only one in ' + 
-    'the room\'s list', 
+    'Given a user whose room exists and their username is the only one in ' +
+      "the room's list",
     () => {
       it('Deletes the room', () => {
         const room: RoomT = {
@@ -82,8 +84,8 @@ describe('When removing a user from a room', () => {
     });
   });
   describe(
-    'Given a user whose room exists and their username doesn\'t appear in ' + 
-    'the room\'s list', 
+    "Given a user whose room exists and their username doesn't appear in " +
+      "the room's list",
     () => {
       it('Does nothing', () => {
         const room: RoomT = roomTemplate;
@@ -95,7 +97,7 @@ describe('When removing a user from a room', () => {
       });
     }
   );
-  describe('Given a user whose room doesn\'t exists', () => {
+  describe("Given a user whose room doesn't exists", () => {
     it('Throws an error', () => {
       const rooms: RoomSetT = {};
       expect(() => {

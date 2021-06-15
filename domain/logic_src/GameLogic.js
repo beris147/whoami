@@ -1,7 +1,6 @@
 // @flow
-import type { GameT, UserInGameT } from 'common/types';
-
 import type {
+  GameT,
   CharacterAssignationT,
   GameInAskStageT,
   QuestionT,
@@ -11,46 +10,43 @@ import type {
   GameInAnswerStageT,
   GameInJudgeStageT,
   AnswerListT,
-  // TurnListT,
+  TurnListT,
   TryT,
   TurnT,
-} from 'domain/models/GameDomainModels';
+} from '../models/GameModels';
 
-import type { UsersInLobbyListT } from 'domain/models/LobbyDomainModels';
+import type { UserInGameT, UsersInLobbyListT } from '../models/UserModels';
 
-const shuffleList = (list: Array<string>): Array<string> => {
+const shuffleList = (list: Array<any>): Array<any> => {
   const len = list.length;
-  let shuffledList: Array<string> = list;
-  for (let i = 0; i < len - 1; i++) { 
-    let j = Math.floor(Math.random() * (len-(i+1)) ) + (i+1);
+  let shuffledList: Array<any> = list;
+  for (let i = 0; i < len - 1; i++) {
+    let j = Math.floor(Math.random() * (len - (i + 1))) + (i + 1);
     let temp = shuffledList[i];
     shuffledList[i] = shuffledList[j];
     shuffledList[j] = temp;
   }
   return shuffledList;
-}
+};
 
 export const createGame = (userList: UsersInLobbyListT): GameT => {
-  const characters: Array<string> = userList.map(
-    (user): string => user.writtenCharacter || 'random character'
-  );
+  const characters = userList.map((user) => user.writtenCharacter || 'random');
   const shuffledCharacters: Array<string> = shuffleList(characters);
-  const usersInGame: Array<UserInGameT> =
-    shuffledCharacters.map(
-      (character, i): UserInGameT => {
-        return {
-          username: userList[i].username,
-          assignedCharacter: character,
-          points: 0,
-        }
-      }
-    );
+  const usersInGame: Array<UserInGameT> = shuffledCharacters.map(
+    (character, i): UserInGameT => {
+      return {
+        username: userList[i].username,
+        assignedCharacter: character,
+        points: 0,
+      };
+    }
+  );
   return {
     round: 0,
     turn: 0,
     users: usersInGame,
-  }
-}
+  };
+};
 
 export const startGame = (
   characterAssignation: CharacterAssignationT

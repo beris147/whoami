@@ -10,8 +10,8 @@ type DisplayErrorPropsT = {
 function DisplayError(props: DisplayErrorPropsT): React$Element<any> {
   const history = useHistory();
   useEffect(() => {
-    if(props.redirectTo) history.push(props.redirectTo);
+    if (props.redirectTo) history.push(props.redirectTo);
   }, [history, props.redirectTo]);
-  return <p>{props.error}</p>
+  return <p>{props.error}</p>;
 }
 export default DisplayError;

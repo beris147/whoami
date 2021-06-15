@@ -1,8 +1,10 @@
 // @flow
-const { describe, it, expect, beforeEach } = require('@jest/globals');
-const { createUser } = require('utils/userUtils');
+import { describe, it, expect, beforeEach } from '@jest/globals';
+import { createUser } from 'utils/userUtils';
 
-import type { RoomT, RoomSetT, UserT, UserSetT, ErrorT } from 'common/types';
+import type { ErrorT } from 'domain/models/ErrorModels';
+import type { RoomT, RoomSetT } from 'domain/models/RoomModels';
+import type { UserT, UserSetT } from 'domain/models/UserModels';
 
 const id: string = 'my-id';
 const username: string = 'my-username';
@@ -11,7 +13,7 @@ const expectedUser: UserT = { id, username, roomId };
 const oldUser: UserT = {
   id,
   username: 'old-username',
-  roomId: 'old-room-id'
+  roomId: 'old-room-id',
 };
 let users: UserSetT = {};
 
@@ -29,7 +31,7 @@ describe('createUser', () => {
   });
   it('overrides the user if already exists', () => {
     users[id] = oldUser;
-    createUser(id, username, roomId, users)
+    createUser(id, username, roomId, users);
     expect(users[id]).toStrictEqual(expectedUser);
   });
 });

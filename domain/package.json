@@ -1,0 +1,31 @@
+{
+  "name": "whoami-domain",
+  "version": "1.0.0",
+  "description": "domain layer for whoami website",
+  "type": "module",
+  "scripts": {
+    "build": "babel logic_src/ -d logic/ --delete-dir-on-start --ignore '**/*.test.js'",
+    "postbuild": "flow-copy-source logic_src logic --ignore '**/*.test.js'",
+    "pretest": "npm run build",
+    "test": "jest"
+  },
+  "author": "beristain",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.14.3",
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.13.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.14.0",
+    "@babel/preset-env": "^7.14.4",
+    "@babel/preset-flow": "^7.13.13",
+    "babel-jest": "^27.0.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "flow-copy-source": "^2.0.9",
+    "jest": "^27.0.1"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.jsx?$": "babel-jest"
+    }
+  }
+}

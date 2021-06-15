@@ -8,20 +8,19 @@ import { useLobbyApp } from 'app/Lobby/LobbyApp';
 
 const Lobby = (): React$Element<any> => {
   const app = useLobbyApp();
-  if(!app) return <DisplayError error='room or user is undefined'/>;
+  if (!app) return <DisplayError error='room or user is undefined' />;
   const handlePlayGame = () => app.playGameRequest();
   return (
     <div>
       <ReadyForm />
       <UserList userList={app.userList} roomOwner={app.roomOwner} />
-      {
-        app.amIOwner && 
+      {app.amIOwner && (
         <button disabled={!app.isPlayable} onClick={handlePlayGame}>
           Play
         </button>
-      }
+      )}
     </div>
   );
-}
+};
 
 export default Lobby;

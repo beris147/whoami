@@ -10,29 +10,32 @@ import {
   removeUserFromRoom,
   changeRoomOwner,
   removeRoom,
-} from 'domain/logic/RoomDomainLogic';
+} from 'domain/logic/RoomLogic';
 
-import type { RoomT } from 'common/types';
+import type { RoomT } from 'domain/models/RoomModels';
 
 export type RoomAppT = {
   leaveRoomRequest: () => void,
   roomId: string,
-} 
+};
 
 export const useRoomApp = (): ?RoomAppT => {
   const { room, setRoom } = useContext(RoomContext);
   const socketContext = useContext(SocketContext);
   const socket = useRoomSocket(socketContext);
-	const isMounted = useIsMounted();
+  const isMounted = useIsMounted();
   const history = useHistory();
-  const updateRoom = useCallback((newRoom: ?RoomT): void => {
-    if(isMounted.current) setRoom(newRoom);
-  }, [isMounted, setRoom]);
+  const updateRoom = useCallback(
+    (newRoom: ?RoomT): void => {
+      if (isMounted.current) setRoom(newRoom);
+    },
+    [isMounted, setRoom]
+  );
   const leaveRoomRequest = () => {
     socket.emitLeaveRoom();
-  } 
+  };
   useEffect(() => {
-    if(!room) return;
+    if (!room) return;
     socket.onLeftRoom(() => {
       const removedRoom = removeRoom(room);
       history.push('/');
@@ -55,11 +58,11 @@ export const useRoomApp = (): ?RoomAppT => {
       socket.offRoomOwnerChanged();
       socket.offUserJoined();
       socket.offUserLeft();
-    }
+    };
   }, [socket, history, room, setRoom, updateRoom]);
-  if(!room) return undefined;
+  if (!room) return undefined;
   return {
     leaveRoomRequest,
     roomId: room.id,
   };
-}
+};

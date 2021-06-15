@@ -6,11 +6,9 @@ import { useReadyFormSocket } from 'sockets/Lobby/ReadyFormSocket';
 export type ReadyFormAppT = {
   userIsReady: () => void,
   userIsNotReady: () => void,
-}
+};
 
-export const useReadyFormApp = (
-  character: string, 
-): ReadyFormAppT => {
+export const useReadyFormApp = (character: string): ReadyFormAppT => {
   const socketContext = useContext(SocketContext);
   const socket = useReadyFormSocket(socketContext);
   const userIsReady = () => socket.emitUserIsReady(character);
@@ -18,5 +16,5 @@ export const useReadyFormApp = (
   return {
     userIsReady,
     userIsNotReady,
-  }
-}
+  };
+};

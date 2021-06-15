@@ -1,4 +1,11 @@
 // @flow
+import type { UserInGameT } from './UserModels';
+
+export type GameT = {
+  round: number,
+  turn: number,
+  users: Array<UserInGameT>,
+};
 
 export type QuestionT = string;
 

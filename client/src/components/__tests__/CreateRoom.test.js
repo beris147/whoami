@@ -17,7 +17,7 @@ describe('CreateRoom component', (): void => {
       </ElementWithProviders>
     );
     joinButton = screen.getByRole('button', { name: /Create Room/i });
-    userNameInput = screen.getByRole('textbox', {type: 'text'});
+    userNameInput = screen.getByRole('textbox', { type: 'text' });
   });
   test('CreateRoom renders wihtout crashing', (): void => {
     expect(joinButton).toBeInTheDocument();
@@ -26,5 +26,5 @@ describe('CreateRoom component', (): void => {
     expect(joinButton).toBeDisabled();
     fireEvent.change(userNameInput, { target: { value: 'username' } });
     expect(joinButton).toBeEnabled();
-  });  
+  });
 });

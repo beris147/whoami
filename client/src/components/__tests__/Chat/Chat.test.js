@@ -7,7 +7,8 @@ import io, { serverSocket, cleanSocket } from 'utils/__mocks__/MockedSocketIO';
 import { user, setUser } from 'utils/__mocks__/mockedUserState';
 import Chat from 'components/Chat/Chat';
 
-import type { UserT, MessageT } from 'common/types';
+import type { MessageT } from 'domain/models/MessageModels';
+import type { UserT } from 'domain/models/UserModels';
 
 import '@testing-library/jest-dom';
 
@@ -18,8 +19,8 @@ describe('Chat component', (): void => {
     const auxUser: ?UserT = { username: 'user', id: 'id', roomId: 'roomid' };
     setUser(auxUser);
     render(
-      <ElementWithProviders socket={socket} mockedUserState={{user, setUser}}>
-        <Chat/>
+      <ElementWithProviders socket={socket} mockedUserState={{ user, setUser }}>
+        <Chat />
       </ElementWithProviders>
     );
   });
@@ -38,7 +39,7 @@ describe('Chat component', (): void => {
     socket.on('send-message', (newMessage: MessageT) => {
       serverSocket.emit('new-message', newMessage);
     });
-    const messageInput = screen.getByRole('textbox', {type: 'text'});
+    const messageInput = screen.getByRole('textbox', { type: 'text' });
     const button = screen.getByRole('button', { name: /Send/i });
     expect(button).toBeDisabled();
     fireEvent.change(messageInput, { target: { value: 'new message' } });

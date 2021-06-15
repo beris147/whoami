@@ -12,22 +12,20 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "socket.io-client": "^4.0.1",
-    "web-vitals": "^1.1.1"
+    "web-vitals": "^1.1.1",
+    "domain": "file:../domain"
   },
   "devDependencies": {
     "app": "file:./src/app",
     "chokidar": "^3.5.1",
-    "common": "file:../common",
     "components": "file:./src/components",
     "contexts": "file:./src/contexts",
-    "domain": "file:./src/domain",
     "providers": "file:./src/providers",
     "react-toastify": "^7.0.4",
     "sockets": "file:./src/sockets",
     "utils": "file:./src/utils"
   },
   "scripts": {
-    "prestart": "npm test -- --watchAll=false",
     "prebuild": "npm test -- --watchAll=false",
     "start": "react-scripts start",
     "build": "react-scripts build",

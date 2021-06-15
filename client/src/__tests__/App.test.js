@@ -30,16 +30,12 @@ describe('App component', () => {
     render(
       <MemoryRouter initialEntries={['/create']}>
         <ElementWithProviders>
-          <App/>
+          <App />
         </ElementWithProviders>
       </MemoryRouter>
     );
     expect(
-      screen.getByRole(
-        'button', 
-        { name: /Create Room/i }
-      )
+      screen.getByRole('button', { name: /Create Room/i })
     ).toBeInTheDocument();
   });
-  
 });

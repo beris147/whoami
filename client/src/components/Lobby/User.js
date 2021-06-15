@@ -1,17 +1,17 @@
 //@flow
 
 import React from 'react';
-import type { UserInLobbyT } from 'common/types';
+import type { UserInLobbyT } from 'domain/models/UserModels';
 
 export type UserPropsT = {|
   user: UserInLobbyT,
-  isOwner: bool,
+  isOwner: boolean,
 |};
 
 const User = (props: UserPropsT): React$Element<any> => {
-  const isReady = (user: UserInLobbyT): bool => {
+  const isReady = (user: UserInLobbyT): boolean => {
     return 'writtenCharacter' in user;
-  }
+  };
   return (
     <div>
       {props.user.username}

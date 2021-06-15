@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { test, expect, describe, beforeEach } from '@jest/globals';
-import Lobby from 'components/lobby/Lobby';
+import Lobby from 'components/Lobby/Lobby';
 import ElementWithProviders from 'components/__mocks__/ElementWithProviders';
 
 import '@testing-library/jest-dom';

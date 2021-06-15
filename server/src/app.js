@@ -1,10 +1,11 @@
 // @flow
-const express = require('express');
-const http = require('http');
-const socketIO = require('socket.io');
-const connection = require('sockets/connection');
+import express from 'express';
+import http from 'http';
+import socketIO from 'socket.io';
+import * as connection from 'sockets/connection';
 
-import type { UserSetT, RoomSetT } from 'common/types';
+import type { RoomSetT } from 'domain/models/RoomModels';
+import type { UserSetT } from 'domain/models/UserModels';
 
 const app = express();
 const port = process.env.PORT || 9000;

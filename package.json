@@ -5,13 +5,17 @@
   "scripts": {
     "server": "npm start --prefix ./server",
     "client": "npm start --prefix ./client",
-    "test": "npm run test --prefix ./server && npm run test --prefix ./client -- --watchAll=false",
+    "test-client": "npm run test --prefix ./client -- --watchAll=false",
+    "test-domain": "npm run test --prefix ./domain",
+    "test-server": "npm run test --prefix ./server",
+    "test": "npm run test-domain && npm run test-client && npm run test-server",
+    "predev": "npm run test",
     "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
     "flow": "flow",
     "init-server": "npm i --prefix ./server",
     "init-client": "npm i --prefix ./client",
-    "init-common": "npm i --prefix ./common",
-    "postinstall": "npm run init-server && npm run init-client && npm run init-common"
+    "init-domain": "npm i --prefix ./domain && npm run build --prefix ./domain",
+    "postinstall": "npm run init-server && npm run init-client && npm run init-domain"
   },
   "repository": {
     "type": "git",
